@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phasmophobia Ghost Analyst</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Nightmare ready evidence analyzer</p>
+          <h1><span>Phasmophobia</span><span>ゴースト分析ツール</span></h1>
+          <p class="lead">
+            証拠の「確定」「否定」を入れると、ナイトメア難易度の隠れ証拠、強制証拠、ミミックの追加オーブを考慮して候補を絞り込みます。
+          </p>
+        </div>
+        <div class="top-actions" aria-label="ツール操作">
+          <button class="icon-button" id="copySummary" type="button" title="現在の分析をコピー" aria-label="現在の分析をコピー">
+            <span aria-hidden="true">Copy</span>
+          </button>
+          <button class="icon-button danger" id="resetAll" type="button" title="入力をリセット" aria-label="入力をリセット">
+            <span aria-hidden="true">Reset</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="status-strip" aria-label="分析状態">
+        <div>
+          <span class="status-label">候補</span>
+          <strong id="candidateCount">0</strong>
+        </div>
+        <div>
+          <span class="status-label">確定証拠</span>
+          <strong id="confirmedCount">0</strong>
+        </div>
+        <div>
+          <span class="status-label">否定証拠</span>
+          <strong id="deniedCount">0</strong>
+        </div>
+        <div>
+          <span class="status-label">難易度</span>
+          <strong id="difficultyLabel">Nightmare</strong>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside class="control-panel" aria-label="分析条件">
+          <section class="panel-section">
+            <div class="section-heading">
+              <h2>難易度</h2>
+            </div>
+            <div class="segmented" role="radiogroup" aria-label="証拠数">
+              <button type="button" data-difficulty="professional" role="radio" aria-checked="false">3証拠</button>
+              <button type="button" data-difficulty="nightmare" role="radio" aria-checked="true">Nightmare 2証拠</button>
+              <button type="button" data-difficulty="insanity" role="radio" aria-checked="false">Insanity 1証拠</button>
+              <button type="button" data-difficulty="zero" role="radio" aria-checked="false">0証拠</button>
+              <button type="button" data-difficulty="custom" role="radio" aria-checked="false">Custom</button>
+            </div>
+            <label class="custom-count" for="customEvidenceCount">
+              Custom証拠数
+              <input id="customEvidenceCount" type="number" min="0" max="3" step="1" value="2" />
+            </label>
+            <p class="hint">
+              ナイトメアでは否定した証拠が「隠れた1枠」になる可能性を残します。強制証拠は隠れません。
+            </p>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <h2>行動の決定打</h2>
+              <button class="text-button" id="clearBehaviors" type="button">解除</button>
+            </div>
+            <div class="behavior-list" id="behaviorFilters"></div>
+          </section>
+        </aside>
+
+        <section class="main-panel">
+          <section class="panel-section">
+            <div class="section-heading evidence-heading">
+              <div>
+                <h2>証拠入力</h2>
+                <p class="muted">各証拠をクリックして、確定、否定、不明を切り替えます。</p>
+              </div>
+              <button class="text-button" id="clearEvidence" type="button">証拠だけ解除</button>
+            </div>
+            <div class="evidence-grid" id="evidenceGrid"></div>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <div>
+                <h2>候補ゴースト</h2>
+                <p class="muted" id="resultNote">条件に合うゴーストを表示します。</p>
+              </div>
+              <label class="toggle-line">
+                <input id="showExcluded" type="checkbox" />
+                除外も表示
+              </label>
+            </div>
+            <div class="ghost-grid" id="ghostGrid"></div>
+          </section>
+        </section>
+      </section>
+
+      <section class="reference-section">
+        <h2>全ゴースト証拠表</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ゴースト</th>
+                <th>証拠</th>
+                <th>ナイトメア注記</th>
+              </tr>
+            </thead>
+            <tbody id="ghostTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>Data checked: 2026-05-18</span>
+        <a href="https://phasmophobia.fandom.com/wiki/Evidence" target="_blank" rel="noreferrer">Evidence</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Difficulty" target="_blank" rel="noreferrer">Difficulty</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Guides/Identifying_ghosts" target="_blank" rel="noreferrer">Identifying ghosts</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Aswang" target="_blank" rel="noreferrer">Aswang</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Kormos" target="_blank" rel="noreferrer">Kormos</a>
+      </footer>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>

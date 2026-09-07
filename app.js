@@ -25,7 +25,7 @@
       english: "Aswang",
       evidence: ["dots", "freezing", "writing"],
       tell: "正しく使える公式隠れ場所にいるプレイヤーへ到達すると、殺さずにハントが終了します。",
-      hunt: "基礎速度は遅めですが、視認加速が強いので直線で見られ続けると危険です。",
+      hunt: "基礎1.53m/s、視認で最大2.53m/s。隠れ場所でハントを終了させた後は、次のハント開始位置に注意。",
     },
     {
       id: "banshee",
@@ -40,8 +40,16 @@
       name: "ダヤン",
       english: "Dayan",
       evidence: ["emf", "orb", "spiritBox"],
-      tell: "近くのプレイヤーが歩くと速く、止まると遅くなります。",
-      hunt: "10m以内の動きで閾値と速度が変化します。名前とモデルは女性のみです。",
+      tell: "10m以内の最寄プレイヤーが歩くと2.25m/s、静止すると1.2m/sに変化します。",
+      hunt: "近くで歩くと閾値65%、静止すると45%。名前とモデルは女性のみです。",
+    },
+    {
+      id: "deildegast",
+      name: "Deildegast",
+      english: "Deildegast",
+      evidence: ["dots", "emf", "writing"],
+      tell: "ハント間に家の小物を移動・投擲すると次のハントが遅くなります。調査装備は対象外です。",
+      hunt: "基礎3m/s、視認加速なし。減速にはハントごとに小物を動かし直す必要があります。",
     },
     {
       id: "demon",
@@ -65,8 +73,8 @@
       name: "ガルル",
       english: "Gallu",
       evidence: ["emf", "ultraviolet", "spiritBox"],
-      tell: "十字架やスマッジなどの防御行動で激昂し、ハント後は弱体化します。",
-      hunt: "激昂中は閾値と速度が上がり、防御範囲やスマッジ時間も変化します。",
+      tell: "十字架、スマッジ、塩で激昂し、激昂中は塩の山を崩せません。ハント後は弱体化します。",
+      hunt: "通常50%/1.7m/s、激昂60%/1.955m/s、弱体40%/1.36m/sで挙動が変わります。",
     },
     {
       id: "goryo",
@@ -74,7 +82,7 @@
       english: "Goryo",
       evidence: ["dots", "emf", "ultraviolet"],
       forced: "dots",
-      tell: "D.O.T.S.はカメラ越し限定で、部屋移動がかなり少ないゴーストです。",
+      tell: "D.O.T.S.はカメラ越し限定で、お気に入り部屋を変更しません。",
       hunt: "ナイトメアでもD.O.T.S.は隠れません。",
     },
     {
@@ -99,8 +107,8 @@
       name: "コルモス",
       english: "Kormos",
       evidence: ["orb", "spiritBox", "ultraviolet"],
-      tell: "視線で追跡できず、足音に反応して追う珍しいゴーストです。",
-      hunt: "視認追跡はせず、声、電子機器、移動音で検知します。接近判定は障害物越しでも危険です。",
+      tell: "ほぼ盲目で、静止したプレイヤーは見つけにくい一方、足音を10〜30m先から検知します。",
+      hunt: "近くで走ると閾値70%。壁越し・通常より遠距離の殺害や、スマッジ中の検知不具合はv0.18で修正済みです。",
     },
     {
       id: "mare",
@@ -141,8 +149,8 @@
       name: "オバンボ",
       english: "Obambo",
       evidence: ["writing", "ultraviolet", "dots"],
-      tell: "平静と攻撃の状態を切り替え、活動量、ハント閾値、速度がはっきり変わります。",
-      hunt: "攻撃状態で始まるハントは速く、持続時間が短めです。状態切替で速度が急変することもあります。",
+      tell: "玄関を開けた1分後から2分ごとに平静と攻撃を切り替え、活動量と速度が急変します。",
+      hunt: "平静10%/1.445m/s、攻撃65%/1.955m/s。攻撃状態で始まるハントは20%短くなります。",
     },
     {
       id: "oni",
@@ -239,7 +247,7 @@
       english: "Wraith",
       evidence: ["dots", "emf", "spiritBox"],
       tell: "塩を踏まず、プレイヤーへのテレポートでEMFを残すことがあります。",
-      hunt: "塩の上を通っても足跡が出ないなら最有力です。",
+      hunt: "塩の山が崩れないことを確認します。UV足跡の有無とは別です。激昂したガルルやミミックにも注意。",
     },
     {
       id: "yokai",
@@ -270,14 +278,14 @@
     {
       id: "femaleOnly",
       label: "女性名限定の候補を疑う",
-      help: "名前や挙動からバンシー、ダヤンだけを残します。",
-      mode: "include",
+      help: "女性名だけでは他の種類を除外できません。参考情報として扱います。",
+      mode: "hint",
       ghosts: ["banshee", "dayan"],
     },
     {
       id: "aswangHide",
       label: "公式隠れ場所で殺されずハント終了",
-      help: "正しい公式隠れ場所へ到達されたのに死ななかった時の決定打です。",
+      help: "自然終了との区別が必要です。隠れ場所への到達と同時に終了したか確認します。",
       mode: "include",
       ghosts: ["aswang"],
     },
@@ -290,24 +298,24 @@
     },
     {
       id: "galluProtect",
-      label: "防御行動後に激昂する",
-      help: "十字架、スマッジ、塩などで状態が変わる候補です。",
+      label: "防御行動後、塩を崩さなくなった",
+      help: "十字架、スマッジ、塩で激昂し、激昂中は塩を踏めない候補です。",
       mode: "include",
       ghosts: ["gallu"],
     },
     {
       id: "kormosAudio",
-      label: "視認ではなく足音を追う",
-      help: "視線追跡せず、足音や物音に反応して追う候補です。",
+      label: "静止中は見失い、足音を追う",
+      help: "物投げではなく、歩行・走行の足音に反応して追う候補です。",
       mode: "include",
       ghosts: ["kormos"],
     },
     {
       id: "wraithSalt",
       label: "塩を踏まない",
-      help: "塩の上を通っても足跡が出ない時の決定打です。",
+      help: "塩の山そのものが崩れない場合。レイス、激昂したガルル、模倣中のミミックが残ります。",
       mode: "include",
-      ghosts: ["wraith"],
+      ghosts: ["wraith", "gallu"],
     },
     {
       id: "obakePrint",
@@ -318,6 +326,8 @@
     },
     {
       id: "goryoDots",
+      mimicCanCopy: false,
+      requiredEvidence: "dots",
       label: "D.O.T.S.がカメラ越し限定",
       help: "肉眼では見えず、カメラ映像だけで見える候補です。",
       mode: "include",
@@ -333,12 +343,13 @@
     {
       id: "phantomPhoto",
       label: "写真で姿が消えた",
-      help: "ゴースト写真に姿が写らず、イベントが途切れた時。",
+      help: "写真撮影で姿だけが消え、イベントの音などは続く場合。単なるイベント終了とは区別します。",
       mode: "include",
       ghosts: ["phantom"],
     },
     {
       id: "deogenBreath",
+      requiredEvidence: "spiritBox",
       label: "Spirit Boxで固有呼吸",
       help: "デオヘンの低確率特殊反応です。",
       mode: "include",
@@ -354,43 +365,43 @@
     {
       id: "mylingQuiet",
       label: "足音が近距離まで聞こえにくい",
-      help: "点滅距離よりかなり近くで足音が聞こえる候補です。",
-      mode: "include",
+      help: "階層や遮音の影響もあるため参考扱いです。同じ階で機器の干渉距離と比較します。",
+      mode: "hint",
       ghosts: ["myling"],
     },
     {
       id: "onryoFlame",
       label: "炎3回消灯後にハント",
-      help: "火を消す行動がハント条件に絡みます。",
-      mode: "include",
+      help: "自然なハントとの偶然の一致もあるため参考扱いです。炎による防御も確認します。",
+      mode: "hint",
       ghosts: ["onryo"],
     },
     {
       id: "obamboPhase",
       label: "活動量と速度が周期的に急変",
-      help: "平静と攻撃の状態差がはっきり出る候補です。",
-      mode: "include",
+      help: "速度変化には複数の原因があるため、周期だけでは他候補を除外しません。",
+      mode: "hint",
       ghosts: ["obambo"],
     },
     {
       id: "spiritSmudge",
       label: "スマッジ後3分ハントなし",
-      help: "スピリットの長いハント封じです。",
-      mode: "include",
+      help: "ハントが来ないだけでは確定できません。正気度や防御物などでも開始が遅れます。",
+      mode: "hint",
       ghosts: ["spirit"],
     },
     {
       id: "demonEarly",
-      label: "極端に早いハント",
-      help: "高正気度や短いスマッジ猶予で疑います。",
+      label: "スマッジ後60秒台で再ハント",
+      help: "スマッジが確実に命中した後、60〜89秒で通常ハントが開始。呪いのハントは対象外です。",
       mode: "include",
       ghosts: ["demon"],
     },
     {
       id: "oniVisible",
       label: "実体が濃く、霧イベントなし",
-      help: "ハント中に見えやすく、霧状イベントを起こさない候補です。",
-      mode: "include",
+      help: "霧イベントが未観測なだけでは除外できません。点滅の見え方と合わせて参考にします。",
+      mode: "hint",
       ghosts: ["oni"],
     },
     {
@@ -403,7 +414,7 @@
     {
       id: "hantuCold",
       label: "寒い場所で速く、白い息",
-      help: "温度差とハント中の息が見抜きどころです。",
+      help: "温度差と、ブレーカーOFFまたは故障時のハント中の息が見抜きどころです。",
       mode: "include",
       ghosts: ["hantu"],
     },
@@ -425,6 +436,7 @@
     evidenceStates: Object.fromEntries(EVIDENCE.map((item) => [item.id, "unknown"])),
     activeBehaviors: [],
     showExcluded: false,
+    searchTerm: "",
   };
 
   const evidenceById = Object.fromEntries(EVIDENCE.map((item) => [item.id, item]));
@@ -498,6 +510,10 @@
   function evaluateEvidence(ghost, state = appState) {
     const evidenceCount = getEvidenceCount(state);
     const { confirmed, denied } = getStateLists(state);
+    for (const id of state.activeBehaviors || []) {
+      const required = behaviorById[id]?.requiredEvidence;
+      if (required && !confirmed.includes(required)) confirmed.push(required);
+    }
     const options = getVisibleMainOptions(ghost, evidenceCount);
     const validOptions = options
       .map((main) => ({
@@ -525,7 +541,7 @@
       const deniedLabels = denied.map((id) => evidenceLabel(id, true)).join(" / ");
       reasons.push(`否定証拠 ${deniedLabels} を避ける表示候補がありません`);
     }
-    if (ghost.forced && denied.includes(ghost.forced)) {
+    if (evidenceCount > 0 && ghost.forced && denied.includes(ghost.forced)) {
       reasons.unshift(`${evidenceLabel(ghost.forced, true)} は強制証拠です`);
     }
     if (ghost.extraEvidence && ghost.extraEvidence.some((id) => denied.includes(id))) {
@@ -538,7 +554,9 @@
     for (const id of activeBehaviors) {
       const filter = behaviorById[id];
       if (!filter) continue;
-      const listed = filter.ghosts.includes(ghost.id);
+      // Mimic can copy abilities, but cannot produce Goryo's DOTS evidence.
+      const listed = filter.ghosts.includes(ghost.id) ||
+        (filter.mode === "include" && ghost.id === "mimic" && filter.mimicCanCopy !== false);
       if (filter.mode === "include" && !listed) {
         return { ok: false, reason: `${filter.label} と一致しません` };
       }
@@ -575,7 +593,7 @@
     score += confirmed.filter((id) => ghost.evidence.includes(id) || (ghost.extraEvidence || []).includes(id)).length * 4;
     score += state.activeBehaviors.filter((id) => {
       const filter = behaviorById[id];
-      return filter && filter.mode === "include" && filter.ghosts.includes(ghost.id);
+      return filter && ["include", "hint"].includes(filter.mode) && filter.ghosts.includes(ghost.id);
     }).length * 8;
     if (ghost.forced && confirmed.includes(ghost.forced)) score += 3;
     if (ghost.extraEvidence && confirmed.some((id) => ghost.extraEvidence.includes(id))) score += 4;
@@ -634,7 +652,7 @@
       label.className = `behavior-filter ${active ? "active" : ""}`;
       label.innerHTML = `
         <input type="checkbox" ${active ? "checked" : ""} />
-        <span>${filter.label}<small>${filter.help}</small></span>
+        <span>${filter.mode === "hint" ? "参考: " : ""}${filter.label}<small>${filter.help}</small></span>
       `;
       const input = label.querySelector("input");
       input.addEventListener("change", () => {
@@ -653,11 +671,18 @@
   function renderGhosts(results) {
     const grid = document.getElementById("ghostGrid");
     grid.replaceChildren();
-    const visibleResults = appState.showExcluded ? results : results.filter((result) => result.ok);
+    const term = appState.searchTerm.trim().toLocaleLowerCase("ja");
+    const statusResults = appState.showExcluded ? results : results.filter((result) => result.ok);
+    const visibleResults = statusResults.filter(({ ghost }) => {
+      if (!term) return true;
+      return [ghost.name, ghost.english, ghost.id].some((value) => value.toLocaleLowerCase("ja").includes(term));
+    });
     if (visibleResults.length === 0) {
       const empty = document.createElement("div");
       empty.className = "empty-state";
-      empty.textContent = "条件に合う候補がありません。否定証拠や行動フィルターを少し戻して確認してください。";
+      empty.textContent = term
+        ? "検索名に一致するゴーストがありません。"
+        : "条件に合う候補がありません。否定証拠や行動フィルターを少し戻して確認してください。";
       grid.append(empty);
       return;
     }
@@ -670,8 +695,9 @@
           const classes = ["chip"];
           if (appState.evidenceStates[id] === "confirmed") classes.push("confirmed");
           if (appState.evidenceStates[id] === "denied") classes.push("denied");
-          if (ghost.forced === id) classes.push("forced");
-          return `<span class="${classes.join(" ")}">${evidenceLabel(id, true)}${ghost.forced === id ? " 強制" : ""}</span>`;
+          const forced = ghost.forced === id && getEvidenceCount() > 0;
+          if (forced) classes.push("forced");
+          return `<span class="${classes.join(" ")}">${evidenceLabel(id, true)}${forced ? " 強制" : ""}</span>`;
         })
         .join("");
       const extraChips = (ghost.extraEvidence || [])
@@ -750,6 +776,7 @@
     });
     document.getElementById("customEvidenceCount").value = String(appState.customEvidenceCount);
     document.getElementById("showExcluded").checked = appState.showExcluded;
+    document.getElementById("ghostSearch").value = appState.searchTerm;
   }
 
   function render() {
@@ -763,20 +790,26 @@
   }
 
   function saveState() {
-    if (typeof localStorage === "undefined") return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    try {
+      if (typeof localStorage !== "undefined") localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    } catch (error) {
+      // Storage can be blocked or full; keep the current investigation usable.
+    }
   }
 
   function loadState() {
-    if (typeof localStorage === "undefined") return;
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
     try {
+      if (typeof localStorage === "undefined") return;
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
       const parsed = JSON.parse(raw);
       if (parsed && typeof parsed === "object") {
-        appState.difficulty = parsed.difficulty || appState.difficulty;
+        if (["professional", "nightmare", "insanity", "zero", "custom"].includes(parsed.difficulty)) {
+          appState.difficulty = parsed.difficulty;
+        }
         appState.customEvidenceCount = clampEvidenceCount(parsed.customEvidenceCount ?? appState.customEvidenceCount);
         appState.showExcluded = Boolean(parsed.showExcluded);
+        appState.searchTerm = typeof parsed.searchTerm === "string" ? parsed.searchTerm : "";
         appState.activeBehaviors = Array.isArray(parsed.activeBehaviors) ? parsed.activeBehaviors.filter((id) => behaviorById[id]) : [];
         EVIDENCE.forEach((item) => {
           const next = parsed.evidenceStates && parsed.evidenceStates[item.id];
@@ -784,7 +817,7 @@
         });
       }
     } catch (error) {
-      localStorage.removeItem(STORAGE_KEY);
+      // Ignore unavailable or malformed saved data without blocking startup.
     }
   }
 
@@ -799,6 +832,7 @@
     appState.customEvidenceCount = 2;
     appState.activeBehaviors = [];
     appState.showExcluded = false;
+    appState.searchTerm = "";
     resetEvidence();
     saveState();
     render();
@@ -818,7 +852,9 @@
       `Candidates: ${possible}`,
     ].join("\n");
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(() => showToast("分析をコピーしました。"));
+      navigator.clipboard.writeText(text)
+        .then(() => showToast("分析をコピーしました。"))
+        .catch(() => showToast("コピーできませんでした。ブラウザのクリップボード権限を確認してください。"));
     } else {
       showToast(text);
     }
@@ -851,6 +887,11 @@
       appState.showExcluded = event.target.checked;
       saveState();
       render();
+    });
+    document.getElementById("ghostSearch").addEventListener("input", (event) => {
+      appState.searchTerm = event.target.value;
+      saveState();
+      renderGhosts(analyze());
     });
     document.getElementById("clearEvidence").addEventListener("click", () => {
       resetEvidence();

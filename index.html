@@ -15,6 +15,11 @@
           <p class="lead">
             証拠の「確定」「否定」を入れると、ナイトメア難易度の隠れ証拠、強制証拠、ミミックの追加オーブを考慮して候補を絞り込みます。
           </p>
+          <div class="version-row" aria-label="データ情報">
+            <span>Game v0.19.0.0</span>
+            <span>30 ghosts</span>
+            <span>Checked 2026-09-07</span>
+          </div>
         </div>
         <div class="top-actions" aria-label="ツール操作">
           <button class="icon-button" id="copySummary" type="button" title="現在の分析をコピー" aria-label="現在の分析をコピー">
@@ -69,9 +74,10 @@
 
           <section class="panel-section">
             <div class="section-heading">
-              <h2>行動の決定打</h2>
+              <h2>行動フィルター</h2>
               <button class="text-button" id="clearBehaviors" type="button">解除</button>
             </div>
+            <p class="hint behavior-hint">模倣可能な行動ではミミックも候補です。「参考」は除外条件ではありません。固有のD.O.T.S.・Box反応は証拠条件にも含みます。</p>
             <div class="behavior-list" id="behaviorFilters"></div>
           </section>
         </aside>
@@ -94,10 +100,16 @@
                 <h2>候補ゴースト</h2>
                 <p class="muted" id="resultNote">条件に合うゴーストを表示します。</p>
               </div>
-              <label class="toggle-line">
-                <input id="showExcluded" type="checkbox" />
-                除外も表示
-              </label>
+              <div class="result-tools">
+                <label class="search-field" for="ghostSearch">
+                  <span>候補名検索</span>
+                  <input id="ghostSearch" type="search" placeholder="日本語 / English" autocomplete="off" />
+                </label>
+                <label class="toggle-line">
+                  <input id="showExcluded" type="checkbox" />
+                  除外も表示
+                </label>
+              </div>
             </div>
             <div class="ghost-grid" id="ghostGrid"></div>
           </section>
@@ -121,12 +133,18 @@
       </section>
 
       <footer class="footer">
-        <span>Data checked: 2026-05-18</span>
+        <span>Data checked: 2026-09-07 / Game v0.19.0.0</span>
+        <a href="https://www.reddit.com/r/PhasmophobiaGame/comments/1vy2ce1/phasmophobia_v01900_quality_of_life_part_2/" target="_blank" rel="noreferrer">v0.19 patch notes</a>
+        <a href="https://kineticgames.co.uk/news/phasmophobia-v01800-patch-notes" target="_blank" rel="noreferrer">v0.18 patch notes</a>
+        <a href="https://games.gg/phasmophobia/guides/phasmophobia-how-to-identify-a-deildegast/" target="_blank" rel="noreferrer">Deildegast</a>
         <a href="https://phasmophobia.fandom.com/wiki/Evidence" target="_blank" rel="noreferrer">Evidence</a>
         <a href="https://phasmophobia.fandom.com/wiki/Difficulty" target="_blank" rel="noreferrer">Difficulty</a>
         <a href="https://phasmophobia.fandom.com/wiki/Guides/Identifying_ghosts" target="_blank" rel="noreferrer">Identifying ghosts</a>
         <a href="https://phasmophobia.fandom.com/wiki/Aswang" target="_blank" rel="noreferrer">Aswang</a>
         <a href="https://phasmophobia.fandom.com/wiki/Kormos" target="_blank" rel="noreferrer">Kormos</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Dayan" target="_blank" rel="noreferrer">Dayan</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Gallu" target="_blank" rel="noreferrer">Gallu</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Obambo" target="_blank" rel="noreferrer">Obambo</a>
       </footer>
     </main>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>

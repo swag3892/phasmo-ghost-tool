@@ -4,17 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Phasmophobia Ghost Analyst</title>
-    <link rel="stylesheet" href="./styles.css?v=20260908" />
+    <meta name="theme-color" content="#141617" />
+    <link rel="stylesheet" href="./styles.css?v=20260929" />
   </head>
   <body>
     <main class="app-shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Nightmare ready evidence analyzer</p>
-          <h1><span>Phasmophobia</span><span>ゴースト分析ツール</span></h1>
-          <p class="lead">
-            証拠の「確定」「否定」を入れると、ナイトメア難易度の隠れ証拠、強制証拠、ミミックの追加オーブを考慮して候補を絞り込みます。
-          </p>
+          <p class="eyebrow"><img src="./assets/radar.svg" width="20" height="20" alt="" /> FIELD INVESTIGATION</p>
+          <h1>Phasmophobia <span>ゴースト分析</span></h1>
           <div class="version-row" aria-label="データ情報">
             <span>Game v0.19.0.0</span>
             <span>30 ghosts</span>
@@ -23,10 +21,10 @@
         </div>
         <div class="top-actions" aria-label="ツール操作">
           <button class="icon-button" id="copySummary" type="button" title="現在の分析をコピー" aria-label="現在の分析をコピー">
-            <span aria-hidden="true">Copy</span>
+            <img src="./assets/copy.svg" width="18" height="18" alt="" />
           </button>
           <button class="icon-button danger" id="resetAll" type="button" title="入力をリセット" aria-label="入力をリセット">
-            <span aria-hidden="true">Reset</span>
+            <img src="./assets/rotate-ccw.svg" width="18" height="18" alt="" />
           </button>
         </div>
       </header>
@@ -50,8 +48,9 @@
         </div>
       </section>
 
+      <nav class="mobile-nav" aria-label="調査ナビゲーション"><a href="#evidence">証拠</a><a href="#results">候補</a><a href="#conditions">分析条件</a></nav>
       <section class="workspace">
-        <aside class="control-panel" aria-label="分析条件">
+        <aside class="control-panel" id="conditions" aria-label="分析条件">
           <section class="panel-section">
             <div class="section-heading">
               <h2>難易度</h2>
@@ -67,9 +66,6 @@
               Custom証拠数
               <input id="customEvidenceCount" type="number" min="0" max="3" step="1" value="2" />
             </label>
-            <p class="hint">
-              ナイトメアでは否定した証拠が「隠れた1枠」になる可能性を残します。強制証拠は隠れません。
-            </p>
           </section>
 
           <section class="panel-section">
@@ -77,24 +73,22 @@
               <h2>行動フィルター</h2>
               <button class="text-button" id="clearBehaviors" type="button">解除</button>
             </div>
-            <p class="hint behavior-hint">模倣可能な行動ではミミックも候補です。「参考」は除外条件ではありません。固有のD.O.T.S.・Box反応は証拠条件にも含みます。</p>
             <div class="behavior-list" id="behaviorFilters"></div>
           </section>
         </aside>
 
         <section class="main-panel">
-          <section class="panel-section">
+          <section class="panel-section" id="evidence">
             <div class="section-heading evidence-heading">
               <div>
                 <h2>証拠入力</h2>
-                <p class="muted">各証拠をクリックして、確定、否定、不明を切り替えます。</p>
               </div>
               <button class="text-button" id="clearEvidence" type="button">証拠だけ解除</button>
             </div>
             <div class="evidence-grid" id="evidenceGrid"></div>
           </section>
 
-          <section class="panel-section">
+          <section class="panel-section" id="results">
             <div class="section-heading">
               <div>
                 <h2>候補ゴースト</h2>
@@ -116,8 +110,8 @@
         </section>
       </section>
 
-      <section class="reference-section">
-        <h2>全ゴースト証拠表</h2>
+      <details class="reference-section">
+        <summary>全ゴースト証拠表 <span>30 TYPES</span></summary>
         <div class="table-wrap">
           <table>
             <thead>
@@ -130,7 +124,7 @@
             <tbody id="ghostTable"></tbody>
           </table>
         </div>
-      </section>
+      </details>
 
       <footer class="footer">
         <span>Data checked: 2026-09-07 / Game v0.19.0.0</span>
@@ -148,6 +142,6 @@
       </footer>
     </main>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="./app.js?v=20260908"></script>
+    <script src="./app.js?v=20260929"></script>
   </body>
 </html>

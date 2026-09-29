@@ -623,6 +623,7 @@
   }
 
   function renderEvidenceGrid() {
+    const icons = { dots: "scan-line", emf: "radio", freezing: "thermometer-snowflake", orb: "circle-dot", spiritBox: "audio-lines", ultraviolet: "fingerprint", writing: "notebook-pen" };
     const grid = document.getElementById("evidenceGrid");
     grid.replaceChildren();
     EVIDENCE.forEach((item) => {
@@ -632,7 +633,8 @@
       button.className = `evidence-card ${state}`;
       button.setAttribute("aria-pressed", state !== "unknown" ? "true" : "false");
       button.dataset.evidence = item.id;
-      button.innerHTML = `<strong>${item.label}</strong><span class="state">${statusLabel(state)}</span>`;
+      button.setAttribute("aria-label", `${item.label}: ${statusLabel(state)}`);
+      button.innerHTML = `<img src="./assets/${icons[item.id]}.svg" width="22" height="22" alt=""><strong>${item.label}</strong><span class="state">${statusLabel(state)}</span>`;
       button.addEventListener("click", () => {
         const currentIndex = STATE_SEQUENCE.indexOf(appState.evidenceStates[item.id]);
         appState.evidenceStates[item.id] = STATE_SEQUENCE[(currentIndex + 1) % STATE_SEQUENCE.length];
@@ -721,7 +723,7 @@
         <p class="ghost-note"><strong>ハント:</strong> ${ghost.hunt}</p>
         ${
           result.ok
-            ? `<p class="visible-options"><strong>表示候補:</strong><br>${optionsText}${moreOptions}</p>`
+            ? `<details class="evidence-options"><summary>証拠の組み合わせ <span>${result.evidence.options.length}</span></summary><p class="visible-options">${optionsText}${moreOptions}</p></details>`
             : `<p class="out-reason">${result.reason}</p>`
         }
       `;

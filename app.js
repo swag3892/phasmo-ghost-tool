@@ -24,40 +24,40 @@
       name: "アスワング",
       english: "Aswang",
       evidence: ["dots", "freezing", "writing"],
-      tell: "正しく使える公式隠れ場所にいるプレイヤーへ到達すると、殺さずにハントが終了します。",
-      hunt: "基礎1.53m/s、視認で最大2.53m/s。隠れ場所でハントを終了させた後は、次のハント開始位置に注意。",
+      tell: "有効な公式の隠れ場所にいるプレイヤーに到達すると、そのプレイヤーを殺さずにハントを終了します。",
+      hunt: "基礎速度は1.53 m/sで、プレイヤーを視認すると最大2.53 m/sまで加速します。隠れ場所でハントを終了させた後は、次のハントの開始位置に注意してください。",
     },
     {
       id: "banshee",
       name: "バンシー",
       english: "Banshee",
       evidence: ["dots", "orb", "ultraviolet"],
-      tell: "ターゲットを1人に絞り、パラボラマイクで固有の絶叫を出すことがあります。",
-      hunt: "ターゲットの正気度で狩りを開始。名前は女性のみ。",
+      tell: "1人のプレイヤーをターゲットにします。パラボラマイクで固有の絶叫が聞こえることがあります。",
+      hunt: "ターゲットの正気度に基づいてハントを開始します。ゴーストの名前は女性名のみです。",
     },
     {
       id: "dayan",
       name: "ダヤン",
       english: "Dayan",
       evidence: ["emf", "orb", "spiritBox"],
-      tell: "10m以内の最寄プレイヤーが歩くと2.25m/s、静止すると1.2m/sに変化します。",
-      hunt: "近くで歩くと閾値65%、静止すると45%。名前とモデルは女性のみです。",
+      tell: "10 m以内で最も近いプレイヤーが歩くと速度が2.25 m/sになり、静止すると1.2 m/sになります。",
+      hunt: "ハント開始の正気度は、近くのプレイヤーが歩いていると65%、静止していると45%です。名前とモデルは女性のみです。",
     },
     {
       id: "deildegast",
       name: "Deildegast",
       english: "Deildegast",
       evidence: ["dots", "emf", "writing"],
-      tell: "ハント間に家の小物を移動・投擲すると次のハントが遅くなります。調査装備は対象外です。",
-      hunt: "基礎3m/s、視認加速なし。減速にはハントごとに小物を動かし直す必要があります。",
+      tell: "ハントとハントの間に家の小物を動かしたり投げたりすると、次のハント中の移動速度が下がります。調査装備は対象外です。",
+      hunt: "基礎速度は3 m/sで、視認による加速はありません。減速させるには、ハントごとに小物を動かし直す必要があります。",
     },
     {
       id: "demon",
       name: "デーモン",
       english: "Demon",
       evidence: ["writing", "ultraviolet", "freezing"],
-      tell: "早期ハント、十字架の広い防御範囲、スマッジ後の短いハント封じが特徴です。",
-      hunt: "通常70%、能力でさらに早いハントがあります。",
+      tell: "早い段階でのハント、十字架の広い防御範囲、スマッジ後の短いハント抑制時間が特徴です。",
+      hunt: "通常のハント開始の正気度は70%です。能力によって、さらに高い正気度でハントを開始することもあります。",
     },
     {
       id: "deogen",
@@ -65,16 +65,16 @@
       english: "Deogen",
       evidence: ["dots", "writing", "spiritBox"],
       forced: "spiritBox",
-      tell: "必ず位置を把握して追跡し、近距離では極端に遅くなります。Spirit Boxの固有呼吸あり。",
-      hunt: "隠れ切れません。近づけて逃げる判断が有効です。",
+      tell: "プレイヤーの位置を常に把握して追跡しますが、近距離では極端に遅くなります。スピリットボックスで固有の呼吸音を出すことがあります。",
+      hunt: "隠れても位置を把握されます。近距離での減速を利用して逃げる方法が有効です。",
     },
     {
       id: "gallu",
       name: "ガルル",
       english: "Gallu",
       evidence: ["emf", "ultraviolet", "spiritBox"],
-      tell: "十字架、スマッジ、塩で激昂し、激昂中は塩の山を崩せません。ハント後は弱体化します。",
-      hunt: "通常50%/1.7m/s、激昂60%/1.955m/s、弱体40%/1.36m/sで挙動が変わります。",
+      tell: "十字架、スマッジ、塩の使用で激昂し、激昂中は塩の山を崩しません。ハント後は弱体化します。",
+      hunt: "ハント開始の正気度と速度は、通常時が50%・1.7 m/s、激昂時が60%・1.955 m/s、弱体化時が40%・1.36 m/sです。",
     },
     {
       id: "goryo",
@@ -82,8 +82,8 @@
       english: "Goryo",
       evidence: ["dots", "emf", "ultraviolet"],
       forced: "dots",
-      tell: "D.O.T.S.はカメラ越し限定で、お気に入り部屋を変更しません。",
-      hunt: "ナイトメアでもD.O.T.S.は隠れません。",
+      tell: "D.O.T.S.の姿はカメラ越しでのみ見えます。お気に入りの部屋を変更しません。",
+      hunt: "ナイトメアでも、D.O.T.S.の証拠は隠れません。",
     },
     {
       id: "hantu",
@@ -91,24 +91,24 @@
       english: "Hantu",
       evidence: ["orb", "ultraviolet", "freezing"],
       forced: "freezing",
-      tell: "低温で速く、高温で遅い。ハント中に白い息が見えることがあります。",
-      hunt: "ブレーカーを入れられず、氷点下は隠れません。",
+      tell: "低温の場所では速く、高温の場所では遅くなります。ハント中に白い息が見えることがあります。",
+      hunt: "ブレーカーをオンにできません。氷点下の証拠は隠れません。",
     },
     {
       id: "jinn",
       name: "ジン",
       english: "Jinn",
       evidence: ["emf", "ultraviolet", "freezing"],
-      tell: "ブレーカーがオンだと遠距離で加速し、能力で近くのプレイヤーの正気度を削ります。",
-      hunt: "ブレーカーを落とすと個性が弱まります。",
+      tell: "ブレーカーがオンのとき、離れたプレイヤーに向かって加速します。能力で近くのプレイヤーの正気度を減らすこともあります。",
+      hunt: "ブレーカーをオフにすると、固有の能力を抑えられます。",
     },
     {
       id: "kormos",
       name: "コルモス",
       english: "Kormos",
       evidence: ["orb", "spiritBox", "ultraviolet"],
-      tell: "ほぼ盲目で、静止したプレイヤーは見つけにくい一方、足音を10〜30m先から検知します。",
-      hunt: "近くで走ると閾値70%。壁越し・通常より遠距離の殺害や、スマッジ中の検知不具合はv0.18で修正済みです。",
+      tell: "ほとんど視覚に頼らず、静止したプレイヤーを見つけにくい一方、10〜30 m先の足音を検知します。",
+      hunt: "近くのプレイヤーが走ると、ハント開始の正気度が70%になります。壁越しや通常より遠い距離での殺害、スマッジ使用中の検知の不具合はv0.18で修正されています。",
     },
     {
       id: "mare",
@@ -116,7 +116,7 @@
       english: "Mare",
       evidence: ["writing", "orb", "spiritBox"],
       tell: "明るい部屋を嫌い、電気を消す行動が多めです。",
-      hunt: "暗所60%、明所40%目安でハント閾値が変わります。",
+      hunt: "ハント開始の正気度の目安は、暗い場所で60%、明るい場所で40%です。",
     },
     {
       id: "moroi",
@@ -124,16 +124,16 @@
       english: "Moroi",
       evidence: ["writing", "freezing", "spiritBox"],
       forced: "spiritBox",
-      tell: "呪いで正気度を削り、平均正気度が低いほど速くなります。",
-      hunt: "スピリットボックスは隠れません。スマッジ後の目眩まし時間が長めです。",
+      tell: "呪いでプレイヤーの正気度を減らします。平均正気度が低いほど、移動速度が上がります。",
+      hunt: "スピリットボックスの証拠は隠れません。スマッジによる目くらましの時間が長めです。",
     },
     {
       id: "myling",
       name: "マイリング",
       english: "Myling",
       evidence: ["writing", "emf", "ultraviolet"],
-      tell: "ハント中の足音が非常に近距離まで聞こえにくい。パラボラ音も多めです。",
-      hunt: "懐中電灯点滅距離と足音の聞こえ方を比べると見抜きやすいです。",
+      tell: "ハント中の足音は、かなり近づくまで聞こえにくいです。パラボラマイクで聞こえる音も多めです。",
+      hunt: "懐中電灯が点滅する距離と、足音が聞こえ始める距離を比較すると見分けやすくなります。",
     },
     {
       id: "obake",
@@ -141,32 +141,32 @@
       english: "Obake",
       evidence: ["emf", "orb", "ultraviolet"],
       forced: "ultraviolet",
-      tell: "6本指などの特殊指紋、指紋消失、ハント中の一瞬のモデル変化が特徴です。",
-      hunt: "紫外線は隠れません。",
+      tell: "6本指などの特殊な指紋、指紋の消失、ハント中に一瞬だけ姿が変わることが特徴です。",
+      hunt: "紫外線の証拠は隠れません。",
     },
     {
       id: "obambo",
       name: "オバンボ",
       english: "Obambo",
       evidence: ["writing", "ultraviolet", "dots"],
-      tell: "玄関を開けた1分後から2分ごとに平静と攻撃を切り替え、活動量と速度が急変します。",
-      hunt: "平静10%/1.445m/s、攻撃65%/1.955m/s。攻撃状態で始まるハントは20%短くなります。",
+      tell: "玄関を開けた1分後から、2分ごとに平静状態と攻撃状態を切り替えます。状態が変わると活動量と速度が急変します。",
+      hunt: "ハント開始の正気度と速度は、平静時が10%・1.445 m/s、攻撃時が65%・1.955 m/sです。攻撃状態で始まるハントは、持続時間が20%短くなります。",
     },
     {
       id: "oni",
       name: "鬼",
       english: "Oni",
       evidence: ["dots", "emf", "freezing"],
-      tell: "実体イベントが多く、ハント中に見える時間が長めです。霧状イベントを起こしません。",
-      hunt: "姿が見えやすい一方、正気度削りは強めです。",
+      tell: "実体を見せるゴーストイベントが多く、ハント中も姿が見える時間が長めです。霧状のゴーストイベントは起こしません。",
+      hunt: "姿が見えやすい一方、プレイヤーの正気度を大きく減らします。",
     },
     {
       id: "onryo",
       name: "怨霊",
       english: "Onryo",
       evidence: ["orb", "freezing", "spiritBox"],
-      tell: "炎が消えることがハント条件にも防御にも関わります。",
-      hunt: "炎3回消灯後のハント、または炎が十字架のように守る挙動を見ます。",
+      tell: "炎の消火がハントの開始条件に関わり、炎そのものにはハントを防ぐ働きもあります。",
+      hunt: "炎を3回消した後のハントや、炎が十字架のようにハントを防ぐ挙動を確認します。",
     },
     {
       id: "phantom",
@@ -174,23 +174,23 @@
       english: "Phantom",
       evidence: ["dots", "ultraviolet", "spiritBox"],
       tell: "写真を撮ると姿が消え、ハント中の点滅間隔が長いです。",
-      hunt: "長く見ると正気度が削られやすいです。",
+      hunt: "姿を長く見続けると、正気度が減りやすくなります。",
     },
     {
       id: "poltergeist",
       name: "ポルターガイスト",
       english: "Poltergeist",
       evidence: ["writing", "ultraviolet", "spiritBox"],
-      tell: "複数の物を同時に投げ、物が多い部屋ほど正気度削りと活動が目立ちます。",
-      hunt: "投げ物の量と同時投げが鍵です。",
+      tell: "複数の物を同時に投げます。物が多い部屋では、正気度の低下や活動が目立ちます。",
+      hunt: "投げる物の数と、複数の物を同時に投げるかを確認します。",
     },
     {
       id: "raiju",
       name: "雷獣",
       english: "Raiju",
       evidence: ["dots", "emf", "orb"],
-      tell: "電子機器の近くで速くなり、遠くから機器を乱します。",
-      hunt: "機器を置いたルートで速度差を見ます。",
+      tell: "電子機器の近くでは移動速度が上がり、離れた場所からも機器に干渉します。",
+      hunt: "電子機器を置いたルートと、置いていないルートで速度を比較します。",
     },
     {
       id: "revenant",
@@ -198,31 +198,31 @@
       english: "Revenant",
       evidence: ["writing", "orb", "freezing"],
       tell: "標的を見つけると非常に速く、見失うとかなり遅くなります。",
-      hunt: "足音速度の落差が大きいです。",
+      hunt: "足音の間隔から分かる速度の変化が大きいです。",
     },
     {
       id: "shade",
       name: "シェード",
       english: "Shade",
       evidence: ["writing", "emf", "freezing"],
-      tell: "人が近いと活動やハントが弱く、低正気度まで大人しいことがあります。",
-      hunt: "単独調査と複数人調査の活動差を見ます。",
+      tell: "プレイヤーが近くにいると活動やハントが抑えられ、正気度が低くなるまでおとなしいことがあります。",
+      hunt: "1人で調査するときと、複数人で調査するときの活動を比較します。",
     },
     {
       id: "spirit",
       name: "スピリット",
       english: "Spirit",
       evidence: ["writing", "emf", "spiritBox"],
-      tell: "スマッジ後、ハント封じが約3分続きます。",
-      hunt: "他の個性が薄い時ほどスマッジタイマーが強力です。",
+      tell: "スマッジの使用後、約3分間ハントが抑制されます。",
+      hunt: "ほかの特徴が見つからないときは、スマッジ使用後のハント抑制時間が判断材料になります。",
     },
     {
       id: "thaye",
       name: "セーイ",
       english: "Thaye",
       evidence: ["dots", "writing", "orb"],
-      tell: "若い時は高速かつ活発で、プレイヤーが近くにいる時間で老化して弱くなります。",
-      hunt: "序盤の速度と後半の減速を比べます。",
+      tell: "若いときは速く活発ですが、プレイヤーが近くにいる間に老化して弱くなります。",
+      hunt: "調査序盤と後半の移動速度を比較します。",
     },
     {
       id: "mimic",
@@ -230,16 +230,16 @@
       english: "The Mimic",
       evidence: ["ultraviolet", "freezing", "spiritBox"],
       extraEvidence: ["orb"],
-      tell: "別ゴーストの個性を真似し、証拠数とは別にゴーストオーブが追加で出ます。",
-      hunt: "ナイトメアでもオーブを含めて3つ見えることがあります。",
+      tell: "ほかのゴーストの特徴を模倣します。設定された証拠数とは別に、ゴーストオーブが追加で出ます。",
+      hunt: "ナイトメアでも、オーブを含めて3種類の証拠が見つかることがあります。",
     },
     {
       id: "twins",
       name: "ツインズ",
       english: "The Twins",
       evidence: ["emf", "freezing", "spiritBox"],
-      tell: "離れた場所で連続干渉し、速い個体と遅い個体のようなハント速度差があります。",
-      hunt: "干渉範囲と速度のズレを見ます。",
+      tell: "離れた場所で連続して干渉します。速い個体と遅い個体がいるかのように、ハントごとに速度が異なります。",
+      hunt: "干渉する場所の広がりと、ハントごとの速度の違いを確認します。",
     },
     {
       id: "wraith",
@@ -247,80 +247,80 @@
       english: "Wraith",
       evidence: ["dots", "emf", "spiritBox"],
       tell: "塩を踏まず、プレイヤーへのテレポートでEMFを残すことがあります。",
-      hunt: "塩の山が崩れないことを確認します。UV足跡の有無とは別です。激昂したガルルやミミックにも注意。",
+      hunt: "塩の山が崩れないことを確認します。紫外線で見える足跡の有無とは別の判定です。激昂したガルルやミミックにも注意してください。",
     },
     {
       id: "yokai",
       name: "妖怪",
       english: "Yokai",
       evidence: ["dots", "orb", "spiritBox"],
-      tell: "近くの会話に反応して早めにハントし、ハント中の聞こえる範囲が狭いです。",
-      hunt: "声で釣って、遠距離認識の弱さを見ます。",
+      tell: "近くの会話に反応して早い段階でハントを開始しますが、ハント中に声を聞き取れる範囲は狭いです。",
+      hunt: "声への反応を確認し、離れたプレイヤーを認識しにくいかを見ます。",
     },
     {
       id: "yurei",
       name: "幽霊",
       english: "Yurei",
       evidence: ["dots", "orb", "freezing"],
-      tell: "ドアを強く閉めて正気度を削り、スマッジで一時的に部屋に閉じ込めやすいです。",
-      hunt: "ドア操作とスマッジ後の部屋移動を見ます。",
+      tell: "ドアを強く閉めてプレイヤーの正気度を減らします。スマッジで一時的に部屋にとどめやすくなります。",
+      hunt: "ドアへの干渉と、スマッジ使用後に部屋を移動するかを確認します。",
     },
   ];
 
   const BEHAVIOR_FILTERS = [
     {
       id: "maleName",
-      label: "ゴースト名が男性",
-      help: "女性名限定のバンシー、ダヤンを除外します。",
+      label: "ゴーストの名前が男性名",
+      help: "女性名のみを持つバンシーとダヤンを除外します。",
       mode: "exclude",
       ghosts: ["banshee", "dayan"],
     },
     {
       id: "femaleOnly",
-      label: "女性名限定の候補を疑う",
-      help: "女性名だけでは他の種類を除外できません。参考情報として扱います。",
+      label: "ゴーストの名前が女性名",
+      help: "女性名であることだけでは、ほかの種類を除外できません。参考情報として扱います。",
       mode: "hint",
       ghosts: ["banshee", "dayan"],
     },
     {
       id: "aswangHide",
-      label: "公式隠れ場所で殺されずハント終了",
-      help: "自然終了との区別が必要です。隠れ場所への到達と同時に終了したか確認します。",
+      label: "公式の隠れ場所で殺されずにハント終了",
+      help: "ハントの自然終了と区別するため、ゴーストが隠れ場所に到達した瞬間に終了したかを確認します。",
       mode: "include",
       ghosts: ["aswang"],
     },
     {
       id: "dayanMotion",
       label: "近くで歩くと速く、止まると遅い",
-      help: "10m以内のプレイヤーの移動状態で速度が変わる候補です。",
+      help: "10 m以内のプレイヤーが歩いているか、静止しているかで移動速度が変わる場合です。",
       mode: "include",
       ghosts: ["dayan"],
     },
     {
       id: "galluProtect",
-      label: "防御行動後、塩を崩さなくなった",
-      help: "十字架、スマッジ、塩で激昂し、激昂中は塩を踏めない候補です。",
+      label: "防御行動の後に塩を踏まなくなった",
+      help: "十字架、スマッジ、塩の使用で激昂し、その間は塩の山を崩さなくなる場合です。",
       mode: "include",
       ghosts: ["gallu"],
     },
     {
       id: "kormosAudio",
-      label: "静止中は見失い、足音を追う",
-      help: "物投げではなく、歩行・走行の足音に反応して追う候補です。",
+      label: "静止すると見失い、足音を追う",
+      help: "物を投げる音ではなく、歩いたり走ったりする足音に反応して追跡する場合です。",
       mode: "include",
       ghosts: ["kormos"],
     },
     {
       id: "wraithSalt",
       label: "塩を踏まない",
-      help: "塩の山そのものが崩れない場合。レイス、激昂したガルル、模倣中のミミックが残ります。",
+      help: "ゴーストが通過しても塩の山そのものが崩れない場合です。レイス、激昂したガルル、模倣中のミミックが候補に残ります。",
       mode: "include",
       ghosts: ["wraith", "gallu"],
     },
     {
       id: "obakePrint",
-      label: "特殊指紋またはモデル変化",
-      help: "6本指などの紫外線証拠、またはハント中の姿変化です。",
+      label: "特殊な指紋、またはハント中の姿の変化",
+      help: "紫外線で6本指などの特殊な指紋が見えるか、ハント中に一瞬だけ姿が変わる場合です。",
       mode: "include",
       ghosts: ["obake"],
     },
@@ -328,100 +328,100 @@
       id: "goryoDots",
       mimicCanCopy: false,
       requiredEvidence: "dots",
-      label: "D.O.T.S.がカメラ越し限定",
-      help: "肉眼では見えず、カメラ映像だけで見える候補です。",
+      label: "D.O.T.S.の姿がカメラ越しでのみ見える",
+      help: "肉眼では見えず、カメラ映像でのみ姿が見える場合です。",
       mode: "include",
       ghosts: ["goryo"],
     },
     {
       id: "bansheeScream",
-      label: "パラボラで固有の絶叫",
-      help: "バンシーの代表的な決定打です。",
+      label: "パラボラマイクで固有の絶叫",
+      help: "バンシー固有の絶叫が聞こえた場合です。模倣中のミミックも候補に残ります。",
       mode: "include",
       ghosts: ["banshee"],
     },
     {
       id: "phantomPhoto",
       label: "写真で姿が消えた",
-      help: "写真撮影で姿だけが消え、イベントの音などは続く場合。単なるイベント終了とは区別します。",
+      help: "写真を撮ると姿だけが消え、イベントの音などは続く場合です。イベントそのものの終了とは区別します。",
       mode: "include",
       ghosts: ["phantom"],
     },
     {
       id: "deogenBreath",
       requiredEvidence: "spiritBox",
-      label: "Spirit Boxで固有呼吸",
-      help: "デオヘンの低確率特殊反応です。",
+      label: "スピリットボックスで固有の呼吸音",
+      help: "デオヘンが低確率で出す特殊な反応です。",
       mode: "include",
       ghosts: ["deogen"],
     },
     {
       id: "polterThrow",
-      label: "複数の物を同時投げ",
-      help: "物が一斉に動くポルターガイストの能力です。",
+      label: "複数の物を同時に投げる",
+      help: "複数の物が一斉に動く、ポルターガイストの能力を観測した場合です。",
       mode: "include",
       ghosts: ["poltergeist"],
     },
     {
       id: "mylingQuiet",
-      label: "足音が近距離まで聞こえにくい",
-      help: "階層や遮音の影響もあるため参考扱いです。同じ階で機器の干渉距離と比較します。",
+      label: "近づくまで足音が聞こえにくい",
+      help: "階の違いや遮音の影響もあるため、参考情報として扱います。同じ階で、足音が聞こえる距離と機器が干渉を受ける距離を比較します。",
       mode: "hint",
       ghosts: ["myling"],
     },
     {
       id: "onryoFlame",
-      label: "炎3回消灯後にハント",
-      help: "自然なハントとの偶然の一致もあるため参考扱いです。炎による防御も確認します。",
+      label: "炎を3回消した後にハント",
+      help: "通常のハントと偶然重なる可能性があるため、参考情報として扱います。炎がハントを防ぐかも確認します。",
       mode: "hint",
       ghosts: ["onryo"],
     },
     {
       id: "obamboPhase",
-      label: "活動量と速度が周期的に急変",
-      help: "速度変化には複数の原因があるため、周期だけでは他候補を除外しません。",
+      label: "活動量と速度が周期的に急変する",
+      help: "速度の変化には複数の原因があるため、周期だけではほかの候補を除外しません。",
       mode: "hint",
       ghosts: ["obambo"],
     },
     {
       id: "spiritSmudge",
-      label: "スマッジ後3分ハントなし",
-      help: "ハントが来ないだけでは確定できません。正気度や防御物などでも開始が遅れます。",
+      label: "スマッジ使用後、3分間ハントがない",
+      help: "ハントが起きないことだけでは種類を確定できません。正気度や防御アイテムなどの影響で、開始が遅れる場合もあります。",
       mode: "hint",
       ghosts: ["spirit"],
     },
     {
       id: "demonEarly",
-      label: "スマッジ後60秒台で再ハント",
-      help: "スマッジが確実に命中した後、60〜89秒で通常ハントが開始。呪いのハントは対象外です。",
+      label: "スマッジ使用後、60〜89秒で再ハント",
+      help: "スマッジの効果が確実に届いた後、60〜89秒で通常のハントが始まった場合です。呪いのハントは対象外です。",
       mode: "include",
       ghosts: ["demon"],
     },
     {
       id: "oniVisible",
-      label: "実体が濃く、霧イベントなし",
-      help: "霧イベントが未観測なだけでは除外できません。点滅の見え方と合わせて参考にします。",
+      label: "姿が見えやすく、霧状のイベントがない",
+      help: "霧状のイベントを観測していないだけでは、ほかの種類を除外できません。ハント中の点滅と併せて判断する参考情報です。",
       mode: "hint",
       ghosts: ["oni"],
     },
     {
       id: "raijuElectronics",
-      label: "電子機器の近くで加速",
-      help: "置いた機器のそばだけ足が速くなる候補です。",
+      label: "電子機器の近くで加速する",
+      help: "設置した電子機器の近くで、移動速度が上がる場合です。",
       mode: "include",
       ghosts: ["raiju"],
     },
     {
       id: "hantuCold",
-      label: "寒い場所で速く、白い息",
-      help: "温度差と、ブレーカーOFFまたは故障時のハント中の息が見抜きどころです。",
+      label: "寒い場所で速くなり、白い息が見える",
+      help: "温度による速度の違いと、ブレーカーがオフまたは故障しているときにハント中の白い息が見えるかを確認します。",
       mode: "include",
       ghosts: ["hantu"],
     },
     {
       id: "mimicOrb",
-      label: "証拠数よりオーブが余分",
-      help: "ミミックは追加のゴーストオーブを出します。",
+      label: "設定された証拠数に加えてオーブが見える",
+      help: "ミミックは、設定された証拠数とは別にゴーストオーブを出します。",
       mode: "include",
       ghosts: ["mimic"],
     },
@@ -535,19 +535,19 @@
     const reasons = [];
     if (confirmed.length > 0) {
       const confirmLabels = confirmed.map((id) => evidenceLabel(id, true)).join(" / ");
-      reasons.push(`確定証拠 ${confirmLabels} が同時に表示できません`);
+      reasons.push(`確定した証拠（${confirmLabels}）が同時に現れる組み合わせはありません。`);
     }
     if (denied.length > 0) {
       const deniedLabels = denied.map((id) => evidenceLabel(id, true)).join(" / ");
-      reasons.push(`否定証拠 ${deniedLabels} を避ける表示候補がありません`);
+      reasons.push(`否定した証拠（${deniedLabels}）を含まない組み合わせはありません。`);
     }
     if (evidenceCount > 0 && ghost.forced && denied.includes(ghost.forced)) {
-      reasons.unshift(`${evidenceLabel(ghost.forced, true)} は強制証拠です`);
+      reasons.unshift(`${evidenceLabel(ghost.forced, true)}は強制証拠のため、否定すると候補から除外されます。`);
     }
     if (ghost.extraEvidence && ghost.extraEvidence.some((id) => denied.includes(id))) {
-      reasons.unshift("ミミックの追加オーブを否定しています");
+      reasons.unshift("ミミックの追加オーブが否定されているため、候補から除外されます。");
     }
-    return { ok: false, options: [], reason: reasons[0] || "条件に合いません" };
+    return { ok: false, options: [], reason: reasons[0] || "選択した条件に一致しません。" };
   }
 
   function evaluateBehaviors(ghost, activeBehaviors = appState.activeBehaviors) {
@@ -558,10 +558,10 @@
       const listed = filter.ghosts.includes(ghost.id) ||
         (filter.mode === "include" && ghost.id === "mimic" && filter.mimicCanCopy !== false);
       if (filter.mode === "include" && !listed) {
-        return { ok: false, reason: `${filter.label} と一致しません` };
+        return { ok: false, reason: `行動条件「${filter.label}」に一致しません。` };
       }
       if (filter.mode === "exclude" && listed) {
-        return { ok: false, reason: `${filter.label} で除外` };
+        return { ok: false, reason: `行動条件「${filter.label}」により除外されます。` };
       }
     }
     return { ok: true, reason: "" };
@@ -613,7 +613,7 @@
     const visible = option.visible.map((id) => evidenceLabel(id, true)).join(" + ") || "証拠なし";
     const hidden = option.hidden.map((id) => evidenceLabel(id, true)).join(" / ") || "なし";
     const extra = ghost.extraEvidence ? ` / 追加: ${ghost.extraEvidence.map((id) => evidenceLabel(id, true)).join(" / ")}` : "";
-    return `${visible} / 隠れ候補: ${hidden}${extra}`;
+    return `${visible} / 隠れる証拠: ${hidden}${extra}`;
   }
 
   function statusLabel(value) {
@@ -683,8 +683,8 @@
       const empty = document.createElement("div");
       empty.className = "empty-state";
       empty.textContent = term
-        ? "検索名に一致するゴーストがありません。"
-        : "条件に合う候補がありません。否定証拠や行動フィルターを少し戻して確認してください。";
+        ? "検索した名前に一致するゴーストはありません。"
+        : "条件に合う候補はありません。否定した証拠や行動フィルターの選択を見直してください。";
       grid.append(empty);
       return;
     }
@@ -736,12 +736,12 @@
     table.replaceChildren();
     GHOSTS.forEach((ghost) => {
       const tr = document.createElement("tr");
-      const forced = ghost.forced ? `${evidenceLabel(ghost.forced, true)} は強制証拠` : "";
-      const extra = ghost.extraEvidence ? `${ghost.extraEvidence.map((id) => evidenceLabel(id, true)).join(" / ")} は追加証拠` : "";
+      const forced = ghost.forced ? `${evidenceLabel(ghost.forced, true)}は強制証拠です` : "";
+      const extra = ghost.extraEvidence ? `${ghost.extraEvidence.map((id) => evidenceLabel(id, true)).join(" / ")}は追加証拠です` : "";
       tr.innerHTML = `
         <td><strong>${ghost.name}</strong><br><span class="muted">${ghost.english}</span></td>
         <td>${ghost.evidence.map((id) => evidenceLabel(id)).join(" / ")}${ghost.extraEvidence ? ` / +${ghost.extraEvidence.map((id) => evidenceLabel(id)).join(" / ")}` : ""}</td>
-        <td>${[forced, extra].filter(Boolean).join("。") || "通常の隠れ証拠判定"}</td>
+        <td>${[forced, extra].filter(Boolean).join("。") || "通常の隠れ証拠として判定します"}。</td>
       `;
       table.append(tr);
     });
@@ -758,14 +758,14 @@
       nightmare: "Nightmare",
       insanity: "Insanity",
       zero: "0証拠",
-      custom: `Custom ${getEvidenceCount()}証拠`,
+      custom: `カスタム ${getEvidenceCount()}証拠`,
     };
     document.getElementById("difficultyLabel").textContent = labels[appState.difficulty];
     const note = document.getElementById("resultNote");
     if (possible === 0) {
-      note.textContent = "条件が厳しすぎる可能性があります。ナイトメアでは否定証拠が隠れ証拠になる場合があります。";
+      note.textContent = "条件に合う候補はありません。ナイトメアでは、見つからない証拠が隠れ証拠の場合もあります。";
     } else if (confirmed.length > getEvidenceCount() && !(confirmed.includes("orb") && results.some((r) => r.ok && r.ghost.id === "mimic"))) {
-      note.textContent = "表示証拠数を超えています。ミミックの追加オーブ以外なら入力を見直してください。";
+      note.textContent = "確定した証拠が、設定された証拠数を超えています。ミミックの追加オーブを除き、入力を見直してください。";
     } else {
       note.textContent = "条件に合うゴーストを表示します。";
     }
@@ -843,19 +843,19 @@
   function copySummary() {
     const results = analyze();
     const { confirmed, denied } = getStateLists();
-    const possible = results.filter((result) => result.ok).map((result) => result.ghost.english).join(", ") || "none";
+    const possible = results.filter((result) => result.ok).map((result) => result.ghost.english).join(", ") || "なし";
     const activeBehaviors = appState.activeBehaviors.map((id) => behaviorById[id]?.label).filter(Boolean).join(", ") || "なし";
     const text = [
-      "Phasmophobia Ghost Analyst",
-      `Difficulty: ${document.getElementById("difficultyLabel").textContent}`,
-      `Confirmed: ${confirmed.map((id) => evidenceLabel(id)).join(", ") || "なし"}`,
-      `Denied: ${denied.map((id) => evidenceLabel(id)).join(", ") || "なし"}`,
-      `Behavior: ${activeBehaviors}`,
-      `Candidates: ${possible}`,
+      "Phasmophobia ゴースト分析",
+      `難易度: ${document.getElementById("difficultyLabel").textContent}`,
+      `確定した証拠: ${confirmed.map((id) => evidenceLabel(id)).join(", ") || "なし"}`,
+      `否定した証拠: ${denied.map((id) => evidenceLabel(id)).join(", ") || "なし"}`,
+      `行動条件: ${activeBehaviors}`,
+      `候補ゴースト: ${possible}`,
     ].join("\n");
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text)
-        .then(() => showToast("分析をコピーしました。"))
+        .then(() => showToast("分析結果をコピーしました。"))
         .catch(() => showToast("コピーできませんでした。ブラウザのクリップボード権限を確認してください。"));
     } else {
       showToast(text);

@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Phasmophobia Ghost Analyst</title>
+    <title>Phasmophobia ゴースト分析</title>
     <meta name="theme-color" content="#141617" />
-    <link rel="stylesheet" href="./styles.css?v=20260929" />
+    <link rel="stylesheet" href="./styles.css?v=20260929-copy" />
   </head>
   <body>
     <main class="app-shell">
@@ -14,16 +14,16 @@
           <p class="eyebrow"><img src="./assets/radar.svg" width="20" height="20" alt="" /> FIELD INVESTIGATION</p>
           <h1>Phasmophobia <span>ゴースト分析</span></h1>
           <div class="version-row" aria-label="データ情報">
-            <span>Game v0.19.0.0</span>
-            <span>30 ghosts</span>
-            <span>Checked 2026-09-07</span>
+            <span>ゲーム v0.19.0.0</span>
+            <span>全30種類</span>
+            <span>データ確認 2026-09-07</span>
           </div>
         </div>
         <div class="top-actions" aria-label="ツール操作">
-          <button class="icon-button" id="copySummary" type="button" title="現在の分析をコピー" aria-label="現在の分析をコピー">
+          <button class="icon-button" id="copySummary" type="button" title="分析結果をコピー" aria-label="分析結果をコピー">
             <img src="./assets/copy.svg" width="18" height="18" alt="" />
           </button>
-          <button class="icon-button danger" id="resetAll" type="button" title="入力をリセット" aria-label="入力をリセット">
+          <button class="icon-button danger" id="resetAll" type="button" title="すべての条件をリセット" aria-label="すべての条件をリセット">
             <img src="./assets/rotate-ccw.svg" width="18" height="18" alt="" />
           </button>
         </div>
@@ -60,10 +60,10 @@
               <button type="button" data-difficulty="nightmare" role="radio" aria-checked="true">Nightmare 2証拠</button>
               <button type="button" data-difficulty="insanity" role="radio" aria-checked="false">Insanity 1証拠</button>
               <button type="button" data-difficulty="zero" role="radio" aria-checked="false">0証拠</button>
-              <button type="button" data-difficulty="custom" role="radio" aria-checked="false">Custom</button>
+              <button type="button" data-difficulty="custom" role="radio" aria-checked="false">カスタム</button>
             </div>
             <label class="custom-count" for="customEvidenceCount">
-              Custom証拠数
+              カスタム証拠数
               <input id="customEvidenceCount" type="number" min="0" max="3" step="1" value="2" />
             </label>
           </section>
@@ -71,7 +71,7 @@
           <section class="panel-section">
             <div class="section-heading">
               <h2>行動フィルター</h2>
-              <button class="text-button" id="clearBehaviors" type="button">解除</button>
+              <button class="text-button" id="clearBehaviors" type="button">選択を解除</button>
             </div>
             <div class="behavior-list" id="behaviorFilters"></div>
           </section>
@@ -83,7 +83,7 @@
               <div>
                 <h2>証拠入力</h2>
               </div>
-              <button class="text-button" id="clearEvidence" type="button">証拠だけ解除</button>
+              <button class="text-button" id="clearEvidence" type="button">証拠をリセット</button>
             </div>
             <div class="evidence-grid" id="evidenceGrid"></div>
           </section>
@@ -96,12 +96,12 @@
               </div>
               <div class="result-tools">
                 <label class="search-field" for="ghostSearch">
-                  <span>候補名検索</span>
-                  <input id="ghostSearch" type="search" placeholder="日本語 / English" autocomplete="off" />
+                  <span>ゴースト名で検索</span>
+                  <input id="ghostSearch" type="search" placeholder="日本語名 / 英語名" autocomplete="off" />
                 </label>
                 <label class="toggle-line">
                   <input id="showExcluded" type="checkbox" />
-                  除外も表示
+                  除外候補も表示
                 </label>
               </div>
             </div>
@@ -111,14 +111,14 @@
       </section>
 
       <details class="reference-section">
-        <summary>全ゴースト証拠表 <span>30 TYPES</span></summary>
+        <summary>全ゴースト証拠表 <span>30種類</span></summary>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th>ゴースト</th>
                 <th>証拠</th>
-                <th>ナイトメア注記</th>
+                <th>ナイトメアでの注意点</th>
               </tr>
             </thead>
             <tbody id="ghostTable"></tbody>
@@ -127,13 +127,13 @@
       </details>
 
       <footer class="footer">
-        <span>Data checked: 2026-09-07 / Game v0.19.0.0</span>
-        <a href="https://www.reddit.com/r/PhasmophobiaGame/comments/1vy2ce1/phasmophobia_v01900_quality_of_life_part_2/" target="_blank" rel="noreferrer">v0.19 patch notes</a>
-        <a href="https://kineticgames.co.uk/news/phasmophobia-v01800-patch-notes" target="_blank" rel="noreferrer">v0.18 patch notes</a>
+        <span>データ確認日: 2026-09-07 / ゲーム v0.19.0.0</span>
+        <a href="https://www.reddit.com/r/PhasmophobiaGame/comments/1vy2ce1/phasmophobia_v01900_quality_of_life_part_2/" target="_blank" rel="noreferrer">v0.19 更新履歴</a>
+        <a href="https://kineticgames.co.uk/news/phasmophobia-v01800-patch-notes" target="_blank" rel="noreferrer">v0.18 更新履歴</a>
         <a href="https://games.gg/phasmophobia/guides/phasmophobia-how-to-identify-a-deildegast/" target="_blank" rel="noreferrer">Deildegast</a>
-        <a href="https://phasmophobia.fandom.com/wiki/Evidence" target="_blank" rel="noreferrer">Evidence</a>
-        <a href="https://phasmophobia.fandom.com/wiki/Difficulty" target="_blank" rel="noreferrer">Difficulty</a>
-        <a href="https://phasmophobia.fandom.com/wiki/Guides/Identifying_ghosts" target="_blank" rel="noreferrer">Identifying ghosts</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Evidence" target="_blank" rel="noreferrer">証拠</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Difficulty" target="_blank" rel="noreferrer">難易度</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Guides/Identifying_ghosts" target="_blank" rel="noreferrer">ゴーストの見分け方</a>
         <a href="https://phasmophobia.fandom.com/wiki/Aswang" target="_blank" rel="noreferrer">Aswang</a>
         <a href="https://phasmophobia.fandom.com/wiki/Kormos" target="_blank" rel="noreferrer">Kormos</a>
         <a href="https://phasmophobia.fandom.com/wiki/Dayan" target="_blank" rel="noreferrer">Dayan</a>
@@ -142,6 +142,6 @@
       </footer>
     </main>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="./app.js?v=20260929"></script>
+    <script src="./app.js?v=20260929-copy"></script>
   </body>
 </html>

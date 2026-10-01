@@ -15,11 +15,18 @@
 
 ## データ確認日
 
-2026-09-07時点で確認したリリース: v0.19.0.0 / 全30種類
+2026-10-01時点で確認した最新リリース: v0.19.0.2 / 全30種類
 
-公式のv0.18・v0.19の更新履歴と照合しました。Deildegastの証拠と行動の詳細は、下記の2件の攻略記事で確認しました。公式の日本語名は未確認のため、英語表記を使用しています。ゲーム内での実測による検証は行っていません。
+公式のv0.18・v0.19.0.0・v0.19.0.1・v0.19.0.2の更新履歴と照合しました。Deildegastの証拠と行動の詳細は、下記の2件の攻略記事で確認しました。公式の日本語名は未確認のため、英語表記を使用しています。ゲーム内での実測による検証は行っていません。
 
-## 今回の修正
+## 最新の更新情報
+
+- [v0.19.0.2](https://kineticgames.co.uk/news/phasmophobia-v01902-patch-notes): PS5・Xbox Series X/Sでルームに入れない不具合と、マルチプレイでパラボラマイクを落とした際にプレイヤーの音声がこもる不具合を修正。
+- [v0.19.0.1](https://kineticgames.co.uk/news/phasmophobia-v01901-patch-notes): Prison Entranceの小物・指紋の干渉箇所を追加。猿の手による誤った証拠の取り消し線、ビデオカメラの黒い画面、コンソールの音声認識、UV指紋の撮影、ドアの音などの不具合を修正。
+
+この2回の更新では、ゴーストの追加や証拠構成・強制証拠・能力の変更は告知されていません。全30種類の証拠判定を継続し、サイトの「ゲーム更新情報」に調査に関係する修正を掲載しています。
+
+## 判定と機能の仕様
 
 - Deildegastを追加しました。証拠はD.O.T.S. / EMF 5 / ライティングです。
 - v0.18で修正されたコルモスの壁越しの殺害を、現行の仕様として案内しないようにしました。
@@ -41,7 +48,10 @@ Node.jsで `node --test app.test.cjs` を実行できます。
 
 主な参照元:
 
-- https://www.reddit.com/r/PhasmophobiaGame/comments/1vy2ce1/phasmophobia_v01900_quality_of_life_part_2/ (Kinetic Games担当者による更新履歴)
+- https://kineticgames.co.uk/news
+- https://kineticgames.co.uk/news/phasmophobia-v01902-patch-notes
+- https://kineticgames.co.uk/news/phasmophobia-v01901-patch-notes
+- https://kineticgames.co.uk/news/phasmophobia-v01900-quality-of-life-part-2
 - https://kineticgames.co.uk/news/phasmophobia-v01800-patch-notes
 - https://games.gg/phasmophobia/guides/phasmophobia-how-to-identify-a-deildegast/
 - https://allthings.how/phasmophobia-how-to-identify-the-deildegast-ghost/

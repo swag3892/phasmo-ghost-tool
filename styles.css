@@ -109,6 +109,10 @@ summary span { color: var(--soft); margin-left: 8px; font-variant-numeric: tabul
 .reference-section { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: 32px; padding: 18px 0; }
 .reference-section > summary { color: var(--text); font-size: 13px; }
 .reference-section > summary span { font-size: 10px; }
+.update-notes { max-width: 900px; padding-top: 16px; color: var(--muted); font-size: 12px; line-height: 1.85; overflow-wrap: anywhere; }
+.update-notes h2 { margin-top: 20px; font-size: 13px; }
+.update-notes ul { margin: 10px 0 0; padding-left: 22px; }
+.update-notes li + li { margin-top: 8px; }
 .table-wrap { overflow-x: auto; margin-top: 20px; }
 table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 12px; }
 th, td { text-align: left; border-bottom: 1px solid var(--line); padding: 12px 16px; vertical-align: top; }

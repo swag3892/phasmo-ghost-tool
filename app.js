@@ -24,7 +24,7 @@
       name: "アスワング",
       english: "Aswang",
       evidence: ["dots", "freezing", "writing"],
-      tell: "有効な公式の隠れ場所にいるプレイヤーに到達すると、そのプレイヤーを殺さずにハントを終了します。",
+      tell: "使用可能な所定の隠れ場所にいるプレイヤーに到達すると、そのプレイヤーを殺さずにハントを終了します。",
       hunt: "基礎速度は1.53 m/sで、プレイヤーを視認すると最大2.53 m/sまで加速します。隠れ場所でハントを終了させた後は、次のハントの開始位置に注意してください。",
     },
     {
@@ -40,15 +40,15 @@
       name: "ダヤン",
       english: "Dayan",
       evidence: ["emf", "orb", "spiritBox"],
-      tell: "10 m以内で最も近いプレイヤーが歩くと速度が2.25 m/sになり、静止すると1.2 m/sになります。",
-      hunt: "ハント開始の正気度は、近くのプレイヤーが歩いていると65%、静止していると45%です。名前とモデルは女性のみです。",
+      tell: "ゴーストから10 m以内にいる最も近いプレイヤーが歩くと、ゴーストの速度は2.25 m/sになり、静止すると1.2 m/sになります。",
+      hunt: "ハント開始の基準となる正気度は、近くのプレイヤーが歩いていると65%、静止していると45%です。ゴーストの名前とモデルは女性のみです。",
     },
     {
       id: "deildegast",
       name: "Deildegast",
       english: "Deildegast",
       evidence: ["dots", "emf", "writing"],
-      tell: "ハントとハントの間に家の小物を動かしたり投げたりすると、次のハント中の移動速度が下がります。調査装備は対象外です。",
+      tell: "ハントの合間に小物を動かしたり投げたりすると、次のハント中の移動速度が下がります。調査装備は対象外です。",
       hunt: "基礎速度は3 m/sで、視認による加速はありません。減速させるには、ハントごとに小物を動かし直す必要があります。",
     },
     {
@@ -57,7 +57,7 @@
       english: "Demon",
       evidence: ["writing", "ultraviolet", "freezing"],
       tell: "早い段階でのハント、十字架の広い防御範囲、スマッジ後の短いハント抑制時間が特徴です。",
-      hunt: "通常のハント開始の正気度は70%です。能力によって、さらに高い正気度でハントを開始することもあります。",
+      hunt: "通常のハント開始の基準となる正気度は70%です。能力によって、さらに高い正気度でハントを開始することもあります。",
     },
     {
       id: "deogen",
@@ -74,7 +74,7 @@
       english: "Gallu",
       evidence: ["emf", "ultraviolet", "spiritBox"],
       tell: "十字架、スマッジ、塩の使用で激昂し、激昂中は塩の山を崩しません。ハント後は弱体化します。",
-      hunt: "ハント開始の正気度と速度は、通常時が50%・1.7 m/s、激昂時が60%・1.955 m/s、弱体化時が40%・1.36 m/sです。",
+      hunt: "ハント開始の基準となる正気度と、ハント中の移動速度は、通常時が50%・1.7 m/s、激昂時が60%・1.955 m/s、弱体化時が40%・1.36 m/sです。",
     },
     {
       id: "goryo",
@@ -108,7 +108,7 @@
       english: "Kormos",
       evidence: ["orb", "spiritBox", "ultraviolet"],
       tell: "ほとんど視覚に頼らず、静止したプレイヤーを見つけにくい一方、10〜30 m先の足音を検知します。",
-      hunt: "近くのプレイヤーが走ると、ハント開始の正気度が70%になります。壁越しや通常より遠い距離での殺害、スマッジ使用中の検知の不具合はv0.18で修正されています。",
+      hunt: "近くのプレイヤーが走ると、ハント開始の基準となる正気度が70%になります。壁越しや通常より遠い距離での殺害、スマッジ使用中の検知に関する不具合はv0.18で修正されています。",
     },
     {
       id: "mare",
@@ -116,7 +116,7 @@
       english: "Mare",
       evidence: ["writing", "orb", "spiritBox"],
       tell: "明るい部屋を嫌い、電気を消す行動が多めです。",
-      hunt: "ハント開始の正気度の目安は、暗い場所で60%、明るい場所で40%です。",
+      hunt: "ハント開始の目安となる正気度は、暗い場所で60%、明るい場所で40%です。",
     },
     {
       id: "moroi",
@@ -132,7 +132,7 @@
       name: "マイリング",
       english: "Myling",
       evidence: ["writing", "emf", "ultraviolet"],
-      tell: "ハント中の足音は、かなり近づくまで聞こえにくいです。パラボラマイクで聞こえる音も多めです。",
+      tell: "ハント中の足音は、ゴーストがかなり近づくまで聞こえにくいです。パラボラマイクでは、ゴーストの音が多く聞こえます。",
       hunt: "懐中電灯が点滅する距離と、足音が聞こえ始める距離を比較すると見分けやすくなります。",
     },
     {
@@ -150,7 +150,7 @@
       english: "Obambo",
       evidence: ["writing", "ultraviolet", "dots"],
       tell: "玄関を開けた1分後から、2分ごとに平静状態と攻撃状態を切り替えます。状態が変わると活動量と速度が急変します。",
-      hunt: "ハント開始の正気度と速度は、平静時が10%・1.445 m/s、攻撃時が65%・1.955 m/sです。攻撃状態で始まるハントは、持続時間が20%短くなります。",
+      hunt: "ハント開始の基準となる正気度と、ハント中の移動速度は、平静時が10%・1.445 m/s、攻撃時が65%・1.955 m/sです。攻撃状態で始まるハントは、持続時間が20%短くなります。",
     },
     {
       id: "oni",
@@ -165,8 +165,8 @@
       name: "怨霊",
       english: "Onryo",
       evidence: ["orb", "freezing", "spiritBox"],
-      tell: "炎の消火がハントの開始条件に関わり、炎そのものにはハントを防ぐ働きもあります。",
-      hunt: "炎を3回消した後のハントや、炎が十字架のようにハントを防ぐ挙動を確認します。",
+      tell: "ゴーストが炎を消した回数が、ハントの開始条件に関わります。炎そのものにはハントを防ぐ働きもあります。",
+      hunt: "ゴーストが炎を3回消した後のハントや、炎が十字架のようにハントを防ぐ挙動を確認します。",
     },
     {
       id: "phantom",
@@ -182,7 +182,7 @@
       english: "Poltergeist",
       evidence: ["writing", "ultraviolet", "spiritBox"],
       tell: "複数の物を同時に投げます。物が多い部屋では、正気度の低下や活動が目立ちます。",
-      hunt: "投げる物の数と、複数の物を同時に投げるかを確認します。",
+      hunt: "投げる物の数と、複数の物を同時に投げるかどうかを確認します。",
     },
     {
       id: "raiju",
@@ -284,15 +284,15 @@
     },
     {
       id: "aswangHide",
-      label: "公式の隠れ場所で殺されずにハント終了",
+      label: "所定の隠れ場所で殺されずにハントが終了",
       help: "ハントの自然終了と区別するため、ゴーストが隠れ場所に到達した瞬間に終了したかを確認します。",
       mode: "include",
       ghosts: ["aswang"],
     },
     {
       id: "dayanMotion",
-      label: "近くで歩くと速く、止まると遅い",
-      help: "10 m以内のプレイヤーが歩いているか、静止しているかで移動速度が変わる場合です。",
+      label: "近くで歩くとゴーストが速く、止まると遅い",
+      help: "ゴーストから10 m以内のプレイヤーが歩いているか、静止しているかで、ゴーストの移動速度が変わる場合です。",
       mode: "include",
       ghosts: ["dayan"],
     },
@@ -305,7 +305,7 @@
     },
     {
       id: "kormosAudio",
-      label: "静止すると見失い、足音を追う",
+      label: "静止したプレイヤーを見失い、足音を追う",
       help: "物を投げる音ではなく、歩いたり走ったりする足音に反応して追跡する場合です。",
       mode: "include",
       ghosts: ["kormos"],
@@ -342,7 +342,7 @@
     },
     {
       id: "phantomPhoto",
-      label: "写真で姿が消えた",
+      label: "写真を撮ると姿が消えた",
       help: "写真を撮ると姿だけが消え、イベントの音などは続く場合です。イベントそのものの終了とは区別します。",
       mode: "include",
       ghosts: ["phantom"],
@@ -371,7 +371,7 @@
     },
     {
       id: "onryoFlame",
-      label: "炎を3回消した後にハント",
+      label: "ゴーストが炎を3回消した後にハント",
       help: "通常のハントと偶然重なる可能性があるため、参考情報として扱います。炎がハントを防ぐかも確認します。",
       mode: "hint",
       ghosts: ["onryo"],
@@ -719,8 +719,8 @@
           <span class="badge ${result.ok ? "possible" : "out"}">${result.ok ? "候補" : "除外"}</span>
         </header>
         <div class="chip-row">${evidenceChips}${extraChips}</div>
-        <p class="ghost-note"><strong>見抜き方:</strong> ${ghost.tell}</p>
-        <p class="ghost-note"><strong>ハント:</strong> ${ghost.hunt}</p>
+        <p class="ghost-note"><strong>特徴:</strong> ${ghost.tell}</p>
+        <p class="ghost-note"><strong>調査のポイント:</strong> ${ghost.hunt}</p>
         ${
           result.ok
             ? `<details class="evidence-options"><summary>証拠の組み合わせ <span>${result.evidence.options.length}</span></summary><p class="visible-options">${optionsText}${moreOptions}</p></details>`
@@ -741,7 +741,7 @@
       tr.innerHTML = `
         <td><strong>${ghost.name}</strong><br><span class="muted">${ghost.english}</span></td>
         <td>${ghost.evidence.map((id) => evidenceLabel(id)).join(" / ")}${ghost.extraEvidence ? ` / +${ghost.extraEvidence.map((id) => evidenceLabel(id)).join(" / ")}` : ""}</td>
-        <td>${[forced, extra].filter(Boolean).join("。") || "通常の隠れ証拠として判定します"}。</td>
+        <td>${[forced, extra].filter(Boolean).join("。") || "強制証拠や追加証拠はありません"}。</td>
       `;
       table.append(tr);
     });

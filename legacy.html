@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phasmophobia ゴースト分析 | 旧版</title>
+    <meta name="theme-color" content="#141617" />
+    <link rel="stylesheet" href="./styles.css?v=20261001" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow"><img src="./assets/radar.svg" width="20" height="20" alt="" /> FIELD INVESTIGATION</p>
+          <h1>Phasmophobia <span>ゴースト分析</span></h1>
+          <div class="version-row" aria-label="データ情報">
+            <span>ゲーム v0.19.0.2</span>
+            <span>全30種類</span>
+            <span>全件確認 2026-10-07</span>
+          </div>
+        </div>
+        <div class="top-actions" aria-label="ツール操作">
+          <button class="icon-button" id="copySummary" type="button" title="分析結果をコピー" aria-label="分析結果をコピー">
+            <img src="./assets/copy.svg" width="18" height="18" alt="" />
+          </button>
+          <button class="icon-button danger" id="resetAll" type="button" title="すべての条件をリセット" aria-label="すべての条件をリセット">
+            <img src="./assets/rotate-ccw.svg" width="18" height="18" alt="" />
+          </button>
+        </div>
+      </header>
+
+      <section class="status-strip" aria-label="分析状態">
+        <div>
+          <span class="status-label">候補</span>
+          <strong id="candidateCount">0</strong>
+        </div>
+        <div>
+          <span class="status-label">確定証拠</span>
+          <strong id="confirmedCount">0</strong>
+        </div>
+        <div>
+          <span class="status-label">否定証拠</span>
+          <strong id="deniedCount">0</strong>
+        </div>
+        <div>
+          <span class="status-label">難易度</span>
+          <strong id="difficultyLabel">Nightmare</strong>
+        </div>
+      </section>
+
+      <nav class="mobile-nav" aria-label="調査ナビゲーション"><a href="#evidence">証拠</a><a href="#results">候補</a><a href="#conditions">分析条件</a></nav>
+      <section class="workspace">
+        <aside class="control-panel" id="conditions" aria-label="分析条件">
+          <section class="panel-section">
+            <div class="section-heading">
+              <h2>難易度</h2>
+            </div>
+            <div class="segmented" role="radiogroup" aria-label="証拠数">
+              <button type="button" data-difficulty="professional" role="radio" aria-checked="false">3証拠</button>
+              <button type="button" data-difficulty="nightmare" role="radio" aria-checked="true">Nightmare 2証拠</button>
+              <button type="button" data-difficulty="insanity" role="radio" aria-checked="false">Insanity 1証拠</button>
+              <button type="button" data-difficulty="zero" role="radio" aria-checked="false">0証拠</button>
+              <button type="button" data-difficulty="custom" role="radio" aria-checked="false">カスタム</button>
+            </div>
+            <label class="custom-count" for="customEvidenceCount">
+              カスタムの証拠数
+              <input id="customEvidenceCount" type="number" min="0" max="3" step="1" value="2" />
+            </label>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <h2>行動フィルター</h2>
+              <button class="text-button" id="clearBehaviors" type="button">選択を解除</button>
+            </div>
+            <div class="behavior-list" id="behaviorFilters"></div>
+          </section>
+        </aside>
+
+        <section class="main-panel">
+          <section class="panel-section" id="evidence">
+            <div class="section-heading evidence-heading">
+              <div>
+                <h2>証拠入力</h2>
+              </div>
+              <button class="text-button" id="clearEvidence" type="button">証拠をリセット</button>
+            </div>
+            <div class="evidence-grid" id="evidenceGrid"></div>
+          </section>
+
+          <section class="panel-section" id="results">
+            <div class="section-heading">
+              <div>
+                <h2>候補ゴースト</h2>
+                <p class="muted" id="resultNote">条件に合うゴーストを表示します。</p>
+              </div>
+              <div class="result-tools">
+                <label class="search-field" for="ghostSearch">
+                  <span>ゴースト名で検索</span>
+                  <input id="ghostSearch" type="search" placeholder="日本語名 / 英語名" autocomplete="off" />
+                </label>
+                <label class="toggle-line">
+                  <input id="showExcluded" type="checkbox" />
+                  除外候補も表示
+                </label>
+              </div>
+            </div>
+            <div class="ghost-grid" id="ghostGrid"></div>
+          </section>
+        </section>
+      </section>
+
+      <details class="reference-section">
+        <summary>全ゴースト証拠表 <span>30種類</span></summary>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ゴースト</th>
+                <th>証拠</th>
+                <th>ナイトメアでの注意点</th>
+              </tr>
+            </thead>
+            <tbody id="ghostTable"></tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="reference-section" id="gameUpdates">
+        <summary>ゲーム更新情報 <span>v0.19.0.2</span></summary>
+        <div class="update-notes">
+          <p>2026-10-07に全30種類の特徴・調査のポイントと、全行動フィルターを資料と照合しました。確認対象はv0.19.0.2です。速度はゴースト速度100%・イベント補正なし、正気度は通常ハントの基準です。</p>
+          <p><a href="https://github.com/swag3892/phasmo-ghost-tool/blob/main/GHOST_AUDIT.md" target="_blank" rel="noreferrer">全件の確認結果と出典</a></p>
+          <p><a href="https://kineticgames.co.uk/news/the-crimson-eye-approaches-once-more" target="_blank" rel="noreferrer">Crimson Eye</a>のパッチは10月7日配信予定、イベントは10月8日開始と告知されています。確認時点で詳細パッチノートは未確認のため、予告だけの仕様変更は反映していません。</p>
+          <h2><a href="https://kineticgames.co.uk/news/phasmophobia-v01902-patch-notes" target="_blank" rel="noreferrer">v0.19.0.2</a></h2>
+          <ul>
+            <li>PS5・Xbox Series X/Sで、シングルプレイやマルチプレイのルームに入れない不具合を修正しました。</li>
+            <li>マルチプレイで、ほかのプレイヤーがパラボラマイクの電源を入れた直後に落とすと、プレイヤーの音声がこもる不具合を修正しました。</li>
+          </ul>
+          <h2><a href="https://kineticgames.co.uk/news/phasmophobia-v01901-patch-notes" target="_blank" rel="noreferrer">v0.19.0.1: 調査に関係する変更</a></h2>
+          <ul>
+            <li>Prison Entranceに小物を追加し、指紋が残る干渉箇所を増やしました。</li>
+            <li>猿の手の「知識が欲しい」の使用時に、正しい証拠にも取り消し線が付く不具合を修正しました。</li>
+            <li>ビデオカメラの画面が黒いままになる複数の不具合と、PS5・Xboxで音声認識のモードを切り替える際の不具合を修正しました。</li>
+            <li>13 Willow Street・Nell's Dinerで指紋を紫外線で照らしても撮影できない不具合と、ゴーストが閉めたドアの音が正しく再生されない不具合を修正しました。</li>
+          </ul>
+        </div>
+      </details>
+
+      <footer class="footer">
+        <span>全件確認日: 2026-10-07 / 仕様確認対象 v0.19.0.2</span>
+        <a href="https://github.com/swag3892/phasmo-ghost-tool/blob/main/GHOST_AUDIT.md" target="_blank" rel="noreferrer">全件監査</a>
+        <a href="https://phasmopedia.com/en/" target="_blank" rel="noreferrer">各ゴーストの仕様資料</a>
+        <a href="https://kineticgames.co.uk/news/phasmophobia-v01902-patch-notes" target="_blank" rel="noreferrer">v0.19.0.2 更新履歴</a>
+        <a href="https://kineticgames.co.uk/news/phasmophobia-v01901-patch-notes" target="_blank" rel="noreferrer">v0.19.0.1 更新履歴</a>
+        <a href="https://kineticgames.co.uk/news/phasmophobia-v01900-quality-of-life-part-2" target="_blank" rel="noreferrer">v0.19.0.0 更新履歴</a>
+        <a href="https://kineticgames.co.uk/news/phasmophobia-v01800-patch-notes" target="_blank" rel="noreferrer">v0.18 更新履歴</a>
+        <a href="https://games.gg/phasmophobia/guides/phasmophobia-how-to-identify-a-deildegast/" target="_blank" rel="noreferrer">Deildegast</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Evidence" target="_blank" rel="noreferrer">証拠</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Difficulty" target="_blank" rel="noreferrer">難易度</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Guides/Identifying_ghosts" target="_blank" rel="noreferrer">ゴーストの見分け方</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Aswang" target="_blank" rel="noreferrer">Aswang</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Kormos" target="_blank" rel="noreferrer">Kormos</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Dayan" target="_blank" rel="noreferrer">Dayan</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Gallu" target="_blank" rel="noreferrer">Gallu</a>
+        <a href="https://phasmophobia.fandom.com/wiki/Obambo" target="_blank" rel="noreferrer">Obambo</a>
+      </footer>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js?v=20261007-audit"></script>
+  </body>
+</html>

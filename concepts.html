@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phasmophobia | 新しいデザイン案</title>
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="./assets/radar.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./concepts.css" />
+    <script src="./app.js" defer></script>
+    <script src="./concept-state.js" defer></script>
+    <script src="./concepts.js" defer></script>
+  </head>
+  <body data-concept="matrix">
+    <nav class="concept-picker" role="tablist" aria-label="新しいデザイン案">
+      <button id="matrixTab" type="button" role="tab" aria-selected="true" aria-controls="conceptApp" data-concept="matrix"><img src="./assets/columns-3.svg" alt="" />証拠マトリクス</button>
+      <button id="fileTab" type="button" role="tab" aria-selected="false" aria-controls="conceptApp" data-concept="file" tabindex="-1"><img src="./assets/book-open.svg" alt="" />調査ファイル</button>
+      <button id="flowTab" type="button" role="tab" aria-selected="false" aria-controls="conceptApp" data-concept="flow" tabindex="-1"><img src="./assets/list-ordered.svg" alt="" />ステップ調査</button>
+      <a href="./designs.html">前回の3案</a>
+    </nav>
+    <main id="conceptApp" role="tabpanel" aria-labelledby="matrixTab"></main>
+    <dialog id="ghostDialog" aria-label="ゴーストの調査記録"></dialog>
+    <p class="sr-only" id="liveStatus" role="status" aria-live="polite"></p>
+    <div id="conceptToast" class="concept-toast" role="status"></div>
+  </body>
+</html>

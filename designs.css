@@ -1,0 +1,243 @@
+/* All three previews retain the existing app DOM and analysis engine. */
+[data-design] { --teal: #87dfd7; --amber: #e6d278; --coral: #ef9b94; --line: #343d40; --bg: #111718; --panel: #1a2224; --text: #eef3f1; --muted: #bcc8c6; --soft: #98aaa7; color-scheme: dark; }
+[data-design] .app-shell { max-width: 1800px; padding: 0 26px 30px; }
+[data-design] .topbar { padding: 22px 0 20px; }
+[data-design] h1 { font-size: 26px; font-weight: 700; }
+[data-design] h1 span { font-size: 13px; }
+[data-design] h2 { font-size: 13px; }
+[data-design] h3 { font-size: 17px; }
+[data-design] .eyebrow { margin-bottom: 7px; }
+[data-design] .status-strip { margin-bottom: 22px; }
+[data-design] .status-strip > div { padding-top: 12px; padding-bottom: 12px; }
+[data-design] .status-strip strong { font-size: 24px; }
+[data-design] #difficultyLabel { font-size: 15px; }
+[data-design] .control-panel, [data-design] .main-panel { display: contents; }
+[data-design] .difficulty-section { grid-area: difficulty; }
+[data-design] .behavior-section { grid-area: behaviors; }
+[data-design] #evidence { grid-area: evidence; }
+[data-design] #results { grid-area: results; }
+[data-design] .section-heading { margin-bottom: 13px; }
+[data-design] .behavior-filter { padding: 12px 6px; }
+[data-design] .behavior-filter span { font-size: 11px; }
+[data-design] .behavior-filter small { font-size: 10px; }
+[data-design] .behavior-filter.active { background: #253a35; }
+[data-design] .search-field input { background: var(--panel); }
+[data-design] .ghost-note { font-size: 11px; line-height: 1.85; }
+[data-design] .ghost-note strong { font-size: 10px; }
+[data-design] .chip { border-color: var(--line); }
+[data-design] .ghost-card { padding: 17px; gap: 13px; }
+[data-design] .ghost-card.excluded { opacity: .72; }
+[data-design] .evidence-card.confirmed { background: #233d35; border-color: #71b8a0; }
+[data-design] .evidence-card.confirmed .state { color: #a9e9d5; }
+[data-design] .evidence-card.denied { background: #402e2d; border-color: #c48c86; }
+[data-design] .evidence-card.denied .state { color: #f1b4ac; }
+[data-design] .evidence-card img { width: 21px; height: 21px; }
+[data-design] .evidence-card:hover { background: #263333; border-color: #87a5a0; }
+[data-design] .segmented button[aria-checked="true"] { background: #263c37; border-color: #79bcb2; color: #cdf1e9; }
+[data-design] .filter-trigger { display: flex; align-items: center; gap: 9px; background: transparent; border: 1px solid var(--line); padding: 10px 12px; border-radius: 4px; font-size: 11px; }
+[data-design] .filter-trigger[hidden] { display: none; }
+[data-design] .filter-trigger b { font-variant-numeric: tabular-nums; border-left: 1px solid var(--line); padding-left: 9px; width: 26px; text-align: center; }
+[data-design] .design-filter-dialog { position: fixed; inset: 0 0 0 auto; margin: 0; width: min(400px, 100%); height: 100dvh; max-height: 100dvh; max-width: 100%; padding: 20px; border: 0; border-left: 1px solid var(--line); background: var(--bg); color: var(--text); }
+[data-design] .design-filter-dialog::backdrop { background: rgb(0 0 0 / 50%); }
+[data-design] .drawer-close { display: block; margin-left: auto; margin-bottom: 16px; }
+[data-design] .design-filter-dialog .behavior-section { max-height: none; overflow: visible; padding: 0; border: 0; }
+
+/* 01: a three-column operations console. */
+[data-design="signal"] .workspace { grid-template-columns: 240px minmax(0, 1fr) 250px; grid-template-rows: auto 1fr; grid-template-areas: "difficulty results behaviors" "evidence results behaviors"; gap: 24px; }
+[data-design="signal"] .topbar { border-top: 3px solid var(--teal); }
+[data-design="signal"] .behavior-section { border-left: 1px solid var(--line); padding-left: 18px; position: sticky; top: 20px; max-height: calc(100dvh - 40px); overflow: auto; scrollbar-width: thin; }
+[data-design="signal"] .evidence-grid { grid-template-columns: minmax(0, 1fr); gap: 5px; }
+[data-design="signal"] .evidence-card { min-height: 51px; grid-template-columns: 22px 1fr auto; grid-template-rows: auto; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 3px; }
+[data-design="signal"] .evidence-card strong { font-size: 11px; }
+[data-design="signal"] .ghost-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+[data-design="signal"] #results > .section-heading { min-height: 49px; align-items: start; }
+[data-design="signal"] .result-tools { gap: 10px; }
+[data-design="signal"] .ghost-card { border-top: 1px solid var(--line); border-left: 2px solid #6b9f92; border-radius: 3px; }
+[data-design="signal"] .ghost-card.excluded { border-left-color: var(--coral); }
+[data-design="signal"] .chip.forced { color: #eddb8d; border-color: #7b713e; }
+[data-design="signal"] .badge { background: #2c3b34; color: #bdd98d; }
+[data-design="signal"] .badge.out { color: var(--coral); background: #40302e; }
+
+/* 02: a light ledger with comparable, horizontal result rows. */
+[data-design="ledger"] { color-scheme: light; --bg: #f6f8f9; --panel: #fff; --line: #dce2e5; --text: #202a2d; --muted: #4c5b60; --soft: #64747a; --teal: #087e73; --amber: #8a6205; --coral: #bb4b46; }
+[data-design="ledger"] .app-shell { max-width: 1700px; }
+[data-design="ledger"] button img, [data-design="ledger"] .eyebrow img { filter: none; }
+[data-design="ledger"] .topbar { padding: 27px 0 21px; }
+[data-design="ledger"] h1 { font-family: Georgia, "Noto Serif JP", serif; font-size: 29px; }
+[data-design="ledger"] h1 span { font-family: "Segoe UI", "Noto Sans JP", system-ui, sans-serif; }
+[data-design="ledger"] .eyebrow { color: var(--muted); }
+[data-design="ledger"] .status-strip { background: #edf2f2; margin-bottom: 24px; }
+[data-design="ledger"] .status-strip > div:first-child { padding-left: 18px; }
+[data-design="ledger"] .status-strip strong { font-weight: 600; }
+[data-design="ledger"] .workspace { grid-template-columns: 235px minmax(0, 1fr); grid-template-areas: "difficulty difficulty" "behaviors evidence" "behaviors results"; gap: 22px 30px; }
+[data-design="ledger"] .difficulty-section { display: flex; align-items: center; gap: 22px; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
+[data-design="ledger"] .difficulty-section .section-heading { margin: 0; }
+[data-design="ledger"] .segmented { grid-template-columns: repeat(5, minmax(0, 1fr)); flex: 1; max-width: 660px; gap: 0; }
+[data-design="ledger"] .segmented button { border-radius: 0; border-right-width: 0; min-height: 37px; }
+[data-design="ledger"] .segmented button:last-child { grid-column: auto; border-right-width: 1px; }
+[data-design="ledger"] .segmented button[aria-checked="true"] { background: #dff0eb; color: #066659; border-color: #74a69a; border-right-width: 1px; }
+[data-design="ledger"] .custom-count { margin: 0; gap: 12px; }
+[data-design="ledger"] .behavior-section { padding-right: 18px; border-right: 1px solid var(--line); position: sticky; top: 20px; max-height: calc(100dvh - 40px); overflow: auto; scrollbar-width: thin; }
+[data-design="ledger"] .behavior-filter { border-bottom-color: var(--line); }
+[data-design="ledger"] .behavior-filter:hover { background: #eaf0f1; }
+[data-design="ledger"] .behavior-filter.active { background: #e1efeb; }
+[data-design="ledger"] .evidence-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+[data-design="ledger"] .evidence-card { min-height: 112px; border-radius: 4px; padding: 12px; }
+[data-design="ledger"] .evidence-card:hover { background: #edf4f2; border-color: #84b2a8; }
+[data-design="ledger"] .evidence-card.confirmed { background: #e2f2eb; border-color: #6eaa92; }
+[data-design="ledger"] .evidence-card.confirmed .state { color: #126b4d; }
+[data-design="ledger"] .evidence-card.denied { background: #fae9e7; border-color: #ca8a83; }
+[data-design="ledger"] .evidence-card.denied .state { color: #9d3832; }
+[data-design="ledger"] .ghost-grid { grid-template-columns: minmax(0, 1fr); gap: 0; border-top: 2px solid #8a999e; }
+[data-design="ledger"] .ghost-card { display: grid; grid-template-columns: 170px minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "title tell hunt" "chips tell hunt" "options tell hunt"; gap: 10px 22px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; padding: 23px 0; }
+[data-design="ledger"] .ghost-card:hover { background: #eef3f4; }
+[data-design="ledger"] .ghost-card header { grid-area: title; }
+[data-design="ledger"] .ghost-card .chip-row { grid-area: chips; }
+[data-design="ledger"] .ghost-card .ghost-note:nth-of-type(1) { grid-area: tell; border-left: 1px solid var(--line); padding-left: 20px; }
+[data-design="ledger"] .ghost-card .ghost-note:nth-of-type(2) { grid-area: hunt; }
+[data-design="ledger"] .ghost-card .evidence-options, [data-design="ledger"] .ghost-card .out-reason { grid-area: options; }
+[data-design="ledger"] .ghost-card .evidence-options { border-top: 0; margin: 0; padding: 0; }
+[data-design="ledger"] .ghost-title small { color: #728188; }
+[data-design="ledger"] .ghost-note { font-size: 12px; }
+[data-design="ledger"] .ghost-note strong { color: #2c4c48; font-weight: 600; font-size: 11px; }
+[data-design="ledger"] .badge { background: #e3eee8; color: #336852; }
+[data-design="ledger"] .badge.out { background: #f7e6e4; color: var(--coral); }
+[data-design="ledger"] .chip.extra { color: #695996; border-color: #b5a8d3; }
+[data-design="ledger"] .chip.confirmed { color: #087654; border-color: #6eab94; }
+[data-design="ledger"] .chip.forced { color: #856215; border-color: #cbbb8b; }
+[data-design="ledger"] .chip.denied { color: var(--coral); border-color: #c6928b; }
+[data-design="ledger"] tbody tr:hover { background: #eaf0f2; }
+[data-design="ledger"] .icon-button:hover { background: #e8f1ec; }
+[data-design="ledger"] .icon-button.danger:hover { background: #f9e8e5; }
+[data-design="ledger"] .toast { background: #e2f0e8; color: var(--text); }
+
+/* 03: compact top controls and an on-demand filter drawer. */
+[data-design="compact"] { color-scheme: light; --bg: #eef2f1; --panel: #fff; --line: #cfdad5; --text: #24312d; --muted: #53665e; --soft: #65766e; --teal: #216e56; --amber: #8b620c; --coral: #b64b3e; }
+[data-design="compact"] .app-shell { max-width: none; padding: 0 32px 30px; }
+[data-design="compact"] .topbar { background: #173d37; color: #f5f8f6; margin: 0 -32px; padding: 24px 32px 21px; }
+[data-design="compact"] .topbar h1 span, [data-design="compact"] .topbar .version-row { color: #c1d4cc; }
+[data-design="compact"] .topbar .eyebrow { color: #ffcfb7; }
+[data-design="compact"] .topbar .icon-button { border-color: #66867b; }
+[data-design="compact"] .topbar .icon-button:hover { background: #31564b; border-color: #ffd0ba; }
+[data-design="compact"] .status-strip { background: #173d37; margin: 0 -32px 24px; padding: 0 32px; border-color: #456259; }
+[data-design="compact"] .status-strip > div { border-color: #456259; }
+[data-design="compact"] .status-label { color: #c1d4cc; }
+[data-design="compact"] #candidateCount, [data-design="compact"] #confirmedCount { color: #d1eccb; }
+[data-design="compact"] #deniedCount { color: #ffbdaa; }
+[data-design="compact"] #difficultyLabel { color: #f3db92; }
+[data-design="compact"] .workspace { max-width: 1320px; margin: auto; grid-template-columns: minmax(0, 1fr); grid-template-areas: "difficulty" "evidence" "results"; gap: 22px; }
+[data-design="compact"] .difficulty-section { display: flex; align-items: center; gap: 20px; }
+[data-design="compact"] .difficulty-section .section-heading { margin: 0; }
+[data-design="compact"] .segmented { grid-template-columns: repeat(5, minmax(0, 1fr)); flex: 1; max-width: 720px; }
+[data-design="compact"] .segmented button { min-height: 36px; background: #fff; }
+[data-design="compact"] .segmented button:last-child { grid-column: auto; }
+[data-design="compact"] .segmented button[aria-checked="true"] { background: #f5c3ab; border-color: #b97554; color: #593922; }
+[data-design="compact"] .custom-count { margin-top: 0; }
+[data-design="compact"] .evidence-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+[data-design="compact"] .evidence-card { min-height: 100px; grid-template-rows: 23px 1fr 17px; border-radius: 4px; gap: 6px; padding: 12px; }
+[data-design="compact"] .evidence-card img, [data-design="compact"] .filter-trigger img { filter: none; }
+[data-design="compact"] .evidence-card:hover { background: #e8f2ec; border-color: #789c8b; }
+[data-design="compact"] .evidence-card.confirmed { background: #dcebdc; border-color: #799e72; }
+[data-design="compact"] .evidence-card.confirmed .state { color: #375c2b; }
+[data-design="compact"] .evidence-card.denied { background: #f6e0d7; border-color: #c18470; }
+[data-design="compact"] .evidence-card.denied .state { color: #964631; }
+[data-design="compact"] .evidence-heading { justify-content: start; }
+[data-design="compact"] .evidence-heading .text-button { margin-left: auto; }
+[data-design="compact"] .filter-trigger { background: #fff; color: #294d40; }
+[data-design="compact"] .filter-trigger:hover { background: #e0ebe6; }
+[data-design="compact"] .ghost-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+[data-design="compact"] .ghost-card { border-top: 3px solid #7ea681; border-radius: 4px; padding: 19px; }
+[data-design="compact"] .ghost-card.excluded { border-top-color: #b97663; }
+[data-design="compact"] .ghost-note { font-size: 12px; }
+[data-design="compact"] .ghost-note strong { color: #395a4b; font-weight: 600; }
+[data-design="compact"] .badge { color: #345b31; background: #e6efdf; }
+[data-design="compact"] .badge.out { background: #f7e5de; color: var(--coral); }
+[data-design="compact"] .chip.extra { color: #745693; border-color: #bcabd0; }
+[data-design="compact"] .chip.forced { color: #885e0e; border-color: #c5b58b; }
+[data-design="compact"] .chip.confirmed { color: #226b45; border-color: #79a688; }
+[data-design="compact"] .chip.denied { color: var(--coral); border-color: #ca9a8d; }
+[data-design="compact"] .reference-section, [data-design="compact"] .footer { max-width: 1320px; margin-left: auto; margin-right: auto; }
+[data-design="compact"] .behavior-filter { border-bottom-color: var(--line); }
+[data-design="compact"] .behavior-filter span { font-size: 12px; }
+[data-design="compact"] .behavior-filter:hover { background: #e4ece8; }
+[data-design="compact"] .behavior-filter.active { background: #deebe2; }
+[data-design="compact"] .behavior-list { grid-template-columns: minmax(0, 1fr); }
+[data-design="compact"] .toast { background: #e2eee6; color: var(--text); }
+
+@media (min-width: 1600px) {
+  [data-design="signal"] .ghost-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1180px) and (min-width: 901px) {
+  [data-design="signal"] .workspace { grid-template-columns: 210px minmax(0, 1fr); grid-template-areas: "difficulty results" "evidence results" "behaviors results"; }
+  [data-design="signal"] .behavior-section { border: 0; padding-left: 0; position: static; max-height: none; }
+  [data-design="signal"] .ghost-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [data-design="ledger"] .evidence-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  [data-design="ledger"] .ghost-card { grid-template-columns: 140px minmax(0, 1fr); grid-template-areas: "title tell" "chips hunt" "options hunt"; }
+  [data-design="ledger"] .ghost-card .ghost-note:nth-of-type(1) { padding-left: 0; border: 0; }
+  [data-design="compact"] .custom-count { display: none; }
+  [data-design="compact"] .difficulty-section:has([data-difficulty="custom"][aria-checked="true"]) .custom-count { display: flex; }
+}
+@media (max-width: 900px) {
+  [data-design] .app-shell { padding: 0 20px 24px; }
+  [data-design] .mobile-nav { display: flex; padding: 13px 0; gap: 24px; margin-bottom: 20px; }
+  [data-design] .workspace { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "difficulty" "evidence" "results" "behaviors"; gap: 24px; }
+  [data-design] .behavior-section { position: static; max-height: none; border: 0; padding: 20px 0 0; border-top: 1px solid var(--line); }
+  [data-design] .behavior-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; }
+  [data-design] .difficulty-section { display: block; border: 0; padding: 0; }
+  [data-design] .difficulty-section .section-heading { margin-bottom: 12px; }
+  [data-design] .segmented { grid-template-columns: repeat(5, minmax(0, 1fr)); max-width: none; }
+  [data-design] .segmented button:last-child { grid-column: auto; }
+  [data-design] .custom-count { margin-top: 10px; max-width: 240px; }
+  [data-design] .evidence-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  [data-design="signal"] .evidence-card { min-height: 94px; grid-template-columns: minmax(0, 1fr); grid-template-rows: 22px 1fr 17px; gap: 5px; padding: 10px; }
+  [data-design] .ghost-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [data-design="ledger"] .ghost-grid { grid-template-columns: minmax(0, 1fr); }
+  [data-design="ledger"] .ghost-card { grid-template-columns: 145px minmax(0, 1fr) minmax(0, 1fr); }
+  [data-design="compact"] .topbar { margin: 0 -20px; padding: 22px 20px; }
+  [data-design="compact"] .status-strip { margin: 0 -20px; padding: 0 20px; }
+  [data-design="compact"] .mobile-nav { background: var(--bg); }
+  [data-design="compact"] .workspace { grid-template-areas: "difficulty" "evidence" "results"; }
+  [data-design="compact"] .mobile-nav a[href="#designBehaviors"] { display: none; }
+  [data-design="compact"] .design-filter-dialog .behavior-list { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 620px) {
+  [data-design] .app-shell { padding: 0 16px 24px; }
+  [data-design] .topbar { padding: 20px 0; gap: 12px; }
+  [data-design] h1 { font-size: 23px; }
+  [data-design] h1 span { display: block; margin: 5px 0 0; font-size: 12px; }
+  [data-design] .version-row { gap: 5px 9px; }
+  [data-design] .status-strip > div { padding: 11px 14px; }
+  [data-design] .status-strip > div:first-child { padding-left: 14px; }
+  [data-design] .status-strip strong { font-size: 22px; }
+  [data-design] #difficultyLabel { font-size: 13px; }
+  [data-design] .segmented { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  [data-design] .segmented button { min-height: 38px; }
+  [data-design="ledger"] .segmented { gap: 5px; }
+  [data-design="ledger"] .segmented button { border-width: 1px; border-radius: 3px; }
+  [data-design] .evidence-grid { gap: 6px; }
+  [data-design] .evidence-card { min-height: 118px; padding: 10px 7px; }
+  [data-design] .evidence-card strong { font-size: 10px; }
+  [data-design] .state { font-size: 9px; }
+  [data-design] .ghost-grid { grid-template-columns: minmax(0, 1fr); }
+  [data-design] .behavior-list { grid-template-columns: minmax(0, 1fr); }
+  [data-design="ledger"] .ghost-card { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "chips" "tell" "hunt" "options"; gap: 12px; padding: 22px 0; }
+  [data-design="ledger"] .ghost-card .ghost-note:nth-of-type(1) { padding: 0; border: 0; }
+  [data-design="ledger"] .ghost-card .evidence-options { padding-top: 10px; border-top: 1px solid var(--line); }
+  [data-design="compact"] .topbar { margin: 0 -16px; padding: 16px; }
+  [data-design="compact"] .eyebrow { display: none; }
+  [data-design="compact"] .status-strip { margin: 0 -16px; padding: 0 16px; }
+  [data-design="compact"] .status-strip > div { padding-top: 8px; padding-bottom: 8px; }
+  [data-design="compact"] .status-strip strong { font-size: 20px; }
+  [data-design="compact"] .segmented { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+  [data-design="compact"] .segmented button { font-size: 10px; padding: 6px 3px; min-height: 38px; }
+  [data-design="compact"] .mode-name { display: none; }
+  [data-design="compact"] .custom-count { display: none; }
+  [data-design="compact"] .difficulty-section:has([data-difficulty="custom"][aria-checked="true"]) .custom-count { display: flex; }
+  [data-design="compact"] .evidence-card { min-height: 98px; }
+  [data-design="compact"] .filter-trigger { padding: 7px 9px; font-size: 10px; }
+  [data-design="compact"] .evidence-heading { gap: 6px; }
+  [data-design="compact"] .evidence-heading .text-button { font-size: 10px; padding: 5px; }
+  [data-design="compact"] .evidence-heading > div { flex-basis: 100%; margin-bottom: 4px; }
+  [data-design="compact"] .evidence-heading .text-button { margin-left: 0; margin-right: auto; }
+  [data-design="compact"] .ghost-card { padding: 18px; }
+}

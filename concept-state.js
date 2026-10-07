@@ -58,6 +58,11 @@
     return true;
   }
 
+  function noteItems(text) {
+    // Japanese full stops keep D.O.T.S. and decimal measurements intact.
+    return text.match(/[^。]+。?/gu) || [];
+  }
+
   function readStorage(storage, key = STORAGE_KEY, fallbackKeys = []) {
     for (const candidate of [key, ...fallbackKeys]) {
       try {
@@ -75,5 +80,5 @@
     catch { return false; }
   }
 
-  return { STORAGE_KEY, DOSSIER_KEY, LEGACY_KEY, difficultyLabels, createState, sanitizeState, visibleResults, selectedResult, selectRelative, setEvidence, readStorage, writeStorage };
+  return { STORAGE_KEY, DOSSIER_KEY, LEGACY_KEY, difficultyLabels, createState, sanitizeState, visibleResults, selectedResult, selectRelative, setEvidence, noteItems, readStorage, writeStorage };
 });

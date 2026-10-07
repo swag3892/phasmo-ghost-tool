@@ -72,7 +72,10 @@ summary { cursor: pointer; font-size: 11px; color: var(--muted); line-height: 1.
 .record-evidence-item.denied { color: var(--negative); text-decoration: line-through; }
 .record-section { margin-top: 23px; }
 .record-section h3 { font-size: 12px; color: var(--accent); font-weight: 650; margin-bottom: 9px; }
-.record-section p { font-size: 13px; line-height: 2; overflow-wrap: anywhere; }
+.record-notes { margin: 0; padding-left: 20px; list-style: disc outside; font-size: 13px; line-height: 1.9; overflow-wrap: anywhere; }
+.record-notes > li { padding-left: 3px; }
+.record-notes > li + li { margin-top: 9px; }
+.record-notes > li::marker { color: var(--accent); }
 .record-options { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 16px; }
 .record-options summary span { font-variant-numeric: tabular-nums; margin-left: 10px; }
 .record-options ul { list-style: none; padding: 0; margin: 12px 0 0; }
@@ -210,6 +213,8 @@ body[data-concept="file"] .empty-note h2 { font-size: 15px; line-height: 1.7; fo
 .reference-table th:nth-child(2) { width: 270px; }
 .reference-table tbody th { font-weight: 500; }
 .reference-table small { display: block; color: var(--muted); font-size: 10px; }
+.reference-table .record-notes { font-size: inherit; line-height: inherit; padding-left: 17px; }
+.reference-table .record-notes > li + li { margin-top: 6px; }
 .dossier-sources { max-width: 1380px; padding: 0 36px 24px; margin: auto; }
 .update-notes { max-width: 960px; padding-top: 18px; font-size: 12px; line-height: 1.95; overflow-wrap: anywhere; }
 .update-notes p { margin-bottom: 14px; }
@@ -365,7 +370,7 @@ body[data-concept="flow"] .concept-toast { bottom: 96px; }
   .dossier-sources { padding: 0 16px 24px; }
   .case-panel { --evidence-control: 42px; }
   body[data-concept="file"] .evidence-label strong { font-size: 12px; }
-  body[data-concept="file"] .record-section p { font-size: 13px; }
+  body[data-concept="file"] .record-notes { font-size: 13px; }
   .file-header { padding: 22px 0; }
   .file-candidate-heading { gap: 12px; }
   .file-search-tools { width: 100%; order: 2; }
@@ -377,7 +382,7 @@ body[data-concept="flow"] .concept-toast { bottom: 96px; }
   .evidence-label img { width: 20px; height: 20px; }
   .file-totals { padding-top: 14px; }
   .record-heading h2, .flow-record .record-heading h2 { font-size: 25px; }
-  .record-section p { font-size: 12px; line-height: 1.95; }
+  .record-notes { font-size: 12px; line-height: 1.95; }
   .record-evidence { gap: 12px 16px; margin: 19px 0; }
   .record-evidence-item { font-size: 11px; gap: 7px; }
   .flow-app { padding: 0 16px 20px; }

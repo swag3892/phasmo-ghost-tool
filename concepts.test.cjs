@@ -146,12 +146,43 @@ test("matrix dialogs render the audited record for all 30 ghosts", () => {
     preview.action("selectGhost", { ghost: ghost.id });
     const dialog = preview.nodes.get("ghostDialog");
     assert.equal(dialog.open, true);
-    assert.ok(dialog.innerHTML.includes(ghost.tell));
-    assert.ok(dialog.innerHTML.includes(ghost.hunt));
+    const sections = [...dialog.innerHTML.matchAll(/<section class="record-section"><h3>[^<]+<\/h3><ul class="record-notes">(.*?)<\/ul><\/section>/g)];
+    assert.equal(sections.length, 2, ghost.id);
+    for (const [index, text] of [ghost.tell, ghost.hunt].entries()) {
+      assert.deepEqual([...sections[index][1].matchAll(/<li>(.*?)<\/li>/g)].map((match) => match[1]), model.noteItems(text), ghost.id);
+    }
     assert.match(dialog.innerHTML, /証拠の組み合わせ/);
   }
   preview.action("closeDialog");
   assert.equal(preview.nodes.get("ghostDialog").open, false);
+});
+
+test("bullet items preserve all 60 audited descriptions without dropping text", () => {
+  for (const ghost of engine.GHOSTS) {
+    for (const text of [ghost.tell, ghost.hunt]) {
+      const items = model.noteItems(text);
+      assert.ok(items.length > 0, ghost.id);
+      assert.ok(items.every((item) => item.trim().length > 0), ghost.id);
+      assert.equal(items.join(""), text, ghost.id);
+      assert.ok(items.every((item) => item.endsWith("。")), ghost.id);
+    }
+  }
+});
+
+test("bullet boundaries keep D.O.T.S. and decimal speeds in their original sentences", () => {
+  assert.deepEqual(model.noteItems("D.O.T.S.で確認する。速度は1.53m/s、近距離では0.4m/s。"), ["D.O.T.S.で確認する。", "速度は1.53m/s、近距離では0.4m/s。"]);
+  assert.deepEqual(model.noteItems("句点のない文章"), ["句点のない文章"]);
+  assert.deepEqual(model.noteItems(""), []);
+});
+
+test("adopted reference table uses the same bullet items for all 30 ghosts", () => {
+  const preview = createPreview("file", null, { adopted: true });
+  const table = preview.root.innerHTML.match(/<table class="reference-table">(.*?)<\/table>/)[1];
+  const lists = [...table.matchAll(/<ul class="record-notes">(.*?)<\/ul>/g)];
+  assert.equal(lists.length, engine.GHOSTS.length);
+  for (const [index, ghost] of engine.GHOSTS.entries()) {
+    assert.deepEqual([...lists[index][1].matchAll(/<li>(.*?)<\/li>/g)].map((match) => match[1]), model.noteItems(ghost.hunt), ghost.id);
+  }
 });
 
 test("dossier tabs, candidate navigation and empty filtered state render correctly", () => {

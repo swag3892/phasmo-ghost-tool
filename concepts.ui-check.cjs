@@ -5,6 +5,7 @@ const fs = require("node:fs");
 const argument = (name) => process.argv.includes(name) ? process.argv[process.argv.indexOf(name) + 1] : undefined;
 const { chromium } = require(argument("--playwright") || "playwright");
 const model = require("./concept-state.js");
+const engine = require("./app.js");
 const base = (argument("--url") || "http://127.0.0.1:4173").replace(/\/$/, "");
 const executablePath = argument("--browser");
 const output = path.join(__dirname, "concept-previews");
@@ -196,6 +197,22 @@ async function main() {
     assert.equal(await page.locator(".case-record .empty-action").innerText(), "条件をリセット");
     await page.locator(".case-record .empty-action").click();
     await count(30);
+    for (const width of [390, 1440]) {
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 950 });
+      for (const ghost of engine.GHOSTS) {
+        await field("searchTerm").fill(ghost.english);
+        await page.locator(`.candidate-rail [data-ghost="${ghost.id}"]`).click();
+        const sections = page.locator(".case-record .record-section");
+        assert.equal(await sections.count(), 2);
+        for (const [index, text] of [ghost.tell, ghost.hunt].entries()) {
+          assert.equal(await sections.nth(index).locator("ul.record-notes").count(), 1);
+          assert.deepEqual(await sections.nth(index).locator("li").allTextContents(), model.noteItems(text), `${ghost.id} ${width}`);
+        }
+        await assertLayout(`${ghost.id} bullet lists ${width}`);
+      }
+      await action("reset").click();
+    }
+    console.log("All 60 ghost descriptions render as intact bullet lists on desktop and mobile.");
     for (const width of [320, 390, 768, 1080, 1440]) {
       await page.setViewportSize({ width, height: width < 540 ? 844 : 950 });
       await action("reset").click();
@@ -211,6 +228,11 @@ async function main() {
       await action("reset").click();
       await page.locator('[data-disclosure="all-evidence"] summary').click();
       assert.equal(await page.locator(".reference-table tbody tr").count(), 30);
+      const referenceLists = page.locator(".reference-table tbody .record-notes");
+      assert.equal(await referenceLists.count(), 30);
+      for (const [index, ghost] of engine.GHOSTS.entries()) {
+        assert.deepEqual(await referenceLists.nth(index).locator("li").allTextContents(), model.noteItems(ghost.hunt), `reference ${ghost.id} ${width}`);
+      }
       await page.locator("#gameUpdates summary").click();
       await assertLayout(`adopted dossier references ${width}`);
       await page.locator("#gameUpdates summary").click();

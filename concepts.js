@@ -72,16 +72,38 @@
     return `<details class="dossier-reference" data-disclosure="all-evidence"><summary>全ゴーストの証拠一覧 <span>${engine.GHOSTS.length}種類</span></summary><div class="reference-scroll" tabindex="0" role="region" aria-label="全ゴーストの証拠一覧"><table class="reference-table"><thead><tr><th scope="col">ゴースト</th><th scope="col">証拠</th><th scope="col">調査のポイント</th></tr></thead><tbody>${engine.GHOSTS.map((ghost) => `<tr><th scope="row">${ghost.name}<small>${ghost.english}</small></th><td>${[...ghost.evidence, ...(ghost.extraEvidence || [])].map((id) => `${engine.EVIDENCE.find((item) => item.id === id).label}${ghost.forced === id && engine.getEvidenceCount(state) > 0 ? "（強制証拠）" : (ghost.extraEvidence || []).includes(id) ? "（追加証拠）" : ""}`).join(" / ")}</td><td>${notes(ghost.hunt)}</td></tr>`).join("")}</tbody></table></div></details>`;
   }
 
+  function adviceView() {
+    const advice = window.PhasmoAdvice.buildAdvice(state);
+    const tabLabels = { evidence: "証拠を確認", behaviors: "行動を確認", settings: "設定を確認" };
+    const tabLink = (tab, label = tabLabels[tab]) => `<button type="button" class="advice-link" data-action="caseTab" data-tab="${tab}" data-focus="advice-${tab}">${label}${icon("arrow-right")}</button>`;
+    const observations = (items) => `<ul class="advice-checks">${items.map((item) => `<li data-advice-behavior="${item.id}"><div class="advice-check-heading"><h4>${escapeHtml(item.label)}</h4><span class="advice-tag ${item.mode === "hint" ? "is-hint" : ""}">${item.mode === "hint" ? "参考・除外なし" : `観測時 ${advice.candidates.length} → ${item.count}種類`}</span></div>${notes(item.help)}<button type="button" class="advice-link" data-action="reviewBehavior" data-behavior="${item.id}" data-focus="review-${item.id}">観測条件を確認${icon("arrow-right")}</button></li>`).join("")}</ul>`;
+    const label = (id) => engine.EVIDENCE.find((item) => item.id === id).label;
+    return `<section class="investigation-advice" data-advice-stage="${advice.stage}" aria-labelledby="adviceTitle">
+      <header class="advice-heading"><p>候補 ${advice.candidates.length}種類 / 通常証拠の設定 ${advice.evidenceCount}種類</p><h2 id="adviceTitle">${escapeHtml(advice.heading)}</h2><p class="advice-summary">${escapeHtml(advice.message)}</p></header>
+      <dl class="advice-context"><div><dt>確定した証拠</dt><dd>${advice.confirmed.map(label).join(" / ") || "なし"}</dd></div>${advice.inferred.length ? `<div><dt>行動から反映</dt><dd>${advice.inferred.map(label).join(" / ")}</dd></div>` : ""}</dl>
+      <ol class="advice-steps">${advice.steps.map((step) => `<li><h3>${step.title}</h3><p>${step.text}</p>${step.tab ? tabLink(step.tab) : ""}</li>`).join("")}</ol>
+      ${advice.evidenceChecks.length ? `<section class="advice-section" aria-labelledby="adviceEvidenceTitle"><h3 id="adviceEvidenceTitle">次に確認する証拠</h3><ul class="advice-checks">${advice.evidenceChecks.map((item) => `<li data-advice-evidence="${item.id}"><div class="advice-check-heading"><h4>${icon(evidenceIcons[item.id])}${item.label}</h4><span class="advice-tag">確認時 ${advice.candidates.length} → ${item.count}種類</span></div><p>${item.method}</p>${item.count <= 4 ? `<p class="advice-meta">残る候補: ${item.names.join(" / ")}</p>` : ""}${item.forcedFor.length ? `<p class="advice-meta">強制証拠: ${item.forcedFor.join(" / ")}</p>` : ""}</li>`).join("")}</ul></section>` : ""}
+      ${advice.behaviorChecks.length ? advice.stage === "evidence" ? `<details class="advice-section advice-observations" data-disclosure="advice-behaviors"><summary>ハント外で確認する行動 <span>${advice.behaviorChecks.length}項目</span></summary>${observations(advice.behaviorChecks)}</details>` : `<section class="advice-section" aria-labelledby="adviceBehaviorTitle"><h3 id="adviceBehaviorTitle">ハント外で確認する行動</h3>${observations(advice.behaviorChecks)}</section>` : ""}
+      ${advice.huntChecks.length ? `<details class="advice-section advice-hunt" data-disclosure="advice-hunt"><summary>ハント中・接近が必要な観測</summary><p class="advice-caution">確認のためにハントを起こしたり、ゴーストに近づいたりする必要はありません。自然に観測できた場合の比較用です。退避手段とスマッジ・着火具を準備してください。</p>${observations(advice.huntChecks)}</details>` : ""}
+      ${advice.candidates.length > 1 && advice.candidates.length <= 6 ? `<section class="advice-section advice-comparison" aria-labelledby="adviceComparisonTitle"><h3 id="adviceComparisonTitle">残った候補の比較</h3>${advice.candidates.map((ghost) => `<details data-disclosure="advice-ghost-${ghost.id}"><summary>${ghost.name}<span>${ghost.english}</span></summary>${notes(ghost.hunt)}</details>`).join("")}</section>` : ""}
+      ${advice.notices.length ? `<ul class="advice-notices">${advice.notices.map((notice) => `<li>${escapeHtml(notice)}</li>`).join("")}</ul>` : ""}
+      ${advice.candidates.some((ghost) => ["deogen", "mimic"].includes(ghost.id)) ? '<p class="advice-caution">デオヘン、またはデオヘンを模倣するミミックが残る間は、隠れるだけではハントを防げません。逃げ続けられる経路も確認してください。</p>' : ""}
+      <a class="advice-source" href="https://github.com/swag3892/phasmo-ghost-tool/blob/main/GHOST_AUDIT.md#調査アドバイス" target="_blank" rel="noopener">判定の根拠と出典</a>
+    </section>`;
+  }
+
   function fileView() {
     const results = model.visibleResults(state);
     const selected = model.selectedResult(state);
     const index = Math.max(0, results.findIndex((result) => result.ghost.id === selected?.ghost.id));
     const tally = counts();
-    const tabs = [["evidence", "証拠"], ["behaviors", "行動"], ["settings", "設定"]];
+    const tabs = [["evidence", "証拠"], ["behaviors", "行動"], ["advice", "アドバイス"], ["settings", "設定"]];
     const panel = state.caseTab === "evidence"
-      ? `<div class="case-section-heading"><h2>証拠の確認</h2><button type="button" class="clear-control" data-action="clearEvidence">証拠をリセット</button></div><div class="evidence-legend" aria-hidden="true"><span>未確認</span><span>確定</span><span>否定</span></div>${evidenceRows()}<dl class="file-totals"><div><dt>確定</dt><dd>${tally.confirmed}</dd></div><div><dt>否定</dt><dd>${tally.denied}</dd></div></dl>`
+      ? `<div class="case-section-heading"><h2>証拠の確認</h2><button type="button" class="clear-control" data-action="clearEvidence">証拠をリセット</button></div><div class="evidence-legend" aria-hidden="true"><span>未確認</span><span>確定</span><span>否定</span></div>${evidenceRows()}<dl class="file-totals"><div><dt>確定</dt><dd>${tally.confirmed}</dd></div><div><dt>否定</dt><dd>${tally.denied}</dd></div></dl><div class="advice-entry"><p>選択した条件から、次に確認すること</p><button type="button" class="advice-link" data-action="caseTab" data-tab="advice" data-focus="open-advice">次の調査へ${icon("arrow-right")}</button></div>`
       : state.caseTab === "behaviors"
         ? behaviorList()
+        : state.caseTab === "advice"
+          ? adviceView()
         : `<div class="file-settings">${difficulty()}<dl class="data-facts"><div><dt>収録ゴースト</dt><dd>${engine.GHOSTS.length}種類</dd></div><div><dt>行動フィルター</dt><dd>${engine.BEHAVIOR_FILTERS.length}項目</dd></div><div><dt>仕様確認対象</dt><dd>v${review.version}</dd></div><div><dt>全件確認日</dt><dd>${review.date}</dd></div></dl><a href="https://github.com/swag3892/phasmo-ghost-tool/blob/main/GHOST_AUDIT.md" target="_blank" rel="noopener">仕様の確認結果と出典</a></div>`;
     return `<div class="file-app">
       <header class="file-header">
@@ -197,6 +219,13 @@
     if (action === "clearSearch") state.searchTerm = "";
     if (action === "toggleMatrixFilters") state.matrixFiltersOpen = !state.matrixFiltersOpen;
     if (action === "caseTab") state.caseTab = button.dataset.tab;
+    if (action === "reviewBehavior") {
+      const filter = engine.BEHAVIOR_FILTERS.find((item) => item.id === button.dataset.behavior);
+      if (!filter) return;
+      state.caseTab = "behaviors";
+      state.behaviorTerm = filter.label;
+      state.behaviorMode = "all";
+    }
     if (action === "evidence") model.setEvidence(state, button.dataset.evidence, button.dataset.state);
     if (action === "step") {
       const step = Number(button.dataset.step);
@@ -209,6 +238,12 @@
       if (concept === "matrix") { persist(); openRecord(state.selectedGhost); return; }
     }
     render();
+    if (action === "reviewBehavior") {
+      const details = root.querySelector(`[data-disclosure="${button.dataset.behavior}"]`);
+      if (details) details.open = true;
+      root.querySelector(`[data-focus="behavior-${button.dataset.behavior}"]`)?.focus({ preventScroll: true });
+    }
+    if (action === "caseTab" && !button.dataset.focus?.startsWith("case-")) root.querySelector(`#case-${state.caseTab}`)?.focus({ preventScroll: true });
     if (action === "step" || action === "reset") window.scrollTo({ top: 0, behavior: "auto" });
     if (["previousGhost", "nextGhost", "selectGhost", "reset"].includes(action)) root.querySelector(`.candidate-rail [data-ghost="${state.selectedGhost}"]`)?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }

@@ -25,7 +25,7 @@ function createPreview(concept, saved, options = {}) {
   };
   if (options.adopted) document.body.dataset.app = "dossier";
   const window = {
-    PhasmoTool: engine, PhasmoConceptState: model,
+    PhasmoTool: engine, PhasmoConceptState: model, PhasmoAdvice: require("./investigation-advice.js"),
     addEventListener(type, fn) { listeners.set(type, fn); },
     removeEventListener(type, fn) { assert.equal(fn, engine.init); },
     localStorage: { getItem(key) { return storage.get(key) ?? null; }, setItem(key, value) { storage.set(key, value); } },
@@ -260,6 +260,44 @@ test("Japanese search composition is applied only after confirmation", () => {
   preview.root.compositionend({ target });
   assert.equal(preview.state().searchTerm, "ミミ");
   assert.match(preview.root.innerHTML, /data-ghost-detail="mimic"/);
+});
+
+test("advice is a persistent fourth tab and does not change investigation conditions", () => {
+  const preview = createPreview("file", null, { adopted: true });
+  preview.action("evidence", { evidence: "emf", state: "confirmed" });
+  const before = preview.state();
+  preview.action("caseTab", { tab: "advice" });
+  assert.match(preview.root.innerHTML, /id="case-advice"[^>]+aria-selected="true"/);
+  assert.match(preview.root.innerHTML, /data-advice-stage="evidence"/);
+  assert.match(preview.root.innerHTML, /data-advice-evidence="orb"/);
+  assert.deepEqual(preview.state().evidenceStates, before.evidenceStates);
+  assert.deepEqual(preview.state().activeBehaviors, before.activeBehaviors);
+  assert.equal(model.sanitizeState(preview.state()).caseTab, "advice");
+  const restored = createPreview("file", null, { adopted: true, entries: [...preview.storage.entries()] });
+  assert.match(restored.root.innerHTML, /id="adviceTitle"/);
+  restored.action("reviewBehavior", { behavior: "goryoDots" });
+  assert.equal(restored.state().caseTab, "behaviors");
+  assert.equal(restored.state().behaviorTerm, "D.O.T.S.の姿がカメラ越しでのみ見える");
+  assert.deepEqual(restored.state().activeBehaviors, []);
+  assert.deepEqual(restored.state().evidenceStates, before.evidenceStates);
+});
+
+test("advice renders safe review, one-candidate and zero-evidence states", () => {
+  const preview = createPreview("file", null, { adopted: true });
+  preview.behavior("maleName", true);
+  preview.behavior("bansheeScream", true);
+  preview.action("caseTab", { tab: "advice" });
+  assert.match(preview.root.innerHTML, /data-advice-stage="review"/);
+  assert.doesNotMatch(preview.root.innerHTML, /data-advice-evidence=|data-advice-behavior=/);
+  preview.action("reset");
+  preview.change("difficulty", "zero");
+  preview.action("caseTab", { tab: "advice" });
+  assert.match(preview.root.innerHTML, /通常証拠は出ない設定/);
+  assert.match(preview.root.innerHTML, /data-advice-evidence="orb"/);
+  preview.action("evidence", { evidence: "orb", state: "confirmed" });
+  assert.match(preview.root.innerHTML, /data-advice-stage="confirm"/);
+  assert.match(preview.root.innerHTML, /ミミックが入力条件に一致/);
+  assert.doesNotMatch(preview.root.innerHTML, /data-advice-behavior=/);
 });
 
 test("saved search input is HTML escaped and every rendered local icon exists", () => {

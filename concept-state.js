@@ -29,7 +29,7 @@
     for (const key of ["searchTerm", "behaviorTerm"]) if (typeof value[key] === "string") state[key] = value[key];
     if (ghostIds.has(value.selectedGhost)) state.selectedGhost = value.selectedGhost;
     if ([0, 1, 2].includes(value.step)) state.step = value.step;
-    if (["evidence", "behaviors", "settings"].includes(value.caseTab)) state.caseTab = value.caseTab;
+    if (["evidence", "behaviors", "advice", "settings"].includes(value.caseTab)) state.caseTab = value.caseTab;
     if (["all", "decisive", "hint"].includes(value.behaviorMode)) state.behaviorMode = value.behaviorMode;
     state.matrixFiltersOpen = value.matrixFiltersOpen === true;
     return state;

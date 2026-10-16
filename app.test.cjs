@@ -63,6 +63,34 @@ test("all 30 evidence sets and five forced evidence types match the reviewed bas
   assert.deepEqual(api.GHOSTS.filter((g) => g.extraEvidence).map((g) => [g.id, g.extraEvidence]), [["mimic", ["orb"]]]);
 });
 
+test("all 30 reviewed profiles have a concise summary and an audited source", () => {
+  const audit = fs.readFileSync(require.resolve("./GHOST_AUDIT.md"), "utf8");
+  assert.equal(new Set(api.GHOSTS.map((g) => g.summary)).size, 30);
+  for (const g of api.GHOSTS) {
+    assert.ok(g.summary.length > 0 && g.summary.length <= 48, g.id);
+    assert.doesNotMatch(g.summary, /[<>\r\n]/);
+    const source = new URL(g.source);
+    assert.equal(source.protocol, "https:");
+    assert.equal(source.hostname, "phasmopedia.com");
+    assert.ok(audit.includes(g.source), g.id);
+    assert.ok(g.hunt.startsWith("確認: "), g.id);
+    assert.ok(g.hunt.includes("注意: "), g.id);
+  }
+});
+
+test("reviewed descriptions retain hunt scope, timing and uncertain-door caveats", () => {
+  assert.ok(ghost("deogen").tell.startsWith("ハント中は"));
+  assert.match(ghost("wraith").tell, /ハント外に/);
+  assert.match(ghost("banshee").hunt, /調査エリア外でも開始判定は標的の正気度/);
+  assert.match(ghost("banshee").hunt, /標的が死亡すると対象が変わる/);
+  assert.match(ghost("gallu").hunt, /目くらましが終わってから変化/);
+  assert.match(ghost("goryo").tell, /お気に入りの部屋に誰もいない/);
+  assert.doesNotMatch(ghost("yurei").tell, /滑らか/);
+  assert.match(ghost("yurei").hunt, /音だけでは断定できず/);
+  assert.match(ghost("twins").tell, /約1\.5 m\/sまたは約1\.9 m\/s/);
+  assert.match(ghost("mimic").hunt, /1回のハント中に模倣対象が切り替わるわけでもありません/);
+});
+
 test("every visible evidence combination survives with all hidden evidence denied", () => {
   for (const g of api.GHOSTS) {
     for (const count of [0, 1, 2, 3]) {

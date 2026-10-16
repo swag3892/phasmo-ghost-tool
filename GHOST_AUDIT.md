@@ -1,55 +1,64 @@
 # ゴースト・行動フィルター全件監査
 
-確認日: 2026-10-07 / 仕様確認対象: v0.19.0.2 / ゴースト30種類
+再確認日: 2026-10-17 / 公式更新履歴: v0.19.1.0 / 詳細資料: 主にv0.19.0.2対応 / ゴースト30種類
 
 ## 確認範囲と限界
 
-`app.js` の全30種類の「特徴」「調査のポイント」、証拠構成、強制証拠、追加オーブ、および既存22項目の行動フィルターの説明と実際の候補判定を確認しました。特殊指紋とモデル変化を分離したため、更新後のフィルターは23項目です。
+`app.js` の全30種類の「特徴」「調査のポイント」、証拠構成、強制証拠、追加オーブを再照合しました。各種類に短い要約を加え、調査の説明を「確認」と「注意」に分けました。既存23項目の行動フィルターと調査アドバイスの条件が、書き直した説明と矛盾しないことも確認しています。
 
 公式更新履歴でバージョンと変更告知を確認し、能力の詳細は各ゴーストの仕様資料と照合しました。公式パッチノートはすべての内部仕様を列挙しているわけではありません。以下は資料照合とプログラムの検証結果であり、今回ゲーム内で実測した結果ではありません。
 
-- [公式ニュース](https://kineticgames.co.uk/news)と[v0.19.0.2更新履歴](https://kineticgames.co.uk/news/phasmophobia-v01902-patch-notes): 確認時点で公開されている最新の詳細パッチノート。
-- [Crimson Eye予告](https://kineticgames.co.uk/news/the-crimson-eye-approaches-once-more): イベント用パッチは10月7日配信予定、イベントは10月8日開始と告知されています。予告をリリース済みの仕様変更と混同せず、詳細未確認の変更は組み込んでいません。
+- [公式ニュース](https://kineticgames.co.uk/news)と[v0.19.1.0更新履歴](https://kineticgames.co.uk/news/phasmophobia-v01910-patch-notes): Crimson Eyeの準備、季節イベントの切り替え機能、復活時の光と一部報酬の修正を確認しました。この更新履歴に証拠構成・強制証拠・固有能力の変更は記載されていません。
+- [Crimson Eye公式告知](https://kineticgames.co.uk/news/the-crimson-eye-approaches-once-more): 開催期間は2026年10月8日〜11月1日です。イベント開催中でも、以下の通常時の数値を補正後の実測値と直接比較しないでください。
 - [v0.19.0.0更新履歴](https://kineticgames.co.uk/news/phasmophobia-v01900-quality-of-life-part-2): 鬼の歌唱イベントの正気度低下20%への修正と、幽霊の能力に誤認されていたドア音の遅延修正を確認。
 - 速度はゴースト速度100%・イベント補正なしの値です。基礎速度と視認加速を区別しています。正気度の基準は通常ハントについての値で、バンシー以外は原則チーム平均です。呪いのハント・猿の手の願い・マルチプレイ同期の例外には注意が必要です。
-- 出典のPhasmopediaは、Phasmophobia Wikiの各記事を出典・版・著者へのリンク付きで整理した非公式資料です。各記事はv0.19.0.2対応と明記しています。Wikiを直接取得できなかった記事は、この公開資料を参照しました。
+- 出典のPhasmopediaは、Phasmophobia Wikiの各記事を出典・版・著者へのリンク付きで整理した非公式資料です。全30記事を今回読み直しましたが、記事の対応表記はv0.19.0.2です。v0.19.1.0の公式更新履歴と併用しており、詳細資料自体がv0.19.1.0対応に更新済みとは扱いません。Wikiの直接取得ができなかった部分は、この公開資料を参照しました。未告知の内部変更まで保証するものではありません。
+
+## 今回の整理
+
+- デオヘンの位置把握は「ハント中」、レイスのテレポートは「ハント外」と明示し、常時有効な能力に見える説明を避けました。
+- バンシーは標的がエリア外でも標的の正気度を使う点と、標的の死亡後には対象が変わる点を補足しました。
+- ガルルはハント中のスマッジの目くらまし終了後に状態が変わる点を補足しました。
+- 幽霊の「滑らかに閉める」は資料内でも異説が示されているため削除し、ドアの閉まり方や音だけでは断定しない説明に改めました。
+- ツインズの速度は丸めた値であることを「約」で示しました。ミミックの模倣切り替えはハント外で、1回のハント中に切り替わるわけではない点も補足しました。
+- 証拠構成・強制証拠・候補の絞り込み条件は変更していません。固有の行動が未観測であることを除外材料にせず、模倣可能な行動ではミミックを残す扱いも維持しました。
 
 ## ゴースト30種類
 
-全30種類の証拠構成は従来データと一致しました。修正は主に能力の発動条件・例外・調査手順の不足です。「条件補足」は元の説明の主旨は正しくても、実際の判定に必要な制約を追加したものです。
+全30種類の証拠構成は従来データと一致しました。以下は再確認した要点です。個別の画面では、要約・特徴・調査のポイントと資料リンクを表示します。
 
-| ID | ゴースト | 結果・確認した重要条件 | 出典 |
+| ID | ゴースト | 再確認した特徴・注意 | 出典 |
 | --- | --- | --- | --- |
-| `aswang` | アスワング | 条件補足。公式かつ使用可能な隠れ場所限定。隠れ場所0や家具の陰は保護対象外。次回は開始時にプレイヤーの位置を把握して追跡。基礎1.53、最大2.53 m/s。 | [Aswang](https://phasmopedia.com/en/ghosts/aswang/) |
-| `banshee` | バンシー | 条件補足。標的の正気度50%で判定。標的が調査エリア外なら全員を追う。名前・モデルとも女性のみ。固有絶叫は録音機でも観測可能。 | [Banshee](https://phasmopedia.com/en/ghosts/banshee/) |
-| `dayan` | ダヤン | 条件補足。10 m以内の最も近い人の移動で65%・2.25 m/s、静止で45%・1.2 m/s。別階も対象。範囲外は50%・通常速度で、蓄積した視認加速が適用される。 | [Dayan](https://phasmopedia.com/en/ghosts/dayan/) |
-| `deildegast` | Deildegast | 修正。異なる対象1つにつき0.1 m/s減速、3→最小0.4 m/s。スイッチ等も対象、ドア・装備・呪いのアイテムは対象外。死亡プレイヤーも有効。十字架消費とハント終了でリセット。 | [Deildegast](https://phasmopedia.com/en/ghosts/deildegast/)、[識別ガイド](https://steamcommunity.com/sharedfiles/filedetails/?id=3635613545&l=english) |
-| `demon` | デーモン | 条件補足。通常70%、能力は正気度不問。スマッジ60秒、ハント後最短20秒。十字架の範囲拡大は正しい。再スマッジによるタイマー更新と呪いのハントを混同しない。 | [Demon](https://phasmopedia.com/en/ghosts/demon/) |
-| `deogen` | デオヘン | 条件補足。通常40%、距離依存0.4〜3 m/s。全員の位置を把握し、隠れるだけでは防げない。特殊Box呼吸は1 m以内で応答した場合。Box強制。 | [Deogen](https://phasmopedia.com/en/ghosts/deogen/) |
-| `gallu` | ガルル | 修正。装備の設置ではなく実際の防御効果で通常→激昂／弱体化→通常。激昂でハントが終わった場合だけ弱体化。塩の状態変化は2〜3秒遅延。50/60/40%・1.7/1.955/1.36 m/sは正しい。 | [Gallu](https://phasmopedia.com/en/ghosts/gallu/) |
-| `goryo` | 御霊 | 条件補足。同室に人がいないときのDOTSを肉眼・カメラで同時比較。通常の部屋変更なし、猿の手の正気度の願いは例外。イベント・ハントは肉眼でも見える。DOTS強制。 | [Goryo](https://phasmopedia.com/en/ghosts/goryo/) |
-| `hantu` | ハントゥ | 条件補足。温度依存で視認加速なし。ブレーカーオフ・故障中の頭付近の息は証拠0でも出る能力で、氷点下証拠やプレイヤーの息とは別。氷点下強制。 | [Hantu](https://phasmopedia.com/en/ghosts/hantu/)、[Wiki](https://phasmophobia.fandom.com/wiki/Hantu) |
-| `jinn` | ジン | 条件補足。ブレーカーオン・視認・距離3 m超で2.5 m/s。電源オフでも通常視認加速は残る。直接オフにはしないが照明の過負荷は可能。正気度低下能力25%。 | [Jinn](https://phasmopedia.com/en/ghosts/jinn/) |
-| `kormos` | コルモス | 修正。同室の走行で70%。足音検知は同じ階のしゃがみ10・歩き15・走行30 m。5 m以内で遮蔽物なく移動すると追跡。声・電子機器も検知し、静止していても接触で死亡。 | [Kormos](https://phasmopedia.com/en/ghosts/kormos/) |
-| `mare` | メアー | 条件補足。ゴーストがいる部屋の照明で60/40%。懐中電灯・炎は対象外。照明を自分で点けない。単なる消灯の多さは確定材料ではない。 | [Mare](https://phasmopedia.com/en/ghosts/mare/) |
-| `moroi` | モーロイ | 条件補足。呪いの契機はBox・パラボラ怪音・録音操作。照明の保護を無効化、回復薬で解除。平均正気度と視認で加速。スマッジ目くらまし7秒。Box強制。 | [Moroi](https://phasmopedia.com/en/ghosts/moroi/) |
-| `myling` | マイリング | 条件補足。ハント音12 mと干渉10 mの比較。同じ階で検証し、雷獣の15 m干渉や遮音も考慮。怪音が多い説明は正しい。 | [Myling](https://phasmopedia.com/en/ghosts/myling/) |
-| `obake` | 化け狐 | 条件補足・フィルター分離。特殊UV指紋と非証拠のモデル変化を別扱いに。UV強制でも毎回指紋を残すわけではない。指紋の残り時間短縮、短いハントの変化未観測にも注意。 | [Obake](https://phasmopedia.com/en/ghosts/obake/) |
-| `obambo` | オバンボ | 条件補足。初期平静→最初の出口開放1分後に攻撃→以後2分交代。平静時のほうが活動量は高い。10/65%・1.445/1.955 m/s・攻撃開始ハント20%短縮は正しい。 | [Obambo](https://phasmopedia.com/en/ghosts/obambo/) |
-| `oni` | 鬼 | 修正。正気度20%低下はイベント接触の性質で、ハントの見えやすさとは別。霧状イベントを起こさないが、追跡イベントで息の音は出せる。 | [Oni](https://phasmopedia.com/en/ghosts/oni/)、[公式v0.19.0.0](https://kineticgames.co.uk/news/phasmophobia-v01900-quality-of-life-part-2) |
-| `onryo` | 怨霊 | 条件補足。通常60%、炎4 m以内では40%。3回消火で能力ハントを試みるが即時開始は保証されない。別の炎・十字架・スマッジ等で阻止可能。炎は十字架より優先。 | [Onryo](https://phasmopedia.com/en/ghosts/onryo/)、[Wiki](https://phasmophobia.fandom.com/wiki/Onryo) |
-| `phantom` | ファントム | 条件補足。正常撮影による消失と自然終了・同期ずれを区別。DOTS写真の実体不在だけは御霊でも起きる。ハントは撮影で終了しない。 | [Phantom](https://phasmopedia.com/en/ghosts/phantom/) |
-| `poltergeist` | ポルターガイスト | 条件補足。ハント外の一斉投げとハント中の連続投げ、物理衝突を区別。単発の強い投げだけでは確定しない。一斉投げと正気度低下の説明は正しい。 | [Poltergeist](https://phasmopedia.com/en/ghosts/poltergeist/) |
-| `raiju` | 雷獣 | 修正。作動中かつ有効な調査用電子機器・同じ階が条件。建物の電気や投げたカメラ等は対象外。近傍2.5 m/s・65%、干渉15 m。単に機器付近で速い観測は参考へ。 | [Raiju](https://phasmopedia.com/en/ghosts/raiju/) |
-| `revenant` | レヴナント | 修正。検知後3 m/sは視線が切れても最後の検知地点まで持続。その後約2.7秒で徘徊1 m/sへ減速。声・電子機器の検知でも高速化。 | [Revenant](https://phasmopedia.com/en/ghosts/revenant/) |
-| `shade` | シェード | 修正。抑制条件は人数や単なる近距離ではなく、ゴーストと同じ部屋に1人以上。隣室からの干渉は可能。通常35%、お気に入りの部屋に滞在するだけでは防御にならない。 | [Shade](https://phasmopedia.com/en/ghosts/shade/) |
-| `spirit` | スピリット | 条件補足。効果が新しく届いてから通常ハント180秒抑制。効果中の再使用はタイマー更新なし。180秒待っても確定ではなく、呪いのハントは別。 | [Spirit](https://phasmopedia.com/en/ghosts/spirit/) |
-| `thaye` | セーイ | 条件補足。同室または3 m以内の人が老化判定の条件。単なる経過時間ではない。2.75→最小1 m/sで視認加速なし。ハント中の老化は終了後に速度へ反映。 | [Thaye](https://phasmopedia.com/en/ghosts/thaye/) |
-| `mimic` | ミミック | 判定修正。男性の場合はバンシー／ダヤンを模倣不可。通常証拠・強制証拠は模倣しない。追加オーブと御霊DOTSの模倣不可は従来判定を維持。 | [The Mimic](https://phasmopedia.com/en/ghosts/the-mimic/)、[Wiki](https://phasmophobia.fandom.com/wiki/The_Mimic) |
-| `twins` | ツインズ | 条件補足。ゲーム上は1体。ハント基礎1.5/1.9 m/sで視認加速あり。遠距離干渉地点に別個体が常駐するわけではない。 | [The Twins](https://phasmopedia.com/en/ghosts/the-twins/) |
-| `wraith` | レイス | 誤りなし。塩の山を崩すかとUV足跡の有無を区別。激昂ガルル・ミミックを残す。テレポートのEMFと塩を踏まない性質を確認。 | [Wraith](https://phasmopedia.com/en/ghosts/wraith/) |
-| `yokai` | 妖怪 | 条件補足。同室の声で通常50→80%。ハント中は声・手持ち電子機器の検知2.5 m、視覚は正常。猿の手の安全の願いを使った人には例外。 | [Yokai](https://phasmopedia.com/en/ghosts/yokai/) |
-| `yurei` | 幽霊 | 修正。能力のドア閉鎖は滑らかで、大きな閉鎖音は確定根拠でない。7.5 m以内15%低下。スマッジ90秒は徘徊・DOTS抑制で、イベント移動を区別。 | [Yurei](https://phasmopedia.com/en/ghosts/yurei/)、[Wiki](https://phasmophobia.fandom.com/wiki/Yurei) |
+| `aswang` | アスワング | 所定の隠れ場所で接触すると、殺さずにハントを終える。所定の使用可能な隠れ場所限定で、隠れ場所なしの設定は対象外。 | [Aswang](https://phasmopedia.com/en/ghosts/aswang/) |
+| `banshee` | バンシー | 特定の1人を狙い、標的の正気度でハントを判断する。標的がエリア外でも開始判定は標的の正気度。死亡後は対象が変わる。 | [Banshee](https://phasmopedia.com/en/ghosts/banshee/) |
+| `dayan` | ダヤン | 近くの人が動くと速く、止まると遅くなる。10 m以内の最も近い人が対象で、別階も含む。 | [Dayan](https://phasmopedia.com/en/ghosts/dayan/) |
+| `deildegast` | Deildegast | ハント外で異なる物を操作すると、次のハントが遅くなる。異なる対象だけが加算され、ハント終了・十字架消費でリセット。 | [Deildegast](https://phasmopedia.com/en/ghosts/deildegast/) |
+| `demon` | デーモン | 高い正気度でもハントし、スマッジの抑制が短い。 | [Demon](https://phasmopedia.com/en/ghosts/demon/) |
+| `deogen` | デオヘン | ハント中は隠れても見つかるが、近づくと大きく減速する。位置把握はハント中。Boxは証拠数1以上で強制。 | [Deogen](https://phasmopedia.com/en/ghosts/deogen/) |
+| `gallu` | ガルル | 防御装備の効果を受けると状態が変わり、激昂中は塩を踏まない。ハント中のスマッジでは目くらまし終了後に状態が変化。 | [Gallu](https://phasmopedia.com/en/ghosts/gallu/) |
+| `goryo` | 御霊 | D.O.T.S.の人影がカメラ越しでだけ見える。無人のお気に入りの部屋で観測し、同じ出現を肉眼とカメラで比較。 | [Goryo](https://phasmopedia.com/en/ghosts/goryo/) |
+| `hantu` | ハントゥ | 寒い部屋ほど速く、ハント中の白い息が手掛かりになる。頭付近の息は氷点下の証拠とは別で、証拠0でも出る。 | [Hantu](https://phasmopedia.com/en/ghosts/hantu/) |
+| `jinn` | ジン | ブレーカーがオンのとき、遠くに見える人へ急加速する。 | [Jinn](https://phasmopedia.com/en/ghosts/jinn/) |
+| `kormos` | コルモス | ハント中は視覚が弱い一方、同じ階の足音を遠くまで追う。 | [Kormos](https://phasmopedia.com/en/ghosts/kormos/) |
+| `mare` | メアー | 部屋の明かりを嫌い、暗い部屋ではハントしやすい。 | [Mare](https://phasmopedia.com/en/ghosts/mare/) |
+| `moroi` | モーロイ | 呪いで正気度を削り、平均正気度が下がるほど速くなる。 | [Moroi](https://phasmopedia.com/en/ghosts/moroi/) |
+| `myling` | マイリング | ハント音が近距離まで聞こえず、マイクの怪音が多い。 | [Myling](https://phasmopedia.com/en/ghosts/myling/) |
+| `obake` | 化け狐 | 特殊な指紋を残し、ハント中に一瞬だけ別の姿になる。 | [Obake](https://phasmopedia.com/en/ghosts/obake/) |
+| `obambo` | オバンボ | 平静と攻撃を周期的に切り替え、ハント中にも速さが変わる。 | [Obambo](https://phasmopedia.com/en/ghosts/obambo/) |
+| `oni` | 鬼 | ハント中の姿が見えやすく、実体化イベントで正気度を多く削る。霧状イベントはしないが、息の音だけでは判定できない。 | [Oni](https://phasmopedia.com/en/ghosts/oni/) |
+| `onryo` | 怨霊 | 炎がハントを防ぐ一方、3回消火すると能力ハントを試みる。3回目の消火後も、ハント開始が遅延・阻止される場合がある。 | [Onryo](https://phasmopedia.com/en/ghosts/onryo/) |
+| `phantom` | ファントム | 撮影で姿が消え、ハント中も見えない時間が長い。撮り損ねや御霊のD.O.T.S.写真と区別し、ハント自体は撮影で止まらない。 | [Phantom](https://phasmopedia.com/en/ghosts/phantom/) |
+| `poltergeist` | ポルターガイスト | 複数の小物を同時に投げ、周囲の正気度も下げる。 | [Poltergeist](https://phasmopedia.com/en/ghosts/poltergeist/) |
+| `raiju` | 雷獣 | 作動中の調査用電子機器の近くで速くなり、早くハントする。同じ階の有効な調査機器が対象で、建物の電気は別。 | [Raiju](https://phasmopedia.com/en/ghosts/raiju/) |
+| `revenant` | レヴナント | 人を検知するまでは遅く、検知すると急に速くなる。 | [Revenant](https://phasmopedia.com/en/ghosts/revenant/) |
+| `shade` | シェード | ゴーストと同じ部屋に人がいると、通常の活動を抑える。 | [Shade](https://phasmopedia.com/en/ghosts/shade/) |
+| `spirit` | スピリット | スマッジによる通常ハントの抑制が180秒と長い。効果中の再スマッジは更新せず、180秒未発生だけでは確定不可。 | [Spirit](https://phasmopedia.com/en/ghosts/spirit/) |
+| `thaye` | セーイ | 近くに人がいると老化し、徐々に遅く・消極的になる。 | [Thaye](https://phasmopedia.com/en/ghosts/thaye/) |
+| `mimic` | ミミック | ほかの種類の行動を模倣するが、追加オーブは常に出る。通常証拠・強制証拠はコピーせず、1回のハント中は対象を切り替えない。 | [The Mimic](https://phasmopedia.com/en/ghosts/the-mimic/) |
+| `twins` | ツインズ | 1体で離れた場所にも干渉し、ハントごとに速度が変わる。約1.5 / 約1.9 m/sは丸めた基礎速度。遠距離に別個体はいない。 | [The Twins](https://phasmopedia.com/en/ghosts/the-twins/) |
+| `wraith` | レイス | 塩の山を崩さず、ハント外に人の近くへテレポートする。テレポートはハント外。塩の山と紫外線足跡を区別。 | [Wraith](https://phasmopedia.com/en/ghosts/wraith/) |
+| `yokai` | 妖怪 | ハント外では声で活発になり、ハント中は声を検知しにくい。 | [Yokai](https://phasmopedia.com/en/ghosts/yokai/) |
+| `yurei` | 幽霊 | ドアを閉めて正気度を下げ、スマッジ後は徘徊を抑える。閉まり方や音だけでは断定せず、資料間で差がある音の断定を削除。 | [Yurei](https://phasmopedia.com/en/ghosts/yurei/) |
 
 ## 行動フィルター
 

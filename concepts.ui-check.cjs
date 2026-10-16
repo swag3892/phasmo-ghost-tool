@@ -202,6 +202,9 @@ async function main() {
       for (const ghost of engine.GHOSTS) {
         await field("searchTerm").fill(ghost.english);
         await page.locator(`.candidate-rail [data-ghost="${ghost.id}"]`).click();
+        assert.equal(await page.locator(".case-record .record-summary").innerText(), ghost.summary);
+        assert.equal(await page.locator(".case-record .record-foot a").getAttribute("href"), ghost.source);
+        assert.ok(await page.locator(".case-record .record-note-label").count() >= 2);
         const sections = page.locator(".case-record .record-section");
         assert.equal(await sections.count(), 2);
         for (const [index, text] of [ghost.tell, ghost.hunt].entries()) {

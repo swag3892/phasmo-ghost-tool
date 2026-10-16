@@ -146,10 +146,14 @@ test("matrix dialogs render the audited record for all 30 ghosts", () => {
     preview.action("selectGhost", { ghost: ghost.id });
     const dialog = preview.nodes.get("ghostDialog");
     assert.equal(dialog.open, true);
+    assert.ok(dialog.innerHTML.includes(`<p class="record-summary">${ghost.summary}</p>`));
+    assert.ok(dialog.innerHTML.includes(`href="${ghost.source}"`));
+    assert.ok(dialog.innerHTML.includes('<strong class="record-note-label">確認: </strong>'));
+    assert.ok(dialog.innerHTML.includes('<strong class="record-note-label">注意: </strong>'));
     const sections = [...dialog.innerHTML.matchAll(/<section class="record-section"><h3>[^<]+<\/h3><ul class="record-notes">(.*?)<\/ul><\/section>/g)];
     assert.equal(sections.length, 2, ghost.id);
     for (const [index, text] of [ghost.tell, ghost.hunt].entries()) {
-      assert.deepEqual([...sections[index][1].matchAll(/<li>(.*?)<\/li>/g)].map((match) => match[1]), model.noteItems(text), ghost.id);
+      assert.deepEqual([...sections[index][1].matchAll(/<li>(.*?)<\/li>/g)].map((match) => match[1].replace(/<\/?strong\b[^>]*>/g, "")), model.noteItems(text), ghost.id);
     }
     assert.match(dialog.innerHTML, /証拠の組み合わせ/);
   }
@@ -181,7 +185,7 @@ test("adopted reference table uses the same bullet items for all 30 ghosts", () 
   const lists = [...table.matchAll(/<ul class="record-notes">(.*?)<\/ul>/g)];
   assert.equal(lists.length, engine.GHOSTS.length);
   for (const [index, ghost] of engine.GHOSTS.entries()) {
-    assert.deepEqual([...lists[index][1].matchAll(/<li>(.*?)<\/li>/g)].map((match) => match[1]), model.noteItems(ghost.hunt), ghost.id);
+    assert.deepEqual([...lists[index][1].matchAll(/<li>(.*?)<\/li>/g)].map((match) => match[1].replace(/<\/?strong\b[^>]*>/g, "")), model.noteItems(ghost.hunt), ghost.id);
   }
 });
 

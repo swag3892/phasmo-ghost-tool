@@ -61,6 +61,7 @@ summary { cursor: pointer; font-size: 11px; color: var(--muted); line-height: 1.
 .empty-note { padding: 32px 16px; color: var(--muted); font-size: 13px; line-height: 1.8; text-align: center; }
 .record-heading { display: flex; justify-content: space-between; align-items: start; gap: 16px; }
 .record-id { font-size: 12px; color: var(--muted); margin-bottom: 7px; font-family: Consolas, monospace; overflow-wrap: anywhere; }
+.record-summary { font-size: 14px; line-height: 1.85; margin-top: 13px; overflow-wrap: anywhere; }
 .record-heading h2 { font-size: 29px; line-height: 1.3; font-weight: 650; overflow-wrap: anywhere; }
 .record-status { font-size: 10px; color: var(--positive); padding-top: 4px; white-space: nowrap; }
 .record-status.out { color: var(--negative); }
@@ -76,6 +77,9 @@ summary { cursor: pointer; font-size: 11px; color: var(--muted); line-height: 1.
 .record-notes > li { padding-left: 3px; }
 .record-notes > li + li { margin-top: 9px; }
 .record-notes > li::marker { color: var(--accent); }
+.record-note-label { font-weight: 650; }
+.record-foot { border-top: 1px solid var(--line); margin-top: 23px; padding-top: 13px; font-size: 11px; line-height: 1.9; color: var(--muted); }
+.record-foot a { display: inline-block; margin-top: 6px; }
 .record-options { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 16px; }
 .record-options summary span { font-variant-numeric: tabular-nums; margin-left: 10px; }
 .record-options ul { list-style: none; padding: 0; margin: 12px 0 0; }
@@ -218,6 +222,7 @@ body[data-concept="file"] .concept-picker { border-top: 3px solid var(--accent);
 .advice-comparison summary { color: var(--ink); font-size: 13px; }
 .advice-comparison summary span { margin-left: 10px; font-size: 11px; color: var(--muted); }
 .advice-comparison .record-notes { margin-top: 12px; }
+.advice-comparison .record-summary { font-size: 12px; color: var(--muted); }
 .case-panel .observation-list { grid-template-columns: minmax(0, 1fr); max-height: 540px; overflow-y: auto; scrollbar-width: thin; padding-right: 10px; }
 .case-panel .behavior-search { flex-basis: 100%; }
 .file-settings { display: grid; align-content: start; gap: 23px; }

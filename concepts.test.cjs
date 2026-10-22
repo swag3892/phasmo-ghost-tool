@@ -21,11 +21,11 @@ function createPreview(concept, saved, options = {}) {
   const document = {
     body: element(), activeElement: null,
     getElementById(id) { if (!nodes.has(id)) nodes.set(id, element()); return nodes.get(id); },
-    querySelectorAll() { return []; },
+    querySelectorAll() { return []; }, addEventListener() {},
   };
   if (options.adopted) document.body.dataset.app = "dossier";
   const window = {
-    PhasmoTool: engine, PhasmoConceptState: model, PhasmoAdvice: require("./investigation-advice.js"),
+    PhasmoTool: engine, PhasmoConceptState: model, PhasmoAdvice: require("./investigation-advice.js"), PhasmoFootsteps: require("./footsteps.js"), PhasmoFootstepView: require("./footstep-view.js"),
     addEventListener(type, fn) { listeners.set(type, fn); },
     removeEventListener(type, fn) { assert.equal(fn, engine.init); },
     localStorage: { getItem(key) { return storage.get(key) ?? null; }, setItem(key, value) { storage.set(key, value); } },

@@ -12,7 +12,7 @@
   const difficultyLabels = { professional: "証拠3種類", nightmare: "ナイトメア（証拠2種類）", insanity: "インサニティ（証拠1種類）", zero: "証拠なし", custom: "カスタム" };
 
   function createState() {
-    return { difficulty: "nightmare", customEvidenceCount: 2, evidenceStates: Object.fromEntries([...evidenceIds].map((id) => [id, "unknown"])), activeBehaviors: [], showExcluded: false, searchTerm: "", selectedGhost: "aswang", step: 0, caseTab: "evidence", behaviorTerm: "", behaviorMode: "all", matrixFiltersOpen: false };
+    return { difficulty: "nightmare", customEvidenceCount: 2, evidenceStates: Object.fromEntries([...evidenceIds].map((id) => [id, "unknown"])), activeBehaviors: [], showExcluded: false, searchTerm: "", selectedGhost: "aswang", step: 0, caseTab: "evidence", behaviorTerm: "", behaviorMode: "all", matrixFiltersOpen: false, footView: "record", footScope: "candidates", footLos: "all", footSpeed: 100, footMoon: false, footVolume: 35, footSeconds: 15, footA: "aswang", footB: "reference", footScenarioA: "", footScenarioB: "", footAccelerateA: false, footAccelerateB: false };
   }
 
   function sanitizeState(value) {
@@ -32,6 +32,18 @@
     if (["evidence", "behaviors", "advice", "settings"].includes(value.caseTab)) state.caseTab = value.caseTab;
     if (["all", "decisive", "hint"].includes(value.behaviorMode)) state.behaviorMode = value.behaviorMode;
     state.matrixFiltersOpen = value.matrixFiltersOpen === true;
+    if (["record", "compare"].includes(value.footView)) state.footView = value.footView;
+    if (["candidates", "all"].includes(value.footScope)) state.footScope = value.footScope;
+    if (["all", "yes", "no", "conditional", "copied"].includes(value.footLos)) state.footLos = value.footLos;
+    if ([50, 75, 100, 125, 150].includes(Number(value.footSpeed))) state.footSpeed = Number(value.footSpeed);
+    if ([6, 15].includes(Number(value.footSeconds))) state.footSeconds = Number(value.footSeconds);
+    if (Number.isFinite(value.footVolume)) state.footVolume = Math.max(0, Math.min(100, value.footVolume));
+    state.footMoon = value.footMoon === true;
+    for (const lane of ["A", "B"]) {
+      if (value[`foot${lane}`] === "reference" || ghostIds.has(value[`foot${lane}`])) state[`foot${lane}`] = value[`foot${lane}`];
+      if (typeof value[`footScenario${lane}`] === "string" && value[`footScenario${lane}`].length < 40) state[`footScenario${lane}`] = value[`footScenario${lane}`];
+      state[`footAccelerate${lane}`] = value[`footAccelerate${lane}`] === true;
+    }
     return state;
   }
 

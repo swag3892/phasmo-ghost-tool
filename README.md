@@ -45,9 +45,17 @@
 - コルモスの静止プレイヤー無視と雷獣の電子機器付近での加速は、ほかの条件でも紛らわしいため「参考」です。スマッジは効果中に再使用しても抑制タイマーが更新されない点に注意してください。
 - ブラウザ内への保存が拒否された場合や保存データが破損している場合でも、ツールを起動できます。クリップボードへのコピーが許可されていない場合も通知します。
 
+## 足音・視認加速の比較
+
+「足音比較」タブに、候補または全30種類の加速前の速度・視認加速の有無・足音の特徴を並べて表示します。調査記録の「足音を比較」からも開けます。視認加速は「あり・なし・条件付き・模倣次第」で分類し、名前検索と組み合わせて表示できます。比較用の表示フィルターは分析の候補を変更しません。
+
+A/Bにゴーストと状態を選び、個別または交互に試聴できます。ゴースト速度・Blood Moon補正・音量・試聴時間は共通です。「継続視認による加速」は、その状態で適用可能な場合だけ選択できます。試聴条件は保存しますが、自動再生はしません。停止ボタン・条件変更・画面切替・ブラウザのタブ非表示で再生を止めます。
+
+音はブラウザで生成する合成リズム音で、ゲーム音声ではありません。床材や距離による聞こえ方は再現しません。標準速度のゴースト同士やミミックはリズムだけでは識別できないため、自動的な確定・除外には使いません。[計算方法・資料・再現しない条件](GHOST_AUDIT.md#足音と視認加速の比較)も確認してください。
+
 ## 検証
 
-Node.jsで `node --test app.test.cjs concepts.test.cjs investigation-advice.test.cjs` と `node --check app.js` を実行できます。全30種類・証拠数0〜3の全許容組み合わせ、強制証拠、ミミックの例外、行動と証拠の矛盾、監査表の全件掲載、正式版への保存データの引き継ぎ、アドバイスの観測可能性・候補数・入力の非変更を検証します。
+Node.jsで `node --test app.test.cjs concepts.test.cjs investigation-advice.test.cjs footsteps.test.cjs` と `node --check app.js` を実行できます。全30種類・証拠数0〜3の全許容組み合わせ、強制証拠、ミミックの例外、行動と証拠の矛盾、監査表の全件掲載、正式版への保存データの引き継ぎ、アドバイスの観測可能性・候補数・入力の非変更、足音比較の加速条件・A/Bの再生と停止を検証します。
 
 ## デザイン案の比較
 
@@ -75,7 +83,7 @@ PC・スマートフォンのプレビュー画像は `concept-previews` に保�
 
 公開URL: [Phasmophobia ゴースト分析](https://swag3892.github.io/phasmo-ghost-tool/)
 
-静的サイトのため、公開先には `index.html`・`app.js`・`concept-state.js`・`investigation-advice.js`・`concepts.js`・`concepts.css` と `assets` フォルダーを同じ階層に配置します。GitHub Pagesで公開する場合は、Settings > Pages > Deploy from a branch で `main` / `/(root)` を選択します。入力内容は利用中のブラウザに保存され、ほかの端末やプレイヤーとは同期しません。
+静的サイトのため、公開先には `index.html`・`app.js`・`concept-state.js`・`investigation-advice.js`・`footsteps.js`・`footstep-audio.js`・`footstep-view.js`・`concepts.js`・`concepts.css` と `assets` フォルダーを同じ階層に配置します。GitHub Pagesで公開する場合は、Settings > Pages > Deploy from a branch で `main` / `/(root)` を選択します。入力内容は利用中のブラウザに保存され、ほかの端末やプレイヤーとは同期しません。
 
 主な参照元:
 

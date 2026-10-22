@@ -2,6 +2,8 @@
   "use strict";
   const engine = window.PhasmoTool;
   const model = window.PhasmoConceptState;
+  const footsteps = window.PhasmoFootsteps;
+  const footView = window.PhasmoFootstepView;
   const adopted = document.body.dataset.app === "dossier";
   const storageKey = adopted ? model.DOSSIER_KEY : model.STORAGE_KEY;
   const review = { version: "0.19.1.0", date: "2026-10-17" };
@@ -16,6 +18,8 @@
   let root;
   let dialog;
   let toastTimer;
+  let footPlayer;
+  let playback = null;
 
   const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
   const icon = (name, className = "") => `<img class="${className}" src="./assets/${name}.svg" width="20" height="20" alt="" />`;
@@ -59,7 +63,7 @@
   function detail(result) {
     if (!result) return emptyRecord();
     const ghost = result.ghost;
-    return `<article class="ghost-record" data-ghost-detail="${ghost.id}"><div class="record-heading"><div><p class="record-id">${ghost.english}</p><h2>${ghost.name}</h2></div><span class="record-status ${result.ok ? "" : "out"}">${result.ok ? "候補" : "除外"}</span></div><p class="record-summary">${escapeHtml(ghost.summary)}</p><div class="record-evidence">${[...ghost.evidence, ...(ghost.extraEvidence || [])].map((id) => { const item = engine.EVIDENCE.find((entry) => entry.id === id); const forced = ghost.forced === id && engine.getEvidenceCount(state) > 0; const extra = (ghost.extraEvidence || []).includes(id); return `<div class="record-evidence-item ${state.evidenceStates[id]}">${icon(evidenceIcons[id])}<span>${item.label}${forced ? '<small>強制証拠</small>' : extra ? '<small>追加証拠</small>' : ""}</span></div>`; }).join("")}</div><section class="record-section"><h3>特徴</h3>${notes(ghost.tell)}</section><section class="record-section"><h3>調査のポイント</h3>${notes(ghost.hunt)}</section><div class="record-foot"><p>速度はゴースト速度100%・イベント補正なし。正気度は通常ハント開始の目安で、必ず即時に始まる条件ではありません。</p><a href="${escapeHtml(ghost.source)}" target="_blank" rel="noopener">個別の仕様資料（非公式）</a></div>${result.ok ? `<details class="record-options" data-disclosure="options-${ghost.id}"><summary>観測できる証拠の組み合わせ <span>${result.evidence.options.length}</span></summary><ul>${result.evidence.options.map((option) => `<li><strong>${option.visible.map((id) => engine.EVIDENCE.find((item) => item.id === id).short).join(" + ") || "証拠なし"}</strong><span>隠れる証拠: ${option.hidden.map((id) => engine.EVIDENCE.find((item) => item.id === id).short).join(" / ") || "なし"}</span></li>`).join("")}</ul></details>` : `<p class="exclusion-reason">${result.reason}</p>`}</article>`;
+    return `<article class="ghost-record" data-ghost-detail="${ghost.id}"><div class="record-heading"><div><p class="record-id">${ghost.english}</p><h2>${ghost.name}</h2></div><span class="record-status ${result.ok ? "" : "out"}">${result.ok ? "候補" : "除外"}</span></div><p class="record-summary">${escapeHtml(ghost.summary)}</p><div class="record-evidence">${[...ghost.evidence, ...(ghost.extraEvidence || [])].map((id) => { const item = engine.EVIDENCE.find((entry) => entry.id === id); const forced = ghost.forced === id && engine.getEvidenceCount(state) > 0; const extra = (ghost.extraEvidence || []).includes(id); return `<div class="record-evidence-item ${state.evidenceStates[id]}">${icon(evidenceIcons[id])}<span>${item.label}${forced ? '<small>強制証拠</small>' : extra ? '<small>追加証拠</small>' : ""}</span></div>`; }).join("")}</div><section class="record-section"><h3>特徴</h3>${notes(ghost.tell)}</section><section class="record-section"><h3>調査のポイント</h3>${notes(ghost.hunt)}</section>${footView.mini(ghost, concept === "file")}<div class="record-foot"><p>速度はゴースト速度100%・イベント補正なし。正気度は通常ハント開始の目安で、必ず即時に始まる条件ではありません。</p><a href="${escapeHtml(ghost.source)}" target="_blank" rel="noopener">個別の仕様資料（非公式）</a></div>${result.ok ? `<details class="record-options" data-disclosure="options-${ghost.id}"><summary>観測できる証拠の組み合わせ <span>${result.evidence.options.length}</span></summary><ul>${result.evidence.options.map((option) => `<li><strong>${option.visible.map((id) => engine.EVIDENCE.find((item) => item.id === id).short).join(" + ") || "証拠なし"}</strong><span>隠れる証拠: ${option.hidden.map((id) => engine.EVIDENCE.find((item) => item.id === id).short).join(" / ") || "なし"}</span></li>`).join("")}</ul></details>` : `<p class="exclusion-reason">${result.reason}</p>`}</article>`;
   }
 
   function matrixView() {
@@ -118,13 +122,15 @@
         </div>
         <nav class="candidate-rail" aria-label="ゴーストを選択">${results.map((result) => `<button type="button" data-action="selectGhost" data-focus="ghost-${result.ghost.id}" data-ghost="${result.ghost.id}" aria-pressed="${result.ghost.id === selected?.ghost.id}" class="${result.ok ? "" : "out"}">${result.ghost.name}</button>`).join("") || '<p class="empty-note">表示するゴーストがありません。</p>'}</nav>
       </section>
-      <div class="case-spread">
+      <nav class="record-view-tabs" role="tablist" aria-label="表示内容">${[["record", "調査記録", "book-open"], ["compare", "足音比較", "headphones"]].map(([id, label, image]) => `<button type="button" role="tab" id="view-${id}" aria-selected="${state.footView === id}" aria-controls="recordView" tabindex="${state.footView === id ? 0 : -1}" data-action="footView" data-view="${id}" data-focus="view-${id}">${icon(image)}${label}</button>`).join("")}</nav>
+      <div id="recordView" role="tabpanel" tabindex="-1" aria-labelledby="view-${state.footView}">${state.footView === "compare" ? footView.render(state) : `<div class="case-spread">
         <section class="case-record" aria-label="選択したゴーストの調査記録"><p class="file-number">調査記録 <span>${String(selected ? index + 1 : 0).padStart(2, "0")}</span></p>${detail(selected)}</section>
         <section class="case-controls" aria-label="調査条件">
           <nav class="case-tabs" role="tablist" aria-label="調査項目">${tabs.map(([id, label]) => `<button id="case-${id}" role="tab" type="button" aria-selected="${state.caseTab === id}" aria-controls="casePanel" data-action="caseTab" data-tab="${id}" data-focus="case-${id}" tabindex="${state.caseTab === id ? 0 : -1}">${label}${id === "behaviors" ? `<b>${state.activeBehaviors.length}</b>` : ""}</button>`).join("")}</nav>
           <div class="case-panel" id="casePanel" role="tabpanel" tabindex="-1" aria-labelledby="case-${state.caseTab}">${panel}</div>
         </section>
       </div>
+      `}</div>
       <footer class="file-foot"><span>${model.difficultyLabels[state.difficulty]}${state.difficulty === "custom" ? ` / 証拠${engine.getEvidenceCount(state)}種類` : ""}</span><span>確定 ${tally.confirmed} / 否定 ${tally.denied} / 行動 ${state.activeBehaviors.length}項目</span></footer>
       ${adopted ? evidenceReference() : ""}
     </div>`;
@@ -155,7 +161,7 @@
     const focusAction = focused?.dataset?.action;
     const selection = focusKey && ["search", "behavior-search"].includes(focusKey) ? [focused.selectionStart, focused.selectionEnd] : null;
     const disclosures = [...root.querySelectorAll("details[open][data-disclosure]")].map((item) => item.dataset.disclosure);
-    const scrollRegions = [".matrix-scroll", ".candidate-rail", ".case-panel .observation-list", ".result-index"];
+    const scrollRegions = [".matrix-scroll", ".candidate-rail", ".case-panel .observation-list", ".result-index", ".foot-table-scroll"];
     const scrollPositions = scrollRegions.map((selector) => {
       const element = root.querySelector(selector);
       return element ? [selector, element.scrollLeft, element.scrollTop] : null;
@@ -184,6 +190,7 @@
     }
     document.getElementById("liveStatus").textContent = `候補 ${counts().candidates}種類`;
     persist();
+    updatePlayback(playback);
   }
 
   function showToast(message) {
@@ -213,6 +220,18 @@
     const action = button.dataset.action;
     if (action === "copy") { copySummary(); return; }
     if (action === "closeDialog") { dialog.close(); return; }
+    if (action === "playFootsteps") { playFootsteps(button.dataset.lane); return; }
+    if (action === "stopFootsteps") { footPlayer?.stop(); return; }
+    footPlayer?.stop();
+    if (action === "footView") state.footView = button.dataset.view;
+    if (action === "footScope") state.footScope = button.dataset.scope;
+    if (action === "openFootsteps" || action === "listenGhost") {
+      const lane = action === "listenGhost" ? button.dataset.lane : "A";
+      state[`foot${lane}`] = button.dataset.ghost;
+      state[`footScenario${lane}`] = "";
+      state[`footAccelerate${lane}`] = false;
+      state.footView = "compare";
+    }
     if (action === "reset") state = model.createState();
     if (action === "clearEvidence") state.evidenceStates = model.createState().evidenceStates;
     if (action === "clearBehaviors") state.activeBehaviors = [];
@@ -238,6 +257,8 @@
       if (concept === "matrix") { persist(); openRecord(state.selectedGhost); return; }
     }
     render();
+    if (action === "listenGhost") playFootsteps(button.dataset.lane);
+    if (action === "openFootsteps") root.querySelector("#view-compare")?.focus({ preventScroll: true });
     if (action === "reviewBehavior") {
       const details = root.querySelector(`[data-disclosure="${button.dataset.behavior}"]`);
       if (details) details.open = true;
@@ -251,6 +272,27 @@
   function handleField(event) {
     const element = event.target;
     const field = element.dataset.field;
+    if (field === "footVolume") {
+      state.footVolume = Math.max(0, Math.min(100, Number(element.value) || 0));
+      footPlayer?.setVolume(state.footVolume / 100);
+      root.querySelector("#footVolumeValue").textContent = `${state.footVolume}%`;
+      persist();
+      return;
+    }
+    footPlayer?.stop();
+    if (field?.startsWith("foot")) {
+      if (["footMoon", "footAccelerateA", "footAccelerateB"].includes(field)) state[field] = element.checked;
+      else if (["footSpeed", "footSeconds", "footVolume"].includes(field)) state[field] = Number(element.value);
+      else state[field] = element.value;
+      if (["footA", "footB"].includes(field)) {
+        const lane = field.at(-1);
+        state[`footScenario${lane}`] = "";
+        state[`footAccelerate${lane}`] = false;
+      }
+      if (["footScenarioA", "footScenarioB"].includes(field)) state[`footAccelerate${field.at(-1)}`] = false;
+      render();
+      return;
+    }
     if (element.dataset.behavior) {
       const id = element.dataset.behavior;
       state.activeBehaviors = element.checked ? [...new Set([...state.activeBehaviors, id])] : state.activeBehaviors.filter((item) => item !== id);
@@ -261,10 +303,46 @@
     render();
   }
 
+  function updatePlayback(status) {
+    playback = status;
+    const workspace = root?.querySelector(".foot-workspace");
+    if (!workspace) return;
+    workspace.dataset.playing = String(Boolean(status));
+    const stop = workspace.querySelector('[data-action="stopFootsteps"]');
+    if (stop) stop.disabled = !status;
+    workspace.querySelectorAll("[data-listen-lane]").forEach((lane) => {
+      lane.classList.toggle("is-playing", lane.dataset.listenLane === status?.lane);
+    });
+    const text = workspace.querySelector("#footPlayback");
+    if (text) text.textContent = !status ? "停止中" : status.lane === "gap" ? "再生待機中" : `${status.lane} 再生中 / ${status.elapsed.toFixed(1)}秒 / 約${footView.number(status.speed)} m/s`;
+  }
+
+  async function playFootsteps(lane) {
+    try {
+      footPlayer ||= window.PhasmoFootstepAudio.createPlayer({
+        createContext() {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) throw new Error("Web Audio unavailable");
+          return new AudioContext();
+        },
+        onStatus: updatePlayback,
+      });
+      const plans = (lane === "both" ? ["A", "B"] : [lane]).map((key) => {
+        const scenario = footsteps.scenario(state[`foot${key}`], state[`footScenario${key}`]);
+        return { lane: key, scenario, seconds: state.footSeconds, accelerate: scenario.bonus > 0 && state[`footAccelerate${key}`], scale: footsteps.multiplier(state.footSpeed, state.footMoon) };
+      });
+      await footPlayer.play(plans, state.footVolume / 100);
+    } catch {
+      showToast("音声を再生できませんでした。ブラウザの音声設定を確認してください。");
+    }
+  }
+
   function init() {
     root = document.getElementById("conceptApp");
     dialog = document.getElementById("ghostDialog");
     try { state = model.readStorage(window.localStorage, storageKey, adopted ? [model.LEGACY_KEY, model.STORAGE_KEY] : []); } catch { state = model.createState(); }
+    document.addEventListener("visibilitychange", () => { if (document.hidden) footPlayer?.stop(); });
+    window.addEventListener("pagehide", () => footPlayer?.stop());
     root.addEventListener("click", handleAction);
     dialog.addEventListener("click", handleAction);
     dialog.addEventListener("click", (event) => {
@@ -280,11 +358,12 @@
       if (event.target.matches('input[type="search"]')) handleField(event);
     });
     root.addEventListener("input", (event) => {
-      if (!composing && !event.isComposing && event.target.matches('input[type="search"], input[type="number"]')) handleField(event);
+      if (!composing && !event.isComposing && event.target.matches('input[type="search"], input[type="number"], input[type="range"]')) handleField(event);
     });
     root.addEventListener("keydown", (event) => {
       const radio = event.target.closest('button[role="radio"]');
-      const tab = event.target.closest('.case-tabs button');
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+      const tab = event.target.closest('.case-tabs button, .record-view-tabs button');
       const current = radio || tab;
       const keys = radio ? ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"] : ["ArrowLeft", "ArrowRight", "Home", "End"];
       if (!current || !keys.includes(event.key)) return;
@@ -298,6 +377,7 @@
     const tabs = [...document.querySelectorAll(".concept-picker button")];
     tabs.forEach((button, index) => {
       button.addEventListener("click", () => {
+        footPlayer?.stop();
         concept = button.dataset.concept;
         if (dialog.open) dialog.close();
         const url = new URL(location.href);

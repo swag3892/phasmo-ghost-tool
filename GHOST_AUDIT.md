@@ -102,9 +102,23 @@
 - 候補0では入力の見直し、候補1では最終照合を案内します。アドバイス表示や観測条件の確認だけでは、証拠・行動を自動選択しません。
 - 氷点下はTier Iで0°C未満、Tier II・IIIで1°C未満を目安とし、白い息だけでは確定しません。証拠の手順は[氷点下](https://phasmophobia.fandom.com/wiki/Freezing_Temperatures)、[スピリットボックス](https://phasmophobia.fandom.com/wiki/Spirit_Box)、[識別ガイド](https://phasmophobia.fandom.com/wiki/Guides/Identifying_ghosts)、[ライティングブック](https://phasmophobia.fandom.com/wiki/Ghost_Writing_Book)、[紫外線](https://phasmophobia.fandom.com/wiki/Ultraviolet)を参照しました。ミミックの例外は[Phasmopedia](https://phasmopedia.com/en/ghosts/the-mimic/)で再確認しました。
 
+## 足音と視認加速の比較
+
+2026-10-22追加。公式の[更新情報](https://kineticgames.co.uk/news)は引き続きv0.19.1.0が最新のパッチ掲載でした。以下は非公式資料との照合による比較機能であり、ゲーム音声の収録・ゲーム内での実測結果ではありません。前回の全件監査日（2026-10-17）とは分けて記録します。
+
+- 足音の間隔はZero Networkの[メトロノーム実装](https://github.com/tybayn/phasmo-cheat-sheet/blob/main/scripts-v10/metronome-v7.js)の経験式 `1 / 速度(m/s) - 0.075` 秒を参照。1.7m/sなら約117歩/分です。音源・プログラムは流用せず、独自の短い合成音をブラウザで生成します。[Phasmopediaの足音資料](https://phasmopedia.com/en/footsteps/)でも同じ経験式を確認しました。
+- 一覧の速度は「加速前」と「継続視認による上限」を区別します。速度設定50・75・100・125・150%とBlood Moonの1.15倍補正は、A/Bと比較一覧で共通に適用します。ほかのイベント固有補正は含みません。通常難易度の選択だけでは試聴速度を変更しません。
+- 標準の視認加速は基礎速度の5%/秒、最大65%増加、約13秒を近似。アスワングは7.5%/秒、約8.7秒。ツインズは1.5/1.9m/sそれぞれに標準速度由来の加速量1.105m/sを足し、上限2.605/3.005m/sとします。ツインズ自身の基礎速度を1.65倍する計算にはしません。根拠: [Aswang](https://phasmopedia.com/en/ghosts/aswang/)、[The Twins](https://phasmopedia.com/en/ghosts/the-twins/)、[Hunt](https://phasmophobia.fandom.com/wiki/Hunt)。
+- 「視認加速なし」はデオヘン・ハントゥ・レヴナント・セーイ・Deildegast。視認しても速度が一切変わらないという意味ではなく、レヴナントの発見時の急加速などは別の仕組みです。温度・距離・発見状態・老化段階・動かした小物の数を、明示した条件のサンプルとして選択できます。詳細は上表の各ゴーストの資料を参照。
+- ジン・雷獣・ダヤン・コルモスは「条件付き」。ジンの電源オン・3m超からの視認、雷獣の有効な電子機器付近、ダヤンの10m以内の最寄りのプレイヤーの状態では、固定速度のサンプルに視認加速を重ねません。コルモスの近距離の疑似視認と音への追跡は別のサンプルにします。コルモスで両効果が複合して約3.65m/sになる状態は試聴に含まず、注記します。根拠: [Jinn](https://phasmopedia.com/en/ghosts/jinn/)、[Raiju](https://phasmopedia.com/en/ghosts/raiju/)、[Dayan](https://phasmopedia.com/en/ghosts/dayan/)、[Kormos](https://phasmopedia.com/en/ghosts/kormos/)。
+- ガルル・オバンボの状態別、モーロイの正気度別の基礎速度には視認加速があります。ミミックは模倣次第であり、試聴は模倣前の標準状態の一例に限定します。模倣中は模倣先のサンプルを参照します。根拠: 上表の各ゴーストの資料。
+- 標準速度の15種類はリズムだけでは区別できません。[Myling](https://phasmopedia.com/en/ghosts/myling/)のハント音の可聴距離約12m（通常約20m）とリズムは別の特徴です。別階による遮音や雷獣の15mの電子機器干渉にも注意が必要です。レイスにもハント中の足音が鳴り、塩を踏まない能力は無音を意味しません。
+- 再生音はA/Bで音色・音量を統一し、同時再生せず交互に再生します。距離による減衰、床材・モデルによる音色差、障害物・曲がり角、視認を失った後の減速、条件の途中変更、複数の能力の複合は再現しません。試聴中の速度は近似値です。音量0・停止・表示切替・条件変更・非表示タブでの停止に対応し、自動再生は行いません。
+- 比較対象・視認加速の表示フィルターは証拠・行動の判定を変更しません。速度の聞き違いやミミックによる模倣を考慮し、音だけによる自動確定・自動除外は追加しません。
+
 ## プログラム検証
 
-`node --test app.test.cjs concepts.test.cjs investigation-advice.test.cjs` と `node --check app.js` で検証します。
+`node --test app.test.cjs concepts.test.cjs investigation-advice.test.cjs footsteps.test.cjs` と `node --check app.js` で検証します。
 
 - 資料照合済みの全30種類の証拠構成・5種類の強制証拠・ミミックの追加証拠を固定した回帰テスト。
 - 全30種類について証拠数0〜3の全許容組み合わせと、隠れる証拠を否定した場合の候補維持。
@@ -117,3 +131,5 @@
 - アドバイスが検索・除外済みの表示で変化せず、入力条件を変更しないこと。証拠枠の充足、追加オーブ、証拠0、矛盾、候補1、行動由来の証拠を別々に扱うこと。
 
 新パッチが配信された場合や上記資料で仕様の訂正があった場合は、この基準を再確認する必要があります。
+
+足音比較は全30種類の分類・速度条件、ツインズの加速量、固定速度の上書き、保存値の検証、A/Bの非重複再生・同一音量、再生待機中の停止、エラー時の終了処理をテストします。ブラウザでは320・390・768・1080・1440pxの表示と操作を確認し、OfflineAudioContextで合成波形が無音・クリッピングにならないことを検証します。

@@ -25,6 +25,7 @@ function createPreview(concept, saved, options = {}) {
   };
   if (options.adopted) document.body.dataset.app = "dossier";
   const window = {
+    PhasmoBehaviorBrowser: require("./behavior-browser.js"),
     PhasmoTool: engine, PhasmoConceptState: model, PhasmoAdvice: require("./investigation-advice.js"), PhasmoFootsteps: require("./footsteps.js"), PhasmoFootstepView: require("./footstep-view.js"),
     addEventListener(type, fn) { listeners.set(type, fn); },
     removeEventListener(type, fn) { assert.equal(fn, engine.init); },
@@ -317,4 +318,39 @@ test("saved search input is HTML escaped and every rendered local icon exists", 
       assert.ok(fs.existsSync(require("node:path").join(__dirname, "assets", match[1])), match[1]);
     }
   }
+});
+
+test("behavior display resets and individual removal preserve evidence and other selections", () => {
+  const preview = createPreview("file", null, { adopted: true });
+  preview.action("caseTab", { tab: "behaviors" });
+  preview.action("evidence", { evidence: "emf", state: "confirmed" });
+  preview.behavior("maleName", true);
+  preview.behavior("mylingQuiet", true);
+  preview.change("behaviorCategory", "sound");
+  preview.change("behaviorTerm", "該当なし");
+  assert.match(preview.root.innerHTML, /表示条件に合う行動はありません/);
+  assert.match(preview.root.innerHTML, /data-focus="remove-maleName"/);
+  preview.action("clearBehaviorDisplay");
+  assert.equal(preview.state().behaviorCategory, "all");
+  assert.equal(preview.state().behaviorTerm, "");
+  assert.deepEqual(preview.state().activeBehaviors, ["maleName", "mylingQuiet"]);
+  preview.action("removeBehavior", { removeBehavior: "maleName" });
+  assert.deepEqual(preview.state().activeBehaviors, ["mylingQuiet"]);
+  assert.equal(preview.state().evidenceStates.emf, "confirmed");
+  preview.action("behaviorScope", { scope: "selected" });
+  assert.equal([...preview.root.innerHTML.matchAll(/data-observation=/g)].length, 1);
+  preview.action("clearBehaviors");
+  assert.match(preview.root.innerHTML, /選択中の行動はありません/);
+  preview.change("behaviorCategory", "sound");
+  preview.action("reviewBehavior", { behavior: "goryoDots" });
+  assert.equal(preview.state().behaviorCategory, "all");
+  assert.equal(preview.state().behaviorScope, "all");
+  assert.match(preview.root.innerHTML, /data-observation="goryoDots"/);
+});
+
+test("behavior search markup escapes untrusted saved text", () => {
+  const state = { ...model.createState(), caseTab: "behaviors", behaviorTerm: '\"><script>bad()</script>' };
+  const preview = createPreview("file", state);
+  assert.doesNotMatch(preview.root.innerHTML, /<script>bad/);
+  assert.match(preview.root.innerHTML, /&lt;script&gt;/);
 });

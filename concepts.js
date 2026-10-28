@@ -56,8 +56,29 @@
   }
 
   function behaviorList() {
-    const filters = engine.BEHAVIOR_FILTERS.filter((item) => (state.behaviorMode === "all" || (state.behaviorMode === "hint" ? item.mode === "hint" : item.mode !== "hint")) && `${item.label} ${item.help}`.toLocaleLowerCase("ja").includes(state.behaviorTerm.trim().toLocaleLowerCase("ja")));
-    return `<div class="behavior-tools"><label class="behavior-search">${icon("search")}<input type="search" aria-label="行動フィルターを検索" placeholder="行動を検索" data-field="behaviorTerm" data-focus="behavior-search" value="${escapeHtml(state.behaviorTerm)}" /></label><select aria-label="行動フィルターの種類" data-field="behaviorMode" data-focus="behavior-mode"><option value="all" ${state.behaviorMode === "all" ? "selected" : ""}>すべて</option><option value="decisive" ${state.behaviorMode === "decisive" ? "selected" : ""}>絞り込み</option><option value="hint" ${state.behaviorMode === "hint" ? "selected" : ""}>参考（除外しない）</option></select><button type="button" class="clear-control" data-action="clearBehaviors">行動をリセット</button></div><div class="observation-list">${filters.map((item) => `<div class="observation ${state.activeBehaviors.includes(item.id) ? "is-selected" : ""}"><label><input type="checkbox" data-behavior="${item.id}" data-focus="behavior-${item.id}" aria-describedby="help-${item.id}" ${state.activeBehaviors.includes(item.id) ? "checked" : ""} /><span>${item.mode === "hint" ? '<small class="hint-label">参考</small>' : ""}${item.label}</span></label><details data-disclosure="${item.id}"><summary>判定条件</summary><p id="help-${item.id}">${item.help}</p></details></div>`).join("") || '<p class="empty-note">該当する行動はありません。</p>'}</div>`;
+    const browser = window.PhasmoBehaviorBrowser.build(state);
+    const selectedCount = browser.selected.length;
+    const resetDisplay = state.behaviorTerm || state.behaviorMode !== "all" || state.behaviorCategory !== "all" || state.behaviorScope !== "all";
+    const impact = (row) => row.mode === "hint" ? "候補数は変わりません" : row.selected ? `解除すると ${row.count}候補` : browser.current === 0 ? "入力条件の見直しが必要" : `観測時 ${browser.current} → ${row.count}候補`;
+    const rowHtml = (row) => `<div class="observation ${row.selected ? "is-selected" : ""} ${row.warning ? "has-warning" : ""}" data-observation="${row.id}">
+      <label><input type="checkbox" data-behavior="${row.id}" data-focus="behavior-${row.id}" aria-describedby="impact-${row.id}${row.warning ? ` warning-${row.id}` : ""} help-${row.id}" ${row.selected ? "checked" : ""} /><span>${escapeHtml(row.label)}</span></label>
+      <div class="observation-meta" id="impact-${row.id}"><span class="behavior-kind ${row.mode === "hint" ? "is-hint" : ""}">${row.mode === "hint" ? "参考・除外なし" : "絞り込み"}</span><span class="observation-impact">${impact(row)}</span>${row.requiredEvidence ? `<span class="behavior-evidence">${engine.EVIDENCE.find((item) => item.id === row.requiredEvidence).short}も判定に反映</span>` : ""}</div>
+      ${row.warning ? `<p class="observation-warning" id="warning-${row.id}">${escapeHtml(row.warning)}</p>` : ""}
+      <details data-disclosure="${row.id}"><summary>判定条件</summary><div id="help-${row.id}" class="behavior-conditions">${notes(row.help)}</div>${row.mode !== "hint" && row.names.length > 0 && row.names.length <= 5 ? `<p class="behavior-preview">${row.selected ? "解除後の候補" : "観測時の候補"}: ${row.names.join(" / ")}</p>` : ""}</details>
+    </div>`;
+    return `<section class="behavior-browser" aria-label="行動による絞り込み">
+      <header class="behavior-overview"><div><h2>行動の観測</h2><p>行動なし <b>${browser.baseline}</b> → 現在 <strong>${browser.current}</strong>候補</p></div><button type="button" class="clear-control" data-action="clearBehaviors" data-focus="clear-behaviors" ${selectedCount ? "" : "disabled"}>${icon("rotate-ccw")}選択をリセット</button></header>
+      ${browser.current === 0 ? `<div class="behavior-conflict" role="status"><strong>${browser.baseline ? "選択した条件が両立していません" : "証拠・難易度の設定を見直してください"}</strong><p>${browser.baseline ? "各条件の解除後の候補数を確認し、観測の取り違えがないか照合してください。" : "行動の選択をすべて外しても候補は0種類です。"}</p></div>` : ""}
+      ${selectedCount ? `<section class="behavior-selected" aria-label="選択中の行動"><div class="behavior-selected-heading"><h3>選択中 <span>${selectedCount}項目</span></h3><span>絞り込み ${browser.selected.filter((row) => row.mode !== "hint").length} / 参考 ${browser.selected.filter((row) => row.mode === "hint").length}</span></div><ul>${browser.selected.map((row) => `<li><span>${escapeHtml(row.label)}</span><button type="button" class="icon-control" data-action="removeBehavior" data-remove-behavior="${row.id}" data-focus="remove-${row.id}" aria-label="${escapeHtml(row.label)}を解除" title="${escapeHtml(row.label)}を解除">${icon("x")}</button></li>`).join("")}</ul></section>` : ""}
+      <div class="behavior-tools">
+        <div class="behavior-search-wrap"><label class="behavior-search">${icon("search")}<input type="search" aria-label="行動フィルターを検索" placeholder="行動・装備・ゴースト名" data-field="behaviorTerm" data-focus="behavior-search" value="${escapeHtml(state.behaviorTerm)}" /></label>${state.behaviorTerm ? iconButton("clearBehaviorSearch", "x", "行動の検索を解除") : ""}</div>
+        <label class="behavior-select-label"><span>観測カテゴリ</span><select aria-label="観測カテゴリ" data-field="behaviorCategory" data-focus="behavior-category"><option value="all">すべての観測</option>${window.PhasmoBehaviorBrowser.CATEGORIES.map((category) => `<option value="${category.id}" ${state.behaviorCategory === category.id ? "selected" : ""}>${category.label}</option>`).join("")}</select></label>
+        <label class="behavior-select-label"><span>判定の種類</span><select aria-label="行動フィルターの種類" data-field="behaviorMode" data-focus="behavior-mode"><option value="all" ${state.behaviorMode === "all" ? "selected" : ""}>すべて</option><option value="decisive" ${state.behaviorMode === "decisive" ? "selected" : ""}>絞り込み</option><option value="hint" ${state.behaviorMode === "hint" ? "selected" : ""}>参考・除外なし</option></select></label>
+      </div>
+      <div class="behavior-scope" role="group" aria-label="行動の表示対象">${[["all", "すべて"], ["relevant", "候補に関係"], ["selected", "選択中"]].map(([id, label]) => `<button type="button" data-action="behaviorScope" data-scope="${id}" data-focus="behavior-scope-${id}" aria-pressed="${state.behaviorScope === id}">${label}<span>${browser.rows.filter((row) => id === "all" || (id === "selected" ? row.selected : row.relevant)).length}</span></button>`).join("")}</div>
+      <div class="behavior-results-heading"><span role="status">表示 ${browser.visible.length} / ${browser.rows.length}項目</span>${resetDisplay ? '<button type="button" class="clear-control" data-action="clearBehaviorDisplay" data-focus="clear-behavior-display">表示条件を解除</button>' : ""}</div>
+      <div class="observation-list" tabindex="0" role="region" aria-label="行動の観測一覧">${browser.groups.map((group) => `<section class="behavior-group" aria-labelledby="behavior-group-${group.id}"><h3 id="behavior-group-${group.id}">${group.label}<span>${group.rows.length}</span></h3>${group.rows.map(rowHtml).join("")}</section>`).join("") || `<div class="behavior-empty"><h3>${state.behaviorScope === "selected" && !selectedCount ? "選択中の行動はありません" : "表示条件に合う行動はありません"}</h3>${resetDisplay ? '<button type="button" class="advice-link" data-action="clearBehaviorDisplay" data-focus="empty-behavior-display">すべての行動を表示</button>' : ""}</div>`}</div>
+    </section>`;
   }
 
   function detail(result) {
@@ -161,7 +182,7 @@
     const focusAction = focused?.dataset?.action;
     const selection = focusKey && ["search", "behavior-search"].includes(focusKey) ? [focused.selectionStart, focused.selectionEnd] : null;
     const disclosures = [...root.querySelectorAll("details[open][data-disclosure]")].map((item) => item.dataset.disclosure);
-    const scrollRegions = [".matrix-scroll", ".candidate-rail", ".case-panel .observation-list", ".result-index", ".foot-table-scroll"];
+    const scrollRegions = [".matrix-scroll", ".candidate-rail", ".observation-list", ".result-index", ".foot-table-scroll"];
     const scrollPositions = scrollRegions.map((selector) => {
       const element = root.querySelector(selector);
       return element ? [selector, element.scrollLeft, element.scrollTop] : null;
@@ -235,6 +256,15 @@
     if (action === "reset") state = model.createState();
     if (action === "clearEvidence") state.evidenceStates = model.createState().evidenceStates;
     if (action === "clearBehaviors") state.activeBehaviors = [];
+    if (action === "removeBehavior") state.activeBehaviors = state.activeBehaviors.filter((id) => id !== button.dataset.removeBehavior);
+    if (action === "behaviorScope") state.behaviorScope = button.dataset.scope;
+    if (action === "clearBehaviorSearch") state.behaviorTerm = "";
+    if (action === "clearBehaviorDisplay") {
+      state.behaviorTerm = "";
+      state.behaviorMode = "all";
+      state.behaviorCategory = "all";
+      state.behaviorScope = "all";
+    }
     if (action === "clearSearch") state.searchTerm = "";
     if (action === "toggleMatrixFilters") state.matrixFiltersOpen = !state.matrixFiltersOpen;
     if (action === "caseTab") state.caseTab = button.dataset.tab;
@@ -244,6 +274,8 @@
       state.caseTab = "behaviors";
       state.behaviorTerm = filter.label;
       state.behaviorMode = "all";
+      state.behaviorCategory = "all";
+      state.behaviorScope = "all";
     }
     if (action === "evidence") model.setEvidence(state, button.dataset.evidence, button.dataset.state);
     if (action === "step") {
@@ -257,6 +289,11 @@
       if (concept === "matrix") { persist(); openRecord(state.selectedGhost); return; }
     }
     render();
+    if (["removeBehavior", "clearBehaviors", "clearBehaviorDisplay", "clearBehaviorSearch"].includes(action)) root.querySelector('[data-focus="behavior-search"]')?.focus({ preventScroll: true });
+    if (["behaviorScope", "clearBehaviorDisplay", "clearBehaviorSearch", "reviewBehavior"].includes(action)) {
+      const list = root.querySelector(".observation-list");
+      if (list) list.scrollTop = 0;
+    }
     if (action === "listenGhost") playFootsteps(button.dataset.lane);
     if (action === "openFootsteps") root.querySelector("#view-compare")?.focus({ preventScroll: true });
     if (action === "reviewBehavior") {
@@ -301,6 +338,10 @@
     else if (field) state[field] = element.value;
     else return;
     render();
+    if (["behaviorTerm", "behaviorCategory", "behaviorMode"].includes(field)) {
+      const list = root.querySelector(".observation-list");
+      if (list) list.scrollTop = 0;
+    }
   }
 
   function updatePlayback(status) {

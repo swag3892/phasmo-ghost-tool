@@ -12,7 +12,7 @@
   const difficultyLabels = { professional: "証拠3種類", nightmare: "ナイトメア（証拠2種類）", insanity: "インサニティ（証拠1種類）", zero: "証拠なし", custom: "カスタム" };
 
   function createState() {
-    return { difficulty: "nightmare", customEvidenceCount: 2, evidenceStates: Object.fromEntries([...evidenceIds].map((id) => [id, "unknown"])), activeBehaviors: [], showExcluded: false, searchTerm: "", selectedGhost: "aswang", step: 0, caseTab: "evidence", behaviorTerm: "", behaviorMode: "all", matrixFiltersOpen: false, footView: "record", footScope: "candidates", footLos: "all", footSpeed: 100, footMoon: false, footVolume: 35, footSeconds: 15, footA: "aswang", footB: "reference", footScenarioA: "", footScenarioB: "", footAccelerateA: false, footAccelerateB: false };
+    return { difficulty: "nightmare", customEvidenceCount: 2, evidenceStates: Object.fromEntries([...evidenceIds].map((id) => [id, "unknown"])), activeBehaviors: [], showExcluded: false, searchTerm: "", selectedGhost: "aswang", step: 0, caseTab: "evidence", behaviorTerm: "", behaviorMode: "all", behaviorCategory: "all", behaviorScope: "all", matrixFiltersOpen: false, footView: "record", footScope: "candidates", footLos: "all", footSpeed: 100, footMoon: false, footVolume: 35, footSeconds: 15, footA: "aswang", footB: "reference", footScenarioA: "", footScenarioB: "", footAccelerateA: false, footAccelerateB: false };
   }
 
   function sanitizeState(value) {
@@ -31,6 +31,8 @@
     if ([0, 1, 2].includes(value.step)) state.step = value.step;
     if (["evidence", "behaviors", "advice", "settings"].includes(value.caseTab)) state.caseTab = value.caseTab;
     if (["all", "decisive", "hint"].includes(value.behaviorMode)) state.behaviorMode = value.behaviorMode;
+    if (["all", "identity", "evidence", "appearance", "sound", "speed", "protection"].includes(value.behaviorCategory)) state.behaviorCategory = value.behaviorCategory;
+    if (["all", "relevant", "selected"].includes(value.behaviorScope)) state.behaviorScope = value.behaviorScope;
     state.matrixFiltersOpen = value.matrixFiltersOpen === true;
     if (["record", "compare"].includes(value.footView)) state.footView = value.footView;
     if (["candidates", "all"].includes(value.footScope)) state.footScope = value.footScope;

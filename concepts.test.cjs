@@ -150,12 +150,13 @@ test("matrix dialogs render the audited record for all 30 ghosts", () => {
     assert.equal(dialog.open, true);
     assert.ok(dialog.innerHTML.includes(`<p class="record-summary">${ghost.summary}</p>`));
     assert.ok(dialog.innerHTML.includes(`href="${ghost.source}"`));
-    assert.ok(dialog.innerHTML.includes('<strong class="record-note-label">確認: </strong>'));
-    assert.ok(dialog.innerHTML.includes('<strong class="record-note-label">注意: </strong>'));
-    const sections = [...dialog.innerHTML.matchAll(/<(?:section|details) class="record-section[^"]*"[^>]*><(?:h3|summary)>[^<]+<\/(?:h3|summary)><ul class="record-notes">(.*?)<\/ul><\/(?:section|details)>/g)];
-    assert.equal(sections.length, 2, ghost.id);
-    for (const [index, text] of [ghost.tell, ghost.hunt].entries()) {
-      assert.deepEqual([...sections[index][1].matchAll(/<li>(.*?)<\/li>/g)].map((match) => match[1].replace(/<\/?strong\b[^>]*>/g, "")), model.noteItems(text), ghost.id);
+    const feature = dialog.innerHTML.match(/<section class="record-section"><h3>特徴<\/h3><ul class="record-notes">(.*?)<\/ul><\/section>/);
+    assert.deepEqual([...feature[1].matchAll(/<li>(.*?)<\/li>/g)].map((match) => match[1]), model.noteItems(ghost.tell), ghost.id);
+    const knowledge = require("./wiki-knowledge.js");
+    assert.ok(dialog.innerHTML.includes(`data-ghost-facts="${ghost.id}"`));
+    for (const section of knowledge.DETAIL_SECTIONS) {
+      assert.ok(dialog.innerHTML.includes(`data-fact-section="${section.id}"`));
+      for (const item of knowledge.DETAILS[ghost.id][section.id]) assert.ok(dialog.innerHTML.includes(`<li>${item}</li>`), `${ghost.id} ${section.id}`);
     }
     assert.match(dialog.innerHTML, /証拠の組み合わせ/);
   }

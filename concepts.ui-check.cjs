@@ -205,21 +205,24 @@ async function main() {
         await page.locator(`.candidate-rail [data-ghost="${ghost.id}"]`).click();
         assert.equal(await page.locator(".case-record .record-summary").innerText(), ghost.summary);
         assert.equal(await page.locator(".case-record .record-foot a").getAttribute("href"), ghost.source);
-        assert.equal(await page.locator(".case-record .wiki-links a").getAttribute("href"), knowledge.source(ghost.id));
+        assert.equal(await page.locator(".case-record .wiki-focus .wiki-links a").getAttribute("href"), knowledge.source(ghost.id));
         assert.equal((await page.locator(".case-record .wiki-focus > .record-notes li").allTextContents()).join(""), knowledge.focusFor(ghost, 2));
         assert.equal(await page.locator(".case-record .wiki-pitfall").count(), 1);
-        assert.ok(await page.locator(".case-record .record-note-label").count() >= 2);
-        const sections = page.locator(".case-record .record-section");
-        assert.equal(await sections.count(), 2);
-        for (const [index, text] of [ghost.tell, ghost.hunt].entries()) {
-          assert.equal(await sections.nth(index).locator("ul.record-notes").count(), 1);
-          assert.deepEqual(await sections.nth(index).locator("li").allTextContents(), model.noteItems(text), `${ghost.id} ${width}`);
+        assert.deepEqual(await page.locator('.case-record .record-section > .record-notes > li').allTextContents(), model.noteItems(ghost.tell));
+        const facts = page.locator(`.case-record [data-ghost-facts="${ghost.id}"]`);
+        await facts.locator("summary").click();
+        assert.equal(await facts.locator(".ghost-fact-group").count(), 3);
+        for (const section of knowledge.DETAIL_SECTIONS) {
+          assert.deepEqual(await facts.locator(`[data-fact-section="${section.id}"] li`).allTextContents(), knowledge.DETAILS[ghost.id][section.id], `${ghost.id} ${section.id} ${width}`);
         }
+        assert.equal(await facts.locator(".wiki-links a").getAttribute("href"), knowledge.source(ghost.id));
         await assertLayout(`${ghost.id} bullet lists ${width}`);
+        await page.reload();
+        assert.equal(await page.locator(`.case-record [data-ghost-facts="${ghost.id}"]`).count(), 1);
       }
       await action("reset").click();
     }
-    console.log("All 60 ghost descriptions render as intact bullet lists on desktop and mobile.");
+    console.log("All 30 ghost profiles and 90 detailed sections render on desktop and mobile.");
     await evidence("emf", "confirmed").click();
     await page.locator('[data-focus="open-advice"]').click();
     assert.equal(await page.locator("#case-advice").getAttribute("aria-selected"), "true");
@@ -545,6 +548,35 @@ async function main() {
     await page.locator('.candidate-rail [data-ghost="mimic"]').click();
     assert.ok((await page.locator(".case-record .wiki-focus").innerText()).includes("通常証拠0でも追加オーブ"));
     console.log("Japanese wiki coverage, five exclusions, report disclosure, persistence and evidence-aware guidance passed.");
+    await action("reset").click();
+    await page.locator('.candidate-rail [data-ghost="obake"]').click();
+    await page.locator('.case-record [data-ghost-facts="obake"] > summary').focus();
+    await page.keyboard.press("Enter");
+    const detailedRecord = page.locator('.case-record [data-ghost-facts="obake"]');
+    assert.equal(await detailedRecord.evaluate((element) => element.open), true);
+    await evidence("ultraviolet", "confirmed").click();
+    assert.equal(await detailedRecord.evaluate((element) => element.open), true);
+    for (const width of [320, 390, 768, 1080, 1440]) {
+      await page.setViewportSize({ width, height: width < 540 ? 844 : 1100 });
+      await detailedRecord.scrollIntoViewIfNeeded();
+      await assertLayout(`expanded ghost details ${width}`);
+      if ([390, 1440].includes(width)) {
+        await page.evaluate(() => document.activeElement?.blur());
+        await page.screenshot({ path: path.join(output, `details-${width === 390 ? "mobile" : "desktop"}.png`), fullPage: true });
+      }
+    }
+    await evidence("orb", "confirmed").click();
+    await page.locator("#case-advice").click();
+    await page.locator('[data-disclosure="advice-ghost-obake"] > summary').click();
+    await page.locator('[data-disclosure="conditions-advice-obake"] > summary').click();
+    assert.equal(await page.locator('.advice-comparison [data-ghost-facts="obake"] .ghost-fact-group').count(), 3);
+    await page.locator('[data-disclosure="advice-ghost-mimic"] > summary').click();
+    await page.locator('[data-disclosure="conditions-advice-mimic"] > summary').click();
+    for (const width of [320, 390, 768, 1080, 1440]) {
+      await page.setViewportSize({ width, height: width < 540 ? 844 : 1100 });
+      await assertLayout(`expanded advice ghost details ${width}`);
+    }
+    console.log("Detailed profiles, keyboard disclosure, input stability and advice comparison passed at five widths.");
     await page.goto(`${base}/legacy.html`);
     assert.equal(await page.locator("#candidateCount").innerText(), "13");
     console.log("Adopted dossier, migration, empty states, references and legacy compatibility passed.");

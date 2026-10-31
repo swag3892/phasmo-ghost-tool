@@ -5,16 +5,19 @@
   "use strict";
   const CATEGORIES = [
     { id: "identity", label: "名前・性別", items: ["maleName", "femaleOnly"] },
+    { id: "power", label: "照明・ブレーカー", items: ["breakerOn", "breakerOff", "lightOn"] },
     { id: "evidence", label: "証拠の特殊反応", items: ["obakeUv", "goryoDots", "deogenBreath", "mimicOrb"] },
     { id: "appearance", label: "姿・物への干渉", items: ["obakePrint", "phantomPhoto", "polterThrow", "oniVisible", "hantuCold"] },
     { id: "sound", label: "音・索敵", items: ["bansheeScream", "mylingQuiet", "kormosAudio"] },
     { id: "speed", label: "速度・活動", items: ["dayanMotion", "obamboPhase", "raijuElectronics"] },
-    { id: "protection", label: "塩・防御・ハント", items: ["wraithSalt", "galluProtect", "onryoFlame", "spiritSmudge", "demonEarly", "aswangHide"] },
+    { id: "protection", label: "塩・防御・ハント", items: ["wraithSalt", "saltStepped", "galluProtect", "onryoFlame", "spiritSmudge", "incenseBefore180", "demonEarly", "aswangHide"] },
   ];
   const aliases = {
     obakeUv: "UV 指紋 手形 六本指", goryoDots: "DOTS ドッツ カメラ", deogenBreath: "スピボ Box 呼吸",
     mimicOrb: "オーブ 追加証拠", bansheeScream: "パラマイ 叫び声 サウンドレコーダー",
     spiritSmudge: "線香 インセンス 180秒", demonEarly: "線香 インセンス 90秒",
+    incenseBefore180: "線香 インセンス 180秒 スピリット除外", saltStepped: "塩 足跡 レイス除外",
+    breakerOn: "電源 復電 ハントゥ除外", breakerOff: "電源 停電 ジン除外", lightOn: "明かり 点灯 メアー除外",
     raijuElectronics: "電気 機器 スピード", dayanMotion: "スピード 移動 停止", mylingQuiet: "静か 音量",
   };
   const normalize = (text) => String(text).normalize("NFKC").toLocaleLowerCase("ja").replace(/[.]/g, "").replace(/[ァ-ヶ]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0x60));

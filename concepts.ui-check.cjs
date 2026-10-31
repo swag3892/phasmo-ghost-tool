@@ -6,6 +6,7 @@ const argument = (name) => process.argv.includes(name) ? process.argv[process.ar
 const { chromium } = require(argument("--playwright") || "playwright");
 const model = require("./concept-state.js");
 const engine = require("./app.js");
+const knowledge = require("./wiki-knowledge.js");
 const base = (argument("--url") || "http://127.0.0.1:4173").replace(/\/$/, "");
 const executablePath = argument("--browser");
 const output = path.join(__dirname, "concept-previews");
@@ -204,6 +205,9 @@ async function main() {
         await page.locator(`.candidate-rail [data-ghost="${ghost.id}"]`).click();
         assert.equal(await page.locator(".case-record .record-summary").innerText(), ghost.summary);
         assert.equal(await page.locator(".case-record .record-foot a").getAttribute("href"), ghost.source);
+        assert.equal(await page.locator(".case-record .wiki-links a").getAttribute("href"), knowledge.source(ghost.id));
+        assert.equal((await page.locator(".case-record .wiki-focus > .record-notes li").allTextContents()).join(""), knowledge.focusFor(ghost, 2));
+        assert.equal(await page.locator(".case-record .wiki-pitfall").count(), 1);
         assert.ok(await page.locator(".case-record .record-note-label").count() >= 2);
         const sections = page.locator(".case-record .record-section");
         assert.equal(await sections.count(), 2);
@@ -413,8 +417,8 @@ async function main() {
     await page.locator("#case-behaviors").click();
     const observation = (id) => page.locator(`[data-observation="${id}"]`);
     const scope = (id) => page.locator(`[data-action="behaviorScope"][data-scope="${id}"]`);
-    assert.equal(await page.locator("[data-observation]").count(), 23);
-    assert.equal(await page.locator(".behavior-group").count(), 6);
+    assert.equal(await page.locator("[data-observation]").count(), 28);
+    assert.equal(await page.locator(".behavior-group").count(), 7);
     await field("behaviorTerm").fill("ＵＶ 化け狐");
     assert.equal(await page.locator("[data-observation]").count(), 1);
     assert.ok((await observation("obakeUv").innerText()).includes("30 → 2候補"));
@@ -447,7 +451,7 @@ async function main() {
     assert.equal(await field("behaviorMode").inputValue(), "hint");
     assert.equal(await scope("selected").getAttribute("aria-pressed"), "true");
     await page.locator('[data-focus="clear-behavior-display"]').click();
-    assert.equal(await page.locator("[data-observation]").count(), 23);
+    assert.equal(await page.locator("[data-observation]").count(), 28);
     assert.equal(await page.locator('.behavior-selected li').count(), 2);
     await count(28);
     await page.locator('[data-behavior="bansheeScream"]').check();
@@ -477,7 +481,7 @@ async function main() {
       element.value = "しお";
       element.dispatchEvent(new InputEvent("input", { bubbles: true, isComposing: true }));
     });
-    assert.equal(await page.locator("[data-observation]").count(), 23);
+    assert.equal(await page.locator("[data-observation]").count(), 28);
     await field("behaviorTerm").evaluate((element) => {
       element.value = "塩";
       element.dispatchEvent(new CompositionEvent("compositionend", { bubbles: true }));
@@ -500,6 +504,47 @@ async function main() {
       await assertLayout(`empty behavior search ${width}`);
     }
     console.log("Behavior categories, normalized search, combined display filters, selection removal, conflicts, zero evidence and five widths passed.");
+    await action("reset").click();
+    await page.locator("#case-behaviors").click();
+    await field("behaviorCategory").selectOption("power");
+    assert.equal(await page.locator("[data-observation]").count(), 3);
+    await page.reload();
+    assert.equal(await field("behaviorCategory").inputValue(), "power");
+    await action("clearBehaviorDisplay").click();
+    for (const [id, excluded] of Object.entries({ breakerOn: "hantu", breakerOff: "jinn", lightOn: "mare", saltStepped: "wraith", incenseBefore180: "spirit" })) {
+      await page.locator(`[data-behavior="${id}"]`).check();
+      await count(29);
+      assert.equal(await page.locator(`.candidate-rail [data-ghost="${excluded}"]`).count(), 0);
+      assert.equal(await page.locator('.candidate-rail [data-ghost="mimic"]').count(), 1);
+      await observation(id).locator("details > summary").click();
+      assert.ok((await observation(id).locator(".wiki-links a").getAttribute("href")).startsWith(knowledge.REVIEW.home));
+      await page.locator(`[data-behavior="${id}"]`).uncheck();
+      await count(30);
+    }
+    await field("behaviorCategory").selectOption("protection");
+    await page.locator('[data-disclosure="wraithSalt"] > summary').click();
+    assert.equal(await observation("wraithSalt").locator('[data-wiki-report="salt-sync"]').count(), 1);
+    await action("reset").click();
+    await page.locator('.candidate-rail [data-ghost="gallu"]').click();
+    await page.locator('.case-record [data-disclosure="reports-ghost-gallu"] > summary').click();
+    await page.locator("#case-behaviors").click();
+    await field("behaviorCategory").selectOption("power");
+    await page.locator('[data-disclosure="breakerOff"] > summary').click();
+    for (const width of [320, 390, 768, 1080, 1440]) {
+      await page.setViewportSize({ width, height: width < 540 ? 844 : 1100 });
+      await assertLayout(`wiki reports and exclusions ${width}`);
+      if ([390, 1440].includes(width)) {
+        await page.evaluate(() => { document.activeElement?.blur(); window.scrollTo(0, 0); });
+        await page.screenshot({ path: path.join(output, `wiki-${width === 390 ? "mobile" : "desktop"}.png`), fullPage: width === 390 });
+      }
+    }
+    await page.locator("#case-settings").click();
+    await field("difficulty").selectOption("zero");
+    await page.locator('.candidate-rail [data-ghost="goryo"]').click();
+    assert.ok((await page.locator(".case-record .wiki-focus").innerText()).includes("証拠0では"));
+    await page.locator('.candidate-rail [data-ghost="mimic"]').click();
+    assert.ok((await page.locator(".case-record .wiki-focus").innerText()).includes("通常証拠0でも追加オーブ"));
+    console.log("Japanese wiki coverage, five exclusions, report disclosure, persistence and evidence-aware guidance passed.");
     await page.goto(`${base}/legacy.html`);
     assert.equal(await page.locator("#candidateCount").innerText(), "13");
     console.log("Adopted dossier, migration, empty states, references and legacy compatibility passed.");

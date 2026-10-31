@@ -13,8 +13,8 @@
     ultraviolet: "ドアやスイッチに触れた直後にUVライトを当て、手形や指紋を確認します。消えるまでの時間や指紋が残る確率にも設定・能力による違いがあります。",
     writing: "本を開いて活動地点に設置し、文字や絵が書かれるか確認します。本を投げられただけでは、書き込みの証拠にはなりません。",
   };
-  const huntChecks = new Set(["aswangHide", "dayanMotion", "kormosAudio", "obakePrint", "deogenBreath", "mylingQuiet", "onryoFlame", "obamboPhase", "demonEarly", "oniVisible", "raijuElectronics", "hantuCold"]);
-  const easyChecks = ["maleName", "goryoDots", "obakeUv", "polterThrow", "bansheeScream", "phantomPhoto", "wraithSalt", "galluProtect", "spiritSmudge"];
+  const huntChecks = new Set(["aswangHide", "dayanMotion", "kormosAudio", "obakePrint", "deogenBreath", "mylingQuiet", "onryoFlame", "obamboPhase", "demonEarly", "incenseBefore180", "oniVisible", "raijuElectronics", "hantuCold"]);
+  const easyChecks = ["maleName", "goryoDots", "obakeUv", "polterThrow", "bansheeScream", "phantomPhoto", "saltStepped", "breakerOn", "breakerOff", "lightOn", "wraithSalt", "galluProtect", "spiritSmudge"];
   const survivors = (state) => engine.analyze(state).filter((result) => result.ok);
 
   function buildAdvice(state) {

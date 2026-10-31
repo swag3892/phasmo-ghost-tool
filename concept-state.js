@@ -31,7 +31,7 @@
     if ([0, 1, 2].includes(value.step)) state.step = value.step;
     if (["evidence", "behaviors", "advice", "settings"].includes(value.caseTab)) state.caseTab = value.caseTab;
     if (["all", "decisive", "hint"].includes(value.behaviorMode)) state.behaviorMode = value.behaviorMode;
-    if (["all", "identity", "evidence", "appearance", "sound", "speed", "protection"].includes(value.behaviorCategory)) state.behaviorCategory = value.behaviorCategory;
+    if (["all", "identity", "power", "evidence", "appearance", "sound", "speed", "protection"].includes(value.behaviorCategory)) state.behaviorCategory = value.behaviorCategory;
     if (["all", "relevant", "selected"].includes(value.behaviorScope)) state.behaviorScope = value.behaviorScope;
     state.matrixFiltersOpen = value.matrixFiltersOpen === true;
     if (["record", "compare"].includes(value.footView)) state.footView = value.footView;

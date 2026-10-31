@@ -95,6 +95,29 @@ body:is([data-concept="file"], [data-concept="flow"]) .behavior-browser { --beha
 .behavior-conditions { padding-top: 8px; }
 .behavior-conditions .record-notes { font-size: 11px; line-height: 1.85; color: var(--muted); padding-left: 15px; }
 .behavior-conditions .record-notes li + li { margin-top: 6px; }
+.wiki-focus { padding: 18px 0 0; border-top: 1px solid var(--line); margin-top: 22px; }
+.wiki-focus h3 { font-size: 12px; line-height: 1.7; margin-bottom: 10px; color: var(--accent); }
+.record-conditions > summary { cursor: pointer; color: var(--muted); font-size: 12px; line-height: 1.8; }
+.record-conditions > .record-notes { margin-top: 12px; }
+.wiki-focus .record-notes { font-size: 12px; line-height: 1.9; }
+.wiki-pitfall { font-size: 12px; line-height: 1.9; margin-top: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.wiki-pitfall > strong { display: block; font-size: 11px; color: var(--accent); margin-bottom: 3px; }
+.wiki-links { display: flex; flex-wrap: wrap; gap: 6px 16px; padding-top: 12px; font-size: 11px; line-height: 1.8; }
+.wiki-links a { overflow-wrap: anywhere; }
+.wiki-reports { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 10px; min-width: 0; }
+.wiki-reports > summary { cursor: pointer; font-size: 11px; line-height: 1.8; color: var(--accent); }
+.wiki-reports > h4 { font-size: 11px; line-height: 1.8; color: var(--accent); margin: 0; }
+.wiki-reports > summary > span { color: var(--muted); margin-left: 6px; white-space: nowrap; }
+.wiki-report-meta { color: var(--muted); font-size: 11px; line-height: 1.9; margin-top: 10px; }
+.wiki-reports > ul { padding-left: 18px; margin: 12px 0 0; font-size: 11px; line-height: 1.9; }
+.wiki-reports li + li { margin-top: 14px; }
+.wiki-reports li > strong { font-weight: 600; }
+.wiki-reports li > p { color: var(--muted); margin: 4px 0; }
+.evidence-caution { font-size: 11px; color: var(--muted); line-height: 1.9; margin-top: 18px; }
+.advice-comparison .wiki-focus { border-top: 0; padding: 8px 0 0; }
+.advice-comparison .wiki-focus > h3 { display: none; }
+.observation .wiki-reports { margin: 12px 0 0; }
+.observation details .wiki-links { padding-bottom: 4px; }
 .behavior-empty { padding: 25px 0; grid-column: 1 / -1; text-align: center; color: var(--muted); }
 .behavior-empty h3 { font-size: 13px; font-weight: 500; line-height: 1.8; }
 .behavior-empty .advice-link { margin-top: 10px; }

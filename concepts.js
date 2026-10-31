@@ -4,9 +4,10 @@
   const model = window.PhasmoConceptState;
   const footsteps = window.PhasmoFootsteps;
   const footView = window.PhasmoFootstepView;
+  const knowledge = window.PhasmoKnowledge;
   const adopted = document.body.dataset.app === "dossier";
   const storageKey = adopted ? model.DOSSIER_KEY : model.STORAGE_KEY;
-  const review = { version: "0.19.1.0", date: "2026-10-17" };
+  const review = knowledge.REVIEW;
   // Reuse the audited engine, without starting its original UI renderer.
   window.removeEventListener("DOMContentLoaded", engine.init);
   const concepts = { matrix: "証拠マトリクス", file: "調査ファイル", flow: "ステップ調査" };
@@ -25,6 +26,21 @@
   const icon = (name, className = "") => `<img class="${className}" src="./assets/${name}.svg" width="20" height="20" alt="" />`;
   const iconButton = (action, name, label, extra = "") => `<button type="button" class="icon-control" data-action="${action}" data-focus="${action}" title="${label}" aria-label="${label}" ${extra}>${icon(name)}</button>`;
   const notes = (text) => `<ul class="record-notes">${model.noteItems(text).map((item) => `<li>${escapeHtml(item).replace(/^(確認|注意): /u, '<strong class="record-note-label">$1: </strong>')}</li>`).join("")}</ul>`;
+
+  function wikiLinks(ghosts) {
+    return `<div class="wiki-links">${ghosts.map((ghost) => `<a href="${knowledge.source(ghost.id)}" target="_blank" rel="noopener">${escapeHtml(ghost.name)}の日本語Wiki</a>`).join("")}</div>`;
+  }
+
+  function reportNotes(context, key, collapsible = true) {
+    const reports = knowledge.reportsFor(context);
+    if (!reports.length) return "";
+    const heading = `判定前に確認する報告 <span>${reports.length}件</span>`;
+    return `${collapsible ? `<details class="wiki-reports" data-disclosure="reports-${key}"><summary>${heading}</summary>` : `<aside class="wiki-reports"><h4>${heading}</h4>`}<p class="wiki-report-meta">日本語Wikiの報告 / v${review.version} / ${review.date}照合。必ず発生するものではなく、自動除外には使いません。</p><ul>${reports.map((report) => `<li data-wiki-report="${report.id}"><strong>${escapeHtml(report.title)}</strong><p>${escapeHtml(report.text)}</p><a href="${review.home}${report.page}" target="_blank" rel="noopener">報告の出典</a></li>`).join("")}</ul>${collapsible ? "</details>" : "</aside>"}`;
+  }
+
+  function investigationFocus(ghost) {
+    return `<section class="wiki-focus" data-wiki-ghost="${ghost.id}"><h3>調査のポイント</h3>${notes(knowledge.focusFor(ghost, engine.getEvidenceCount(state)))}<p class="wiki-pitfall"><strong>見誤りやすい条件</strong>${escapeHtml(knowledge.GHOSTS[ghost.id].caution)}</p>${reportNotes({ ghost: ghost.id }, `ghost-${ghost.id}`)}${wikiLinks([ghost])}</section>`;
+  }
 
   function counts() {
     return { candidates: engine.analyze(state).filter((result) => result.ok).length, confirmed: Object.values(state.evidenceStates).filter((value) => value === "confirmed").length, denied: Object.values(state.evidenceStates).filter((value) => value === "denied").length };
@@ -62,9 +78,9 @@
     const impact = (row) => row.mode === "hint" ? "候補数は変わりません" : row.selected ? `解除すると ${row.count}候補` : browser.current === 0 ? "入力条件の見直しが必要" : `観測時 ${browser.current} → ${row.count}候補`;
     const rowHtml = (row) => `<div class="observation ${row.selected ? "is-selected" : ""} ${row.warning ? "has-warning" : ""}" data-observation="${row.id}">
       <label><input type="checkbox" data-behavior="${row.id}" data-focus="behavior-${row.id}" aria-describedby="impact-${row.id}${row.warning ? ` warning-${row.id}` : ""} help-${row.id}" ${row.selected ? "checked" : ""} /><span>${escapeHtml(row.label)}</span></label>
-      <div class="observation-meta" id="impact-${row.id}"><span class="behavior-kind ${row.mode === "hint" ? "is-hint" : ""}">${row.mode === "hint" ? "参考・除外なし" : "絞り込み"}</span><span class="observation-impact">${impact(row)}</span>${row.requiredEvidence ? `<span class="behavior-evidence">${engine.EVIDENCE.find((item) => item.id === row.requiredEvidence).short}も判定に反映</span>` : ""}</div>
+      <div class="observation-meta" id="impact-${row.id}"><span class="behavior-kind ${row.mode === "hint" ? "is-hint" : ""}">${row.mode === "hint" ? "参考・除外なし" : row.mode === "exclude" ? "除外条件" : "絞り込み"}</span><span class="observation-impact">${impact(row)}</span>${row.requiredEvidence ? `<span class="behavior-evidence">${engine.EVIDENCE.find((item) => item.id === row.requiredEvidence).short}も判定に反映</span>` : ""}</div>
       ${row.warning ? `<p class="observation-warning" id="warning-${row.id}">${escapeHtml(row.warning)}</p>` : ""}
-      <details data-disclosure="${row.id}"><summary>判定条件</summary><div id="help-${row.id}" class="behavior-conditions">${notes(row.help)}</div>${row.mode !== "hint" && row.names.length > 0 && row.names.length <= 5 ? `<p class="behavior-preview">${row.selected ? "解除後の候補" : "観測時の候補"}: ${row.names.join(" / ")}</p>` : ""}</details>
+      <details data-disclosure="${row.id}"><summary>判定条件</summary><div id="help-${row.id}" class="behavior-conditions">${notes(row.help)}</div>${reportNotes({ behavior: row.id }, `behavior-${row.id}`, false)}${wikiLinks(engine.GHOSTS.filter((ghost) => row.ghosts.includes(ghost.id)))}${row.mode !== "hint" && row.names.length > 0 && row.names.length <= 5 ? `<p class="behavior-preview">${row.selected ? "解除後の候補" : "観測時の候補"}: ${row.names.join(" / ")}</p>` : ""}</details>
     </div>`;
     return `<section class="behavior-browser" aria-label="行動による絞り込み">
       <header class="behavior-overview"><div><h2>行動の観測</h2><p>行動なし <b>${browser.baseline}</b> → 現在 <strong>${browser.current}</strong>候補</p></div><button type="button" class="clear-control" data-action="clearBehaviors" data-focus="clear-behaviors" ${selectedCount ? "" : "disabled"}>${icon("rotate-ccw")}選択をリセット</button></header>
@@ -84,7 +100,7 @@
   function detail(result) {
     if (!result) return emptyRecord();
     const ghost = result.ghost;
-    return `<article class="ghost-record" data-ghost-detail="${ghost.id}"><div class="record-heading"><div><p class="record-id">${ghost.english}</p><h2>${ghost.name}</h2></div><span class="record-status ${result.ok ? "" : "out"}">${result.ok ? "候補" : "除外"}</span></div><p class="record-summary">${escapeHtml(ghost.summary)}</p><div class="record-evidence">${[...ghost.evidence, ...(ghost.extraEvidence || [])].map((id) => { const item = engine.EVIDENCE.find((entry) => entry.id === id); const forced = ghost.forced === id && engine.getEvidenceCount(state) > 0; const extra = (ghost.extraEvidence || []).includes(id); return `<div class="record-evidence-item ${state.evidenceStates[id]}">${icon(evidenceIcons[id])}<span>${item.label}${forced ? '<small>強制証拠</small>' : extra ? '<small>追加証拠</small>' : ""}</span></div>`; }).join("")}</div><section class="record-section"><h3>特徴</h3>${notes(ghost.tell)}</section><section class="record-section"><h3>調査のポイント</h3>${notes(ghost.hunt)}</section>${footView.mini(ghost, concept === "file")}<div class="record-foot"><p>速度はゴースト速度100%・イベント補正なし。正気度は通常ハント開始の目安で、必ず即時に始まる条件ではありません。</p><a href="${escapeHtml(ghost.source)}" target="_blank" rel="noopener">個別の仕様資料（非公式）</a></div>${result.ok ? `<details class="record-options" data-disclosure="options-${ghost.id}"><summary>観測できる証拠の組み合わせ <span>${result.evidence.options.length}</span></summary><ul>${result.evidence.options.map((option) => `<li><strong>${option.visible.map((id) => engine.EVIDENCE.find((item) => item.id === id).short).join(" + ") || "証拠なし"}</strong><span>隠れる証拠: ${option.hidden.map((id) => engine.EVIDENCE.find((item) => item.id === id).short).join(" / ") || "なし"}</span></li>`).join("")}</ul></details>` : `<p class="exclusion-reason">${result.reason}</p>`}</article>`;
+    return `<article class="ghost-record" data-ghost-detail="${ghost.id}"><div class="record-heading"><div><p class="record-id">${ghost.english}</p><h2>${ghost.name}</h2></div><span class="record-status ${result.ok ? "" : "out"}">${result.ok ? "候補" : "除外"}</span></div><p class="record-summary">${escapeHtml(ghost.summary)}</p><div class="record-evidence">${[...ghost.evidence, ...(ghost.extraEvidence || [])].map((id) => { const item = engine.EVIDENCE.find((entry) => entry.id === id); const forced = ghost.forced === id && engine.getEvidenceCount(state) > 0; const extra = (ghost.extraEvidence || []).includes(id); return `<div class="record-evidence-item ${state.evidenceStates[id]}">${icon(evidenceIcons[id])}<span>${item.label}${forced ? '<small>強制証拠</small>' : extra ? '<small>追加証拠</small>' : ""}</span></div>`; }).join("")}</div><section class="record-section"><h3>特徴</h3>${notes(ghost.tell)}</section>${investigationFocus(ghost)}<details class="record-section record-conditions" data-disclosure="conditions-${ghost.id}"><summary>詳しい観測条件</summary>${notes(ghost.hunt)}</details>${footView.mini(ghost, concept === "file")}<div class="record-foot"><p>速度はゴースト速度100%・イベント補正なし。正気度は通常ハント開始の目安で、必ず即時に始まる条件ではありません。</p><a href="${escapeHtml(ghost.source)}" target="_blank" rel="noopener">補足資料: Phasmopedia（非公式）</a></div>${result.ok ? `<details class="record-options" data-disclosure="options-${ghost.id}"><summary>観測できる証拠の組み合わせ <span>${result.evidence.options.length}</span></summary><ul>${result.evidence.options.map((option) => `<li><strong>${option.visible.map((id) => engine.EVIDENCE.find((item) => item.id === id).short).join(" + ") || "証拠なし"}</strong><span>隠れる証拠: ${option.hidden.map((id) => engine.EVIDENCE.find((item) => item.id === id).short).join(" / ") || "なし"}</span></li>`).join("")}</ul></details>` : `<p class="exclusion-reason">${result.reason}</p>`}</article>`;
   }
 
   function matrixView() {
@@ -110,7 +126,7 @@
       ${advice.evidenceChecks.length ? `<section class="advice-section" aria-labelledby="adviceEvidenceTitle"><h3 id="adviceEvidenceTitle">次に確認する証拠</h3><ul class="advice-checks">${advice.evidenceChecks.map((item) => `<li data-advice-evidence="${item.id}"><div class="advice-check-heading"><h4>${icon(evidenceIcons[item.id])}${item.label}</h4><span class="advice-tag">確認時 ${advice.candidates.length} → ${item.count}種類</span></div><p>${item.method}</p>${item.count <= 4 ? `<p class="advice-meta">残る候補: ${item.names.join(" / ")}</p>` : ""}${item.forcedFor.length ? `<p class="advice-meta">強制証拠: ${item.forcedFor.join(" / ")}</p>` : ""}</li>`).join("")}</ul></section>` : ""}
       ${advice.behaviorChecks.length ? advice.stage === "evidence" ? `<details class="advice-section advice-observations" data-disclosure="advice-behaviors"><summary>ハント外で確認する行動 <span>${advice.behaviorChecks.length}項目</span></summary>${observations(advice.behaviorChecks)}</details>` : `<section class="advice-section" aria-labelledby="adviceBehaviorTitle"><h3 id="adviceBehaviorTitle">ハント外で確認する行動</h3>${observations(advice.behaviorChecks)}</section>` : ""}
       ${advice.huntChecks.length ? `<details class="advice-section advice-hunt" data-disclosure="advice-hunt"><summary>ハント中・接近が必要な観測</summary><p class="advice-caution">確認のためにハントを起こしたり、ゴーストに近づいたりする必要はありません。自然に観測できた場合の比較用です。退避手段とスマッジ・着火具を準備してください。</p>${observations(advice.huntChecks)}</details>` : ""}
-      ${advice.candidates.length > 1 && advice.candidates.length <= 6 ? `<section class="advice-section advice-comparison" aria-labelledby="adviceComparisonTitle"><h3 id="adviceComparisonTitle">残った候補の比較</h3>${advice.candidates.map((ghost) => `<details data-disclosure="advice-ghost-${ghost.id}"><summary>${ghost.name}<span>${ghost.english}</span></summary><p class="record-summary">${ghost.summary}</p>${notes(ghost.hunt)}</details>`).join("")}</section>` : ""}
+      ${advice.candidates.length > 0 && advice.candidates.length <= 6 ? `<section class="advice-section advice-comparison" aria-labelledby="adviceComparisonTitle"><h3 id="adviceComparisonTitle">候補の確認事項</h3>${advice.candidates.map((ghost) => `<details data-disclosure="advice-ghost-${ghost.id}"><summary>${ghost.name}<span>${ghost.english}</span></summary><p class="record-summary">${ghost.summary}</p>${investigationFocus(ghost)}</details>`).join("")}</section>` : ""}
       ${advice.notices.length ? `<ul class="advice-notices">${advice.notices.map((notice) => `<li>${escapeHtml(notice)}</li>`).join("")}</ul>` : ""}
       ${advice.candidates.some((ghost) => ["deogen", "mimic"].includes(ghost.id)) ? '<p class="advice-caution">デオヘン、またはデオヘンを模倣するミミックが残る間は、隠れるだけではハントを防げません。逃げ続けられる経路も確認してください。</p>' : ""}
       <a class="advice-source" href="https://github.com/swag3892/phasmo-ghost-tool/blob/main/GHOST_AUDIT.md#調査アドバイス" target="_blank" rel="noopener">判定の根拠と出典</a>
@@ -124,12 +140,12 @@
     const tally = counts();
     const tabs = [["evidence", "証拠"], ["behaviors", "行動"], ["advice", "アドバイス"], ["settings", "設定"]];
     const panel = state.caseTab === "evidence"
-      ? `<div class="case-section-heading"><h2>証拠の確認</h2><button type="button" class="clear-control" data-action="clearEvidence">証拠をリセット</button></div><div class="evidence-legend" aria-hidden="true"><span>未確認</span><span>確定</span><span>否定</span></div>${evidenceRows()}<dl class="file-totals"><div><dt>確定</dt><dd>${tally.confirmed}</dd></div><div><dt>否定</dt><dd>${tally.denied}</dd></div></dl><div class="advice-entry"><p>選択した条件から、次に確認すること</p><button type="button" class="advice-link" data-action="caseTab" data-tab="advice" data-focus="open-advice">次の調査へ${icon("arrow-right")}</button></div>`
+      ? `<div class="case-section-heading"><h2>証拠の確認</h2><button type="button" class="clear-control" data-action="clearEvidence">証拠をリセット</button></div><div class="evidence-legend" aria-hidden="true"><span>未確認</span><span>確定</span><span>否定</span></div>${evidenceRows()}<p class="evidence-caution">見つからない証拠は、隠れている可能性があります。観測に確信がなければ「未確認」のまま比較してください。</p>${reportNotes({ evidence: "ultraviolet" }, "evidence-uv")}<dl class="file-totals"><div><dt>確定</dt><dd>${tally.confirmed}</dd></div><div><dt>否定</dt><dd>${tally.denied}</dd></div></dl><div class="advice-entry"><p>選択した条件から、次に確認すること</p><button type="button" class="advice-link" data-action="caseTab" data-tab="advice" data-focus="open-advice">次の調査へ${icon("arrow-right")}</button></div>`
       : state.caseTab === "behaviors"
         ? behaviorList()
         : state.caseTab === "advice"
           ? adviceView()
-        : `<div class="file-settings">${difficulty()}<dl class="data-facts"><div><dt>収録ゴースト</dt><dd>${engine.GHOSTS.length}種類</dd></div><div><dt>行動フィルター</dt><dd>${engine.BEHAVIOR_FILTERS.length}項目</dd></div><div><dt>仕様確認対象</dt><dd>v${review.version}</dd></div><div><dt>全件確認日</dt><dd>${review.date}</dd></div></dl><a href="https://github.com/swag3892/phasmo-ghost-tool/blob/main/GHOST_AUDIT.md" target="_blank" rel="noopener">仕様の確認結果と出典</a></div>`;
+        : `<div class="file-settings">${difficulty()}<dl class="data-facts"><div><dt>収録ゴースト</dt><dd>${engine.GHOSTS.length}種類</dd></div><div><dt>行動フィルター</dt><dd>${engine.BEHAVIOR_FILTERS.length}項目</dd></div><div><dt>仕様確認対象</dt><dd>v${review.version}</dd></div><div><dt>日本語Wiki照合日</dt><dd>${review.date}</dd></div></dl><a href="https://github.com/swag3892/phasmo-ghost-tool/blob/main/GHOST_AUDIT.md" target="_blank" rel="noopener">仕様の確認結果と出典</a><div class="wiki-links"><a href="${review.home}" target="_blank" rel="noopener">Phasmophobia 日本語Wiki</a><a href="${review.home}866325" target="_blank" rel="noopener">不具合・報告一覧</a></div><p class="wiki-report-meta">日本語Wikiはコミュニティ資料です。報告と通常の判定条件を分け、公式修正と食い違う情報は除外判定に採用していません。</p></div>`;
     return `<div class="file-app">
       <header class="file-header">
         <div class="brand"><p>ゴースト調査記録</p><h1 id="appTitle">Phasmophobia</h1></div>

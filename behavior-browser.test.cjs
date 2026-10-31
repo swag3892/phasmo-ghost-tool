@@ -8,9 +8,9 @@ const count = (state) => engine.analyze(state).filter((result) => result.ok).len
 
 test("all audited behavior filters belong to exactly one category", () => {
   const ids = browser.CATEGORIES.flatMap((category) => category.items);
-  assert.equal(new Set(ids).size, 23);
+  assert.equal(new Set(ids).size, 28);
   assert.deepEqual(ids.sort(), engine.BEHAVIOR_FILTERS.map((filter) => filter.id).sort());
-  assert.equal(browser.build(stateModel.createState()).visible.length, 23);
+  assert.equal(browser.build(stateModel.createState()).visible.length, 28);
 });
 
 test("search handles full-width input, kana, ghost names, aliases and AND terms", () => {

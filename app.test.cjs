@@ -82,7 +82,7 @@ test("reviewed descriptions retain hunt scope, timing and uncertain-door caveats
   assert.ok(ghost("deogen").tell.startsWith("ハント中は"));
   assert.match(ghost("wraith").tell, /ハント外に/);
   assert.match(ghost("banshee").hunt, /調査エリア外でも開始判定は標的の正気度/);
-  assert.match(ghost("banshee").hunt, /標的が死亡すると対象が変わる/);
+  assert.match(ghost("banshee").hunt, /死亡・退出で標的が変わる/);
   assert.match(ghost("gallu").hunt, /目くらましが終わってから変化/);
   assert.match(ghost("goryo").tell, /お気に入りの部屋に誰もいない/);
   assert.doesNotMatch(ghost("yurei").tell, /滑らか/);
@@ -179,8 +179,8 @@ test("ambiguous movement and electronics observations cannot discard other ghost
 
 test("audit covers all ghosts and filters with no duplicate or dangling filter references", () => {
   const audit = fs.readFileSync(require.resolve("./GHOST_AUDIT.md"), "utf8");
-  assert.equal(api.BEHAVIOR_FILTERS.length, 23);
-  assert.equal(new Set(api.BEHAVIOR_FILTERS.map((f) => f.id)).size, 23);
+  assert.equal(api.BEHAVIOR_FILTERS.length, 28);
+  assert.equal(new Set(api.BEHAVIOR_FILTERS.map((f) => f.id)).size, 28);
   for (const g of api.GHOSTS) assert.ok(audit.includes(`| \`${g.id}\` |`), g.id);
   for (const f of api.BEHAVIOR_FILTERS) {
     assert.ok(audit.includes(`| \`${f.id}\` |`), f.id);

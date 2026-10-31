@@ -25,6 +25,7 @@ function createPreview(concept, saved, options = {}) {
   };
   if (options.adopted) document.body.dataset.app = "dossier";
   const window = {
+    PhasmoKnowledge: require("./wiki-knowledge.js"),
     PhasmoBehaviorBrowser: require("./behavior-browser.js"),
     PhasmoTool: engine, PhasmoConceptState: model, PhasmoAdvice: require("./investigation-advice.js"), PhasmoFootsteps: require("./footsteps.js"), PhasmoFootstepView: require("./footstep-view.js"),
     addEventListener(type, fn) { listeners.set(type, fn); },
@@ -151,7 +152,7 @@ test("matrix dialogs render the audited record for all 30 ghosts", () => {
     assert.ok(dialog.innerHTML.includes(`href="${ghost.source}"`));
     assert.ok(dialog.innerHTML.includes('<strong class="record-note-label">確認: </strong>'));
     assert.ok(dialog.innerHTML.includes('<strong class="record-note-label">注意: </strong>'));
-    const sections = [...dialog.innerHTML.matchAll(/<section class="record-section"><h3>[^<]+<\/h3><ul class="record-notes">(.*?)<\/ul><\/section>/g)];
+    const sections = [...dialog.innerHTML.matchAll(/<(?:section|details) class="record-section[^"]*"[^>]*><(?:h3|summary)>[^<]+<\/(?:h3|summary)><ul class="record-notes">(.*?)<\/ul><\/(?:section|details)>/g)];
     assert.equal(sections.length, 2, ghost.id);
     for (const [index, text] of [ghost.tell, ghost.hunt].entries()) {
       assert.deepEqual([...sections[index][1].matchAll(/<li>(.*?)<\/li>/g)].map((match) => match[1].replace(/<\/?strong\b[^>]*>/g, "")), model.noteItems(text), ghost.id);

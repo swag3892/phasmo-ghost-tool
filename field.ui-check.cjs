@@ -51,6 +51,7 @@ const base = live ? "https://swag3892.github.io/phasmo-ghost-tool/" : "https://p
     assert.equal(await page.locator(".count strong").innerText(),reduced);
     await page.locator("nav a[href='./dossier.html']").click();
     const dossierNav=page.getByRole("navigation",{name:"調査画面"});
+    await dossierNav.waitFor({state:"visible"});
     assert.deepEqual(await dossierNav.getByRole("link").allTextContents(),["現場ボード","候補比較台","調査ファイル"]);
     assert.equal(await dossierNav.locator('[aria-current="page"]').textContent(),"調査ファイル");
     for(const width of [320,390,768,1024,1440]){

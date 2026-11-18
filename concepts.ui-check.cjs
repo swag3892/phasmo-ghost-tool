@@ -163,7 +163,7 @@ async function main() {
       console.log(`All layouts passed at ${width}px.`);
     }
     }
-    await page.goto(`${base}/index.html?concept=flow`);
+    await page.goto(`${base}/dossier.html?concept=flow`);
     await page.locator("#appTitle").waitFor();
     assert.equal(await page.locator("body").getAttribute("data-app"), "dossier");
     assert.equal(await page.locator(".concept-picker").count(), 0);

@@ -139,11 +139,11 @@ test("new filters and category persist without renaming existing saved observati
   assert.equal(model.visibleResults({ ...model.createState(), searchTerm: "ディルデガスト" })[0].ghost.id, "deildegast");
 });
 
-test("both current entry points load wiki knowledge before the renderer", () => {
-  for (const name of ["index.html", "concepts.html"]) {
+test("field board, dossier and concepts load wiki knowledge before their renderer", () => {
+  for (const [name, renderer] of [["index.html","drafts/studio.js"],["dossier.html","concepts.js"],["concepts.html","concepts.js"]]) {
     const html = fs.readFileSync(require.resolve(`./${name}`), "utf8");
     assert.ok(html.indexOf("wiki-knowledge.js?") > html.indexOf("app.js?"));
-    assert.ok(html.indexOf("wiki-knowledge.js?") < html.indexOf("concepts.js?"));
+    assert.ok(html.indexOf("wiki-knowledge.js?") < html.indexOf(renderer+"?"));
     assert.ok(html.includes("20261031-details-1"));
   }
 });

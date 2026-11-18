@@ -406,6 +406,15 @@
     try { state = model.readStorage(window.localStorage, storageKey, adopted ? [model.LEGACY_KEY, model.STORAGE_KEY] : []); } catch { state = model.createState(); }
     document.addEventListener("visibilitychange", () => { if (document.hidden) footPlayer?.stop(); });
     window.addEventListener("pagehide", () => footPlayer?.stop());
+    if (adopted) {
+      const syncSaved = () => {
+        try { state = model.readStorage(window.localStorage, storageKey, [model.LEGACY_KEY, model.STORAGE_KEY]); }
+        catch { return; }
+        render();
+      };
+      window.addEventListener("pageshow", (event) => { if (event.persisted) syncSaved(); });
+      window.addEventListener("storage", (event) => { if (event.key === storageKey || event.key === null) syncSaved(); });
+    }
     root.addEventListener("click", handleAction);
     dialog.addEventListener("click", handleAction);
     dialog.addEventListener("click", (event) => {

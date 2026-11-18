@@ -1,10 +1,16 @@
 # Phasmophobia ゴースト分析
 
-ナイトメア難易度に対応した静的ゴースト分析ツールです。暗色の「調査ファイル」デザインを正式採用し、候補の一覧と1体ずつの調査記録を表示します。
+ナイトメア難易度に対応した静的ゴースト分析ツールです。[現場ボード](https://swag3892.github.io/phasmo-ghost-tool/)で観測を入力し、[候補比較台](https://swag3892.github.io/phasmo-ghost-tool/#compare)で残った2体を同じ条件で比較できます。
 
 ## 使い方
 
 `index.html` をブラウザで開くと利用できます。
+
+- 現場ボードで証拠・行動を記録し、「次の調査」と各候補の「まず確かめること」を参照します。難易度とカスタム証拠数は画面上部で変更できます。
+- 「2体を比較する」で、似た候補の条件、速度、継続視認による加速、合成足音を比較します。比較画面でも観測条件を変更できます。
+- 詳細な行動検索、全候補の足音設定、更新履歴は従来の[調査ファイル](./dossier.html)から利用できます。公開サイト上では両画面で同じ調査記録を使い、ドラフトの試用データは取り込みません。
+
+### 調査ファイルの機能
 
 - 初期設定の難易度は `ナイトメア（証拠2種類）` です。
 - 全30種類に一行の要約を付け、特徴と調査のポイントを箇条書きで整理しています。「確認」と「注意」を区別し、個別の仕様資料にもリンクしています。
@@ -91,7 +97,7 @@ Node.jsで `node --test app.test.cjs concepts.test.cjs investigation-advice.test
 - 調査ファイル: 候補名の横並びナビゲーションと、1体ずつの記録を表示する見開き構成。証拠・行動・アドバイス・設定のタブで切り替えます。
 - ステップ調査: 証拠・行動・候補を個別の画面に分けた段階式。候補画面は名前の一覧と選択した1体の詳細を表示します。
 
-判定は監査済みの `app.js` のAPIを共有します。入力状態は3案間で共有・保存し、正式版とは別の保存キーを使います。「調査ファイル」を暗色に調整したものが正式版です。比較用のタブは正式版には表示しません。
+判定は監査済みの `app.js` のAPIを共有します。入力状態は3案間で共有・保存し、正式版とは別の保存キーを使います。暗色の調査ファイルは `dossier.html` にあります。
 
 PC・スマートフォンのプレビュー画像は `concept-previews` に保存しています。Playwrightで320・390・768・1080・1440pxの表示、証拠と行動の入力、キーボード操作、候補移動、入力状態の保存を検証しています。再検証には `node concepts.ui-check.cjs --playwright <Playwrightのモジュールパス> --browser <ブラウザの実行ファイル>` を使用します。先に上記のプレビューサーバーを起動してください。検証はlocalhostのみで行い、独立したブラウザプロファイルを使用します。
 
@@ -99,7 +105,7 @@ PC・スマートフォンのプレビュー画像は `concept-previews` に保�
 
 公開URL: [Phasmophobia ゴースト分析](https://swag3892.github.io/phasmo-ghost-tool/)
 
-静的サイトのため、公開先には `index.html`・`app.js`・`wiki-knowledge.js`・`concept-state.js`・`investigation-advice.js`・`footsteps.js`・`footstep-audio.js`・`footstep-view.js`・`behavior-browser.js`・`concepts.js`・`concepts.css` と `assets` フォルダーを同じ階層に配置します。GitHub Pagesで公開する場合は、Settings > Pages > Deploy from a branch で `main` / `/(root)` を選択します。入力内容は利用中のブラウザに保存され、ほかの端末やプレイヤーとは同期しません。
+静的サイトのため、公開先には `index.html`・`dossier.html` と、両HTMLで参照するスクリプト・CSS・`assets` を相対パスごと配置します。現場ボードと候補比較台は `drafts/studio.js`・`drafts/studio.css`・`drafts/pair-notes.js` を共有します。GitHub Pagesでは `main` / `/(root)` から配信します。入力内容は利用中のブラウザに保存され、ほかの端末やプレイヤーとは同期しません。
 
 主な参照元:
 

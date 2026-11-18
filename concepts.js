@@ -156,6 +156,7 @@
       <header class="file-header">
         <div class="brand"><p>ゴースト調査記録</p><h1 id="appTitle">Phasmophobia</h1></div>
         <span class="file-edition">ゴースト分析 / v${review.version}</span>${actions()}
+        ${adopted ? `<nav class="dossier-nav" aria-label="調査画面"><a href="./index.html#board">現場ボード</a><a href="./index.html#compare">候補比較台</a><a href="./dossier.html" aria-current="page">調査ファイル</a></nav>` : ""}
       </header>
       <section class="file-candidates" aria-label="候補ゴースト">
         <div class="file-candidate-heading">

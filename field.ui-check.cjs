@@ -50,9 +50,23 @@ const base = live ? "https://swag3892.github.io/phasmo-ghost-tool/" : "https://p
     assert.equal(await page.locator("#pick-1").inputValue(),"deogen");
     assert.equal(await page.locator(".count strong").innerText(),reduced);
     await page.locator("nav a[href='./dossier.html']").click();
+    const dossierNav=page.getByRole("navigation",{name:"調査画面"});
+    assert.deepEqual(await dossierNav.getByRole("link").allTextContents(),["現場ボード","候補比較台","調査ファイル"]);
+    assert.equal(await dossierNav.locator('[aria-current="page"]').textContent(),"調査ファイル");
+    for(const width of [320,390,768,1024,1440]){
+      await page.setViewportSize({width,height:900});
+      const nav=await dossierNav.boundingBox();
+      const actions=await page.locator(".file-header .utility-actions").boundingBox();
+      assert.ok(nav && actions && nav.y>=0 && nav.y<200 && nav.x>=0 && nav.x+nav.width<=width+1);
+      assert.ok(nav.x>=actions.x+actions.width-1 || nav.y>=actions.y+actions.height-1,"nav overlaps utilities at "+width);
+    }
+    await dossierNav.getByRole("link",{name:"候補比較台"}).click();
+    assert.equal(await page.locator("h1").innerText(),"候補比較台");
+    assert.equal(await page.locator(".count strong").innerText(),reduced);
+    await page.getByRole("navigation",{name:"調査画面"}).getByRole("link",{name:"調査ファイル"}).click();
     assert.equal(await page.locator('[data-evidence="writing"][data-state="confirmed"]').getAttribute("aria-checked"),"true");
     await page.locator('[data-evidence="writing"][data-state="unknown"]').click();
-    await page.locator('a[href="./index.html"]').click();
+    await dossierNav.getByRole("link",{name:"現場ボード"}).click();
     assert.equal(await page.locator(".count strong").innerText(),"30");
     await page.locator("#custom-count").selectOption("0");
     await page.locator('[data-e="orb"][data-v="confirmed"]').click();

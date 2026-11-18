@@ -224,6 +224,15 @@ body[data-concept="file"] .concept-picker { border-top: 3px solid var(--accent);
 .file-header .brand h1 { font-family: Georgia, serif; font-size: 28px; }
 .file-edition { font-size: 11px; color: var(--muted); border-left: 1px solid var(--line); padding-left: 25px; }
 .file-header .utility-actions { margin-left: auto; }
+.dossier-nav { display: flex; align-items: stretch; }
+.dossier-nav a { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 13px; border-bottom: 3px solid transparent; color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 600; }
+.dossier-nav a:hover { color: var(--ink); background: var(--soft); }
+.dossier-nav a[aria-current="page"] { border-color: var(--accent); background: #353c29; color: var(--accent); }
+@media (max-width: 760px) {
+  body[data-app="dossier"] .file-header { flex-wrap: wrap; row-gap: 10px; padding-bottom: 0; }
+  .dossier-nav { flex: 0 0 100%; }
+  .dossier-nav a { flex: 1; padding-inline: 4px; }
+}
 .file-candidates { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .file-candidate-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; padding: 14px 0; }
 .file-candidate-heading > h2 { font-size: 13px; display: flex; align-items: baseline; gap: 11px; }
